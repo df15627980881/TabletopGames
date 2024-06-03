@@ -1,18 +1,29 @@
 package games.blackjack;
 
+import com.beust.ah.A;
 import core.AbstractGameState;
 import core.CoreConstants;
 import core.StandardForwardModel;
 import core.actions.AbstractAction;
 import core.components.FrenchCard;
 import core.components.PartialObservableDeck;
+import evaluation.metrics.Event;
 import games.blackjack.actions.Hit;
 import games.blackjack.actions.Stand;
+import guide.DialogUtils;
+import guide.InterfaceTech;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
+import org.testng.collections.Lists;
+import utilities.Pair;
+
 import java.util.ArrayList;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static core.CoreConstants.GameResult.*;
 import static core.CoreConstants.GameResult.LOSE_GAME;
+import static evaluation.metrics.Event.GameEvent.TURN_OVER;
 
 
 public class BlackjackForwardModel extends StandardForwardModel {
@@ -54,8 +65,14 @@ public class BlackjackForwardModel extends StandardForwardModel {
             Hit hit = (Hit)action;
             // Check if bust or win score
             int points = bjgs.calculatePoints(hit.playerID);
+//            System.out.println("playerId: " + hit.playerID + " points: " + points);
             if (points > ((BlackjackParameters)gameState.getGameParameters()).winScore) {
                 gameState.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, hit.playerID);
+                if (Objects.nonNull(gameState.getFrame())) {
+                    gameState.getDialogs().add(DialogUtils.create(gameState.getFrame(), "Game Guide",
+                            Boolean.TRUE, 300, 200, "<html><h2>Lose Game</h2><p>The player's" +
+                                    " score is greater than 21.<p>"));
+                }
                 if (hit.advanceTurnOrder) {
                     _endTurn((BlackjackGameState) gameState);
                 }
@@ -75,12 +92,12 @@ public class BlackjackForwardModel extends StandardForwardModel {
         BlackjackGameState bjgs = (BlackjackGameState) gameState;
         ArrayList<AbstractAction> actions = new ArrayList<>();
         int player = bjgs.getCurrentPlayer();
-
         // Check if current player is the dealer.
         // Dealer must hit if score is <=16 otherwise must stand
         if (bjgs.getCurrentPlayer() == bjgs.dealerPlayer){
-            if (bjgs.calculatePoints(bjgs.dealerPlayer) >= ((BlackjackParameters) bjgs.getGameParameters()).dealerStand){
-//                System.out.println("Stand");
+            if (Arrays.stream(bjgs.getPlayerResults()).filter(a -> a != LOSE_GAME).toList().size() == 1) {
+                actions.add(new Stand());
+            } else if (bjgs.calculatePoints(bjgs.dealerPlayer) >= ((BlackjackParameters) bjgs.getGameParameters()).dealerStand) {
                 actions.add(new Stand());
             }
             else {
@@ -92,11 +109,21 @@ public class BlackjackForwardModel extends StandardForwardModel {
             actions.add(new Hit(player, true, false));
             actions.add(new Stand());
         }
+
         return actions;
     }
 
     private void _endTurn(BlackjackGameState bjgs) {
-        if (bjgs.getTurnCounter() >= bjgs.getNPlayers()) {
+//        if (bjgs.getTurnCounter() >= bjgs.getNPlayers()) {
+//        if (CollectionUtils.isNotEmpty(bjgs.getHistory()) &&
+//                bjgs.getHistory().get(bjgs.getHistory().size()-1).a == bjgs.dealerPlayer &&
+//                (bjgs.getHistory().get(bjgs.getHistory().size()-1).b instanceof Stand ||
+//                        bjgs.getPlayerResults()[bjgs.getDealerPlayer()] == LOSE_GAME)) {
+        if (CollectionUtils.isNotEmpty(bjgs.getHistory())
+                && bjgs.getHistory().get(bjgs.getHistory().size()-1).a == bjgs.dealerPlayer) {
+//            for (int i = 0; i < bjgs.getHistory().size(); i++) {
+//                System.out.println(bjgs.getHistory().get(i).a + " " + bjgs.getHistory().get(i).b);
+//            }
             // Everyone finished, game is over, assign results
             bjgs.setGameStatus(GAME_END);
 
@@ -134,8 +161,16 @@ public class BlackjackForwardModel extends StandardForwardModel {
                     bjgs.setPlayerResult(LOSE_GAME, i);
                 }
             }
+
         }
         else {
+//            for (Pair<Integer, AbstractAction> integerAbstractActionPair : bjgs.getHistory()) {
+//                System.out.println("aa" + integerAbstractActionPair.a + " " + integerAbstractActionPair.b);
+//            }
+//            for (CoreConstants.GameResult playerResult : bjgs.getPlayerResults()) {
+//                System.out.println(playerResult);
+//            }
+//            System.out.println("***************");
             endPlayerTurn(bjgs);
         }
     }

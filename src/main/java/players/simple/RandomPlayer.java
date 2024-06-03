@@ -3,8 +3,11 @@ package players.simple;
 import core.AbstractGameState;
 import core.AbstractPlayer;
 import core.actions.AbstractAction;
+import utilities.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class RandomPlayer extends AbstractPlayer {
@@ -24,8 +27,21 @@ public class RandomPlayer extends AbstractPlayer {
 
     @Override
     public AbstractAction _getAction(AbstractGameState observation, List<AbstractAction> actions) {
-        int randomAction = rnd.nextInt(actions.size());
-        return actions.get(randomAction);
+        ArrayList<AbstractAction> results = new ArrayList<>();
+        for (AbstractAction action : actions) {
+            AbstractAction bannedAction = this.getBannedAction();
+            if (Objects.nonNull(bannedAction)) {
+                Class<?> bannedActionClass = bannedAction.getClass();
+                if (!bannedActionClass.isInstance(action)) {
+                    results.add(action);
+                }
+            } else {
+                results = new ArrayList<>(actions);
+            }
+        }
+//        System.out.println("actions: " + actions.size() + " results: " + results.size());
+        int randomAction = rnd.nextInt(results.size());
+        return results.get(randomAction);
     }
 
     @Override

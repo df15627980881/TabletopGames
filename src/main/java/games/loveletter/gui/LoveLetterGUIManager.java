@@ -6,6 +6,8 @@ import core.CoreConstants;
 import core.Game;
 import core.actions.AbstractAction;
 import core.components.Deck;
+import core.components.FrenchCard;
+import core.components.PartialObservableDeck;
 import games.loveletter.LoveLetterForwardModel;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.LoveLetterParameters;
@@ -25,7 +27,9 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class LoveLetterGUIManager extends AbstractGUIManager {
@@ -54,6 +58,126 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
 
     LoveLetterGameState llgs;
     LoveLetterForwardModel fm;
+
+    public LoveLetterGUIManager(GamePanel parent, Game game) {
+        super(parent);
+
+        UIManager.put("TabbedPane.contentOpaque", false);
+        UIManager.put("TabbedPane.opaque", false);
+        UIManager.put("TabbedPane.tabsOpaque", false);
+
+        JTabbedPane pane = new JTabbedPane();
+        JPanel main = new JPanel();
+        main.setOpaque(false);
+        main.setLayout(new BorderLayout());
+        JPanel rules = new JPanel();
+        pane.add("Main", main);
+        pane.add("Rules", rules);
+        JLabel ruleText = new JLabel(getRuleText());
+        rules.add(ruleText);
+
+        llgs = (LoveLetterGameState) game.getGameState();
+
+        // Initialise active player
+        activePlayer = 0;
+
+        // Find required size of window
+        int count = 8;
+        this.width = 200;
+        this.height = 300;
+        ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
+
+        parent.setBackground(ImageIO.GetInstance().getImage("data/loveletter/bg.png"));
+
+        // Create main game area that will hold all game views
+        playerHands = new LoveLetterPlayerView[count];
+        playerViewBorders = new Border[count];
+        playerViewBordersHighlight = new Border[count];
+        JPanel mainGameArea = new JPanel();
+        mainGameArea.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        mainGameArea.setOpaque(false);
+
+        Deck<LoveLetterCard> deck = new Deck<>("GuideDeck", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
+        boolean[] visibility = new boolean[count];
+        Arrays.fill(visibility, true);
+        for (LoveLetterCard.CardType value : LoveLetterCard.CardType.values()) {
+            deck.add(new LoveLetterCard(value));
+        }
+
+        LoveLetterParameters llp = (LoveLetterParameters) game.getGameState().getGameParameters();
+
+        for (int i = 0; i < count; i++) {
+            PartialObservableDeck<LoveLetterCard> playerDeck = new PartialObservableDeck<>("Player " + i + " deck", i, visibility);
+            playerDeck.add(deck.get(i));
+            LoveLetterPlayerView playerHand = new LoveLetterPlayerView(playerDeck, i, llp.getDataPath(), deck.get(i).cardType.getCardText(llp));
+
+//            playerViewBordersHighlight[i] = BorderFactory.createCompoundBorder(highlightActive, playerViewBorders[i]);
+//            playerHand.setBorder(title);
+
+            playerHands[i] = playerHand;
+            int p = i;
+            playerHands[i].addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    highlightPlayerIdx = p;
+                }
+            });
+            playerHands[i].setOpaque(false);
+            mainGameArea.add(playerHands[i]);
+        }
+
+        // Add GUI listener
+//        game.addListener(new LLGUIListener(fm, parent, playerHands));
+//        if (gameState.getNPlayers() == 2) {
+//            // Add reserve
+//            JLabel label = new JLabel("Reserve cards:");
+//            reserve = new LoveLetterDeckView(-1, llgs.getReserveCards(), true, llp.getDataPath(),
+//                    new Rectangle(0, 0, playerAreaWidth, llCardHeight));
+//            JPanel wrap = new JPanel();
+//            wrap.setOpaque(false);
+//            wrap.setLayout(new BoxLayout(wrap, BoxLayout.Y_AXIS));
+//            wrap.add(label);
+//            wrap.add(reserve);
+//            sides[next].setOpaque(false);
+//            sides[next].add(wrap);
+//            sides[next].setLayout(new GridBagLayout());
+//        }
+//        for (int i = 0; i < locations.length; i++) {
+//            mainGameArea.add(sides[i], locations[i]);
+//        }
+
+        // Discard and draw piles go in the center
+//        JPanel centerArea = new JPanel();
+//        centerArea.setOpaque(false);
+//        centerArea.setLayout(new BoxLayout(centerArea, BoxLayout.Y_AXIS));
+//        drawPile = new LoveLetterDeckView(-1, llgs.getDrawPile(), game.getGameState().getCoreGameParameters().alwaysDisplayFullObservable, llp.getDataPath(),
+//                new Rectangle(0, 0, playerAreaWidth, llCardHeight));
+//        centerArea.add(new JLabel("Draw pile:"));
+//        centerArea.add(drawPile);
+//        JPanel jp = new JPanel();
+//        jp.setOpaque(false);
+//        jp.setLayout(new GridBagLayout());
+//        jp.add(centerArea);
+//        mainGameArea.add(jp, BorderLayout.CENTER);
+//
+//        // Top area will show state information
+//        JPanel infoPanel = createGameStateInfoPanel("Love Letter", game.getGameState(), width, defaultInfoPanelHeight);
+//        infoPanel.setOpaque(false);
+//        // Bottom area will show actions available
+//        JComponent actionPanel = createActionPanel(new IScreenHighlight[0], width, defaultActionPanelHeight, false);
+//        actionPanel.setOpaque(false);
+
+//        main.add(infoPanel, BorderLayout.NORTH);
+        main.add(mainGameArea, BorderLayout.CENTER);
+//        main.add(actionPanel, BorderLayout.SOUTH);
+
+        parent.setLayout(new BorderLayout());
+        parent.add(pane, BorderLayout.CENTER);
+        parent.setPreferredSize(new Dimension(width, height + defaultActionPanelHeight + defaultInfoPanelHeight + defaultCardHeight + 20));
+        parent.revalidate();
+        parent.setVisible(true);
+        parent.repaint();
+    }
 
     public LoveLetterGUIManager(GamePanel parent, Game game, ActionController ac, Set<Integer> humanID) {
         super(parent, game, ac, humanID);
@@ -138,7 +262,6 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
 
                 // Add GUI listener
                 game.addListener(new LLGUIListener(fm, parent, playerHands));
-
                 if (gameState.getNPlayers() == 2) {
                     // Add reserve
                     JLabel label = new JLabel("Reserve cards:");
@@ -338,7 +461,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
         }
     }
 
-    private String getRuleText() {
+    public String getRuleText() {
         String rules = "<html><center><h1>Love Letter</h1></center><br/><hr><br/>";
         rules += "<p>You try to earn the favour of the princess and get your love letter delivered to her. The closer you are (the higher your card number) at the end, the better. The closest player, or the only one left in the game, is the winner of the round. Win most rounds to win the game.</p><br/>";
         rules += "<p>On your turn, you draw a card to have 2 in hand, and then play one of the cards, discarding it and executing its effect.</p>";

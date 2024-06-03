@@ -1,0 +1,40 @@
+{
+  "1": {
+    "type": "optional",
+    "questionText": "What is the highest points hand you can have, without busting?",
+    "options": [
+      {
+        "option": "A",
+        "optionText": "20"
+      },
+      {
+        "option": "B",
+        "optionText": "22"
+      },
+      {
+        "option": "C",
+        "optionText": "21"
+      },
+      {
+        "option": "D",
+        "optionText": "19"
+      }
+    ],
+    "answer": "C"
+  },
+  "2": {
+    "type": "optional",
+    "questionText": "When a player's hand totals 17 or more, it is usually appropriate to choose to stop.",
+    "options": [
+      {
+        "option": "A",
+        "optionText": "True"
+      },
+      {
+        "option": "B",
+        "optionText": "False"
+      }
+    ],
+    "answer": "A"
+  }
+}

@@ -45,6 +45,19 @@ public abstract class AbstractGUIManager {
 
     protected int width, height;
 
+    public AbstractGUIManager(GamePanel parent) {
+        this.maxActionSpace = getMaxActionSpace();
+        this.parent = parent;
+
+        gameStatus = new JLabel();
+        playerStatus = new JLabel();
+        playerScores = new JLabel();
+        gamePhase = new JLabel();
+        turn = new JLabel();
+        currentPlayer = new JLabel();
+        historyInfo = new JTextPane();
+    }
+
     public AbstractGUIManager(GamePanel parent, Game game, ActionController ac, Set<Integer> human) {
         this.ac = ac;
         this.maxActionSpace = getMaxActionSpace();

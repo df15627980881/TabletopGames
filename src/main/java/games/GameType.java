@@ -340,6 +340,20 @@ public enum GameType {
     }
 
     /**
+     * Creates a graphical user interface for the given game type for game guide. Add here all games with a GUI available.
+     */
+    public AbstractGUIManager createGUIManagerForGuide(GamePanel parent, Game game) {
+        if (guiManagerClass == null) throw new AssertionError("No GUI manager class declared for the game: " + this);
+
+        try {
+            Constructor<?> constructorGS = ConstructorUtils.getMatchingAccessibleConstructor(guiManagerClass, GamePanel.class, Game.class);
+            return (AbstractGUIManager) constructorGS.newInstance(parent, game);
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Creates an instance of the given game type with nPlayers number of players and random seed.
      *
      * @param nPlayers - number of players taking part in the game, used for initialisation.

@@ -111,7 +111,8 @@ public class Game {
      * @return - game instance created for the run
      */
     public static Game runOne(GameType gameToPlay, String parameterConfigFile, List<AbstractPlayer> players, long seed,
-                              boolean randomizeParameters, List<IGameListener> listeners, ActionController ac, int turnPause) {
+                              boolean randomizeParameters, List<IGameListener> listeners, ActionController ac,
+                              int turnPause) {
         // Creating game instance (null if not implemented)
         Game game;
         if (parameterConfigFile != null) {
@@ -120,7 +121,6 @@ public class Game {
         } else game = gameToPlay.createGameInstance(players.size(), seed);
         if (game == null)
             System.out.println("Error game: " + gameToPlay);
-
         if (listeners != null) {
             Set<String> agentNames = players.stream()
                     //           .peek(a -> System.out.println(a.toString()))
@@ -621,6 +621,18 @@ public class Game {
 
         if (debug) System.out.printf("Finishing oneAction for player %s%n", activePlayer);
         return action;
+    }
+
+    public void processOneAction(AbstractAction nextAction) {
+        int activePlayer = gameState.getCurrentPlayer();
+        AbstractPlayer currentPlayer = players.get(activePlayer);
+        actionSpaceSize.add(new Pair<>(activePlayer, 1));
+        nDecisions += 1;
+        AbstractGameState observation = gameState.copy(activePlayer);
+        currentPlayer.registerUpdatedObservation(observation);
+        forwardModel.next(gameState, nextAction.copy());
+        lastPlayer = activePlayer;
+        listeners.forEach(l -> l.onEvent(Event.createEvent(Event.GameEvent.ACTION_CHOSEN, gameState, nextAction, activePlayer)));
     }
 
     /**

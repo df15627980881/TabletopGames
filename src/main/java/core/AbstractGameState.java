@@ -15,7 +15,10 @@ import games.GameType;
 import utilities.ElapsedCpuChessTimer;
 import utilities.Pair;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -73,6 +76,8 @@ public abstract class AbstractGameState {
     // redeterminisationRnd is used for redeterminisation only - this is to ensure that the main game is not affected
     // this is not initialised from any seed, as redeterminisation is used to hide data from players and cannot affect the game itself
     protected Random redeterminisationRnd = new Random();
+    public JFrame frame;
+    private List<Dialog> dialogs;
 
     /**
      * @param gameParameters - game parameters.
@@ -83,6 +88,7 @@ public abstract class AbstractGameState {
         // this is then overridden in the game-specific constructor if needed
         this.gameParameters = gameParameters;
         this.coreGameParameters = new CoreParameters();
+        this.dialogs = new ArrayList<>();
     }
 
     protected abstract GameType _getGameType();
@@ -105,12 +111,13 @@ public abstract class AbstractGameState {
         firstPlayer = 0;
         actionsInProgress.clear();
         rnd = new Random(gameParameters.randomSeed);
+        dialogs = new ArrayList<>();
     }
 
     /**
      * Resets variables initialised for this game state.
      */
-    void reset(long seed) {
+    public void reset(long seed) {
         gameParameters.randomSeed = seed;
         reset();
     }
@@ -649,5 +656,21 @@ public abstract class AbstractGameState {
         result = 31 * result + Objects.hash(tick, nPlayers, roundCounter, turnCounter, turnOwner, firstPlayer);
         result = 31 * result + Arrays.hashCode(playerResults);
         return result;
+    }
+
+    public JFrame getFrame() {
+        return frame;
+    }
+
+    public void setFrame(JFrame frame) {
+        this.frame = frame;
+    }
+
+    public List<Dialog> getDialogs() {
+        return dialogs;
+    }
+
+    public void setDialogs(List<Dialog> dialogs) {
+        this.dialogs = dialogs;
     }
 }

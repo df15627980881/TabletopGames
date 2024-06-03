@@ -1,5 +1,9 @@
 package games.blackjack.gui;
 
+import core.CoreConstants;
+import core.components.Deck;
+import core.components.FrenchCard;
+import core.components.PartialObservableDeck;
 import gui.*;
 import core.AbstractGameState;
 import core.AbstractPlayer;
@@ -14,6 +18,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Set;
 
 public class BlackjackGUIManager extends AbstractGUIManager {
@@ -29,6 +34,149 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
     Border highlightActive = BorderFactory.createLineBorder(new Color(47,132,220), 3);
     Border[] playerViewBorders;
+
+    public BlackjackGUIManager(GamePanel parent, Game game) {
+        super(parent);
+
+        UIManager.put("TabbedPane.contentOpaque", false);
+        UIManager.put("TabbedPane.opaque", false);
+        UIManager.put("TabbedPane.tabsOpaque", false);
+
+        JTabbedPane pane = new JTabbedPane();
+        JPanel main = new JPanel();
+        main.setOpaque(false);
+        main.setLayout(new BorderLayout());
+        JPanel rules = new JPanel();
+        pane.add("Main", main);
+        pane.add("Rules", rules);
+        JLabel ruleText = new JLabel(getRuleText());
+        rules.add(ruleText);
+        rules.setBackground(new Color(43, 108, 25, 111));
+
+        activePlayer = 0;
+
+        this.width = 200;
+        this.height = 200;
+        ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
+
+        parent.setBackground(ImageIO.GetInstance().getImage("data/FrenchCards/table-background.jpg"));
+        int count = 13;
+        boolean[] visibility = new boolean[count];
+        Arrays.fill(visibility, true);
+        Deck<FrenchCard> deck = new Deck<>("GuideDeck", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
+        for (int i=2; i<=10; ++i) {
+            deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, i));
+        }
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Jack, FrenchCard.Suite.Diamonds));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Queen, FrenchCard.Suite.Diamonds));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.King, FrenchCard.Suite.Diamonds));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Ace, FrenchCard.Suite.Diamonds));
+
+//        PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + 0 + " deck", 0, visibility);
+//        deck.stream().forEach(playerDeck::add);
+
+        playerHands = new BlackjackPlayerView[count];
+        playerViewBorders = new Border[count];
+        JPanel mainGameArea = new JPanel();
+        mainGameArea.setOpaque(false);
+//        mainGameArea.setLayout(new BorderLayout());
+        mainGameArea.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+//        String[] locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+//        JPanel[] sides = new JPanel[]{new JPanel(), new JPanel(), new JPanel(), new JPanel()};
+//        JPanel[] playerPanels = new JPanel[count];
+        for (int i = 0; i < count; i++) {
+            PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + i + " deck", i, visibility);
+            playerDeck.add(deck.get(i));
+            if (deck.get(i).type == FrenchCard.FrenchCardType.Ace) {
+                playerHands[i] = new BlackjackPlayerView(playerDeck, i, "data/FrenchCards/", "It can be seen as Point 11");
+            } else {
+                playerHands[i] = new BlackjackPlayerView(playerDeck, i, "data/FrenchCards/");
+            }
+            BlackjackGameState gameState = (BlackjackGameState) game.getGameState();
+            BlackjackParameters params = (BlackjackParameters) gameState.getGameParameters();
+            int points = 0;
+            switch (deck.get(i).type) {
+                case Number:
+                    points += deck.get(i).number;
+                    break;
+                case Jack:
+                    points += params.jackCard;
+                    break;
+                case Queen:
+                    points += params.queenCard;
+                    break;
+                case King:
+                    points += params.kingCard;
+                    break;
+                case Ace:
+                    points = 1;
+                    break;
+            }
+            playerHands[i].Points = points;
+            playerHands[i].setOpaque(false);
+            mainGameArea.add(playerHands[i]);
+//            playerPanels[i] = new JPanel();
+//            playerPanels[i].setOpaque(false);
+//            playerPanels[i].add(playerHands[i]);
+        }
+//        int next = 0;
+//        if (count % 2 == 1) {
+//            mainGameArea.add(playerPanels[count / 2]);
+//        }
+//        // 从中间向两边添加
+//        for (int i = 1; i <= count; i++) {
+//            if ((count / 2 - i) >= 0) {
+//                mainGameArea.add(playerPanels[count / 2 - i], 0);
+//            }
+//            if ((count / 2 + i) < count) {
+//                mainGameArea.add(playerPanels[count / 2 + i]);
+//            }
+//        }
+//        for (int i = 0; i < 2; i++) {
+//            BlackjackPlayerView playerHand = new BlackjackPlayerView(playerDeck, 0, "data/FrenchCards/");
+//            playerHand.setOpaque(false);
+//            playerHands[i] = playerHand;
+            // Create border, layouts and keep track of this view
+//        TitledBorder title = BorderFactory.createTitledBorder(
+//                    BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "DEALER [" + "ddd" + "]",
+//                    TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM);
+//        playerViewBorders[0] = title;
+//        playerHand.setBorder(title);
+
+
+//        for (int i = 0; i < locations.length; i++) {
+//            mainGameArea.add(sides[i], locations[i]);
+//        }
+//            sides[next].add(playerHand);
+//            sides[next].setLayout(new GridBagLayout());
+//            sides[next].setOpaque(false);
+//            next = (next + 1) % (locations.length);
+//            playerHands[i] = playerHand;
+//            mainGameArea.add(playerHand, BorderLayout.CENTER);
+//        }
+//        for (int i = 0; i < locations.length; i++) {
+//            mainGameArea.add(sides[i], locations[i]);
+//        }
+        // Top area will show state information
+//        JPanel infoPanel = createGameStateInfoPanel("Blackjack", game.getGameState(), width, defaultInfoPanelHeight);
+        // Bottom area will show actions available
+//                JComponent actionPanel = createActionPanel(new IScreenHighlight[0], width, defaultActionPanelHeight, false);
+
+        // Add all views to frame
+        main.add(mainGameArea, BorderLayout.CENTER);
+//        main.add(infoPanel, BorderLayout.NORTH);
+//                main.add(actionPanel, BorderLayout.SOUTH);
+
+        pane.add("Main", main);
+        pane.add("Rules", rules);
+
+        parent.setLayout(new BorderLayout());
+        parent.add(pane, BorderLayout.CENTER);
+        parent.setPreferredSize(new Dimension(width, height));
+        parent.revalidate();
+        parent.setVisible(true);
+        parent.repaint();
+    }
 
     public BlackjackGUIManager(GamePanel parent, Game game, ActionController ac, Set<Integer> humanID) {
         super(parent, game, ac, humanID);
@@ -109,12 +257,12 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                 // Top area will show state information
                 JPanel infoPanel = createGameStateInfoPanel("Blackjack", gameState, width, defaultInfoPanelHeight);
                 // Bottom area will show actions available
-                JComponent actionPanel = createActionPanel(new IScreenHighlight[0], width, defaultActionPanelHeight, false);
+//                JComponent actionPanel = createActionPanel(new IScreenHighlight[0], width, defaultActionPanelHeight, false);
 
                 // Add all views to frame
                 main.add(mainGameArea, BorderLayout.CENTER);
                 main.add(infoPanel, BorderLayout.NORTH);
-                main.add(actionPanel, BorderLayout.SOUTH);
+//                main.add(actionPanel, BorderLayout.SOUTH);
 
                 pane.add("Main", main);
                 pane.add("Rules", rules);
@@ -190,12 +338,12 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         historyInfo.setPreferredSize(new Dimension(width/2 - 10, height));
         historyContainer = new JScrollPane(historyInfo);
         historyContainer.setPreferredSize(new Dimension(width/2 - 25, height));
-        wrapper.add(historyContainer);
         historyInfo.setOpaque(false);
         historyContainer.setOpaque(false);
         historyContainer.getViewport().setBackground(new Color(43, 108, 25, 111));
 //        historyContainer.getViewport().setOpaque(false);
         historyInfo.setEditable(false);
+        wrapper.add(historyContainer);
         return wrapper;
     }
 
@@ -214,8 +362,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
                 // Highlight active player
                 if (i == gameState.getCurrentPlayer()) {
-                    Border compound = BorderFactory.createCompoundBorder(
-                            highlightActive, playerViewBorders[i]);
+                    Border compound = BorderFactory.createCompoundBorder(highlightActive, playerViewBorders[i]);
                     playerHands[i].setBorder(compound);
                 } else {
                     playerHands[i].setBorder(playerViewBorders[i]);
@@ -224,7 +371,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         }
     }
 
-    private String getRuleText() {
+    public static String getRuleText() {
         String rules = "<html><center><h1>Blackjack</h1></center><br/><hr><br/>";
         rules += "<p>Players are each dealt 2 cards face up. The dealer is also dealt 2 cards, one up (exposed) and one down (hidden). " +
                 "The value of number cards 2 through 10 is their pip value (2 through 10). " +
