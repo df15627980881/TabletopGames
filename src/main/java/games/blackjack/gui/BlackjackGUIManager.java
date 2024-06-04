@@ -35,7 +35,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
     Border highlightActive = BorderFactory.createLineBorder(new Color(47,132,220), 3);
     Border[] playerViewBorders;
 
-    public BlackjackGUIManager(GamePanel parent, Game game) {
+    public BlackjackGUIManager(GamePanel parent, Game game, String purpose) {
         super(parent);
 
         UIManager.put("TabbedPane.contentOpaque", false);
@@ -115,52 +115,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
             playerHands[i].Points = points;
             playerHands[i].setOpaque(false);
             mainGameArea.add(playerHands[i]);
-//            playerPanels[i] = new JPanel();
-//            playerPanels[i].setOpaque(false);
-//            playerPanels[i].add(playerHands[i]);
         }
-//        int next = 0;
-//        if (count % 2 == 1) {
-//            mainGameArea.add(playerPanels[count / 2]);
-//        }
-//        // 从中间向两边添加
-//        for (int i = 1; i <= count; i++) {
-//            if ((count / 2 - i) >= 0) {
-//                mainGameArea.add(playerPanels[count / 2 - i], 0);
-//            }
-//            if ((count / 2 + i) < count) {
-//                mainGameArea.add(playerPanels[count / 2 + i]);
-//            }
-//        }
-//        for (int i = 0; i < 2; i++) {
-//            BlackjackPlayerView playerHand = new BlackjackPlayerView(playerDeck, 0, "data/FrenchCards/");
-//            playerHand.setOpaque(false);
-//            playerHands[i] = playerHand;
-            // Create border, layouts and keep track of this view
-//        TitledBorder title = BorderFactory.createTitledBorder(
-//                    BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "DEALER [" + "ddd" + "]",
-//                    TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM);
-//        playerViewBorders[0] = title;
-//        playerHand.setBorder(title);
-
-
-//        for (int i = 0; i < locations.length; i++) {
-//            mainGameArea.add(sides[i], locations[i]);
-//        }
-//            sides[next].add(playerHand);
-//            sides[next].setLayout(new GridBagLayout());
-//            sides[next].setOpaque(false);
-//            next = (next + 1) % (locations.length);
-//            playerHands[i] = playerHand;
-//            mainGameArea.add(playerHand, BorderLayout.CENTER);
-//        }
-//        for (int i = 0; i < locations.length; i++) {
-//            mainGameArea.add(sides[i], locations[i]);
-//        }
-        // Top area will show state information
-//        JPanel infoPanel = createGameStateInfoPanel("Blackjack", game.getGameState(), width, defaultInfoPanelHeight);
-        // Bottom area will show actions available
-//                JComponent actionPanel = createActionPanel(new IScreenHighlight[0], width, defaultActionPanelHeight, false);
 
         // Add all views to frame
         main.add(mainGameArea, BorderLayout.CENTER);
