@@ -2,12 +2,14 @@ package games.blackjack.gui;
 
 import com.beust.ah.A;
 import com.clearspring.analytics.util.Lists;
+import core.components.Component;
 import core.components.Deck;
 import core.components.FrenchCard;
 import core.components.PartialObservableDeck;
 import gui.GamePanel;
 import gui.views.CardView;
 import gui.views.ComponentView;
+import org.apache.commons.lang3.BooleanUtils;
 import utilities.ImageIO;
 
 import javax.swing.*;
@@ -17,6 +19,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static games.blackjack.gui.BlackjackGUIManager.*;
 
@@ -35,6 +39,7 @@ public class BlackjackDeckView extends ComponentView {
     public static int count = 0;
     public static FrenchCard.Suite suite;
     public static int ggg = 0;
+    public static Map<String, Boolean> isShouGong = new HashMap<>();
 
     public BlackjackDeckView(Deck<FrenchCard> d, String dataPath, GamePanel parent, String[] gg){
         super(d, playerWidth, cardHeight);
@@ -98,6 +103,7 @@ public class BlackjackDeckView extends ComponentView {
             @Override
             public void mouseClicked(MouseEvent e) {
 //                String[] locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+
                 JTabbedPane pane = (JTabbedPane) parent.getComponent(0);
                 JPanel main = (JPanel) pane.getComponent(0);
                 JPanel northPanel = (JPanel) main.getComponent(0);
@@ -109,7 +115,10 @@ public class BlackjackDeckView extends ComponentView {
                 // TODO
                 newP.Points = 0;
                 newP.setOpaque(false);
-                newP.setPreferredSize(new Dimension(cardWidth*2/3, cardHeight));
+                newP.setPreferredSize(new Dimension(cardWidth/3, cardHeight));
+                if (count % 4 == 0) {
+                    newP.setPreferredSize(new Dimension(cardWidth*4/5, cardHeight));
+                }
 //                for (int i = 0; i < playerHand.length; i++) {
 //                    newP[i] = playerHand[i];
 //                }
@@ -119,7 +128,7 @@ public class BlackjackDeckView extends ComponentView {
                 sides.add(newP);
                 mainGameArea.remove(currentFangwei);
                 mainGameArea.add(sides, locations[turn], currentFangwei);
-                System.out.println("turn: " + turn + " locations[turn]: " + locations[turn] + " currentFangwei: " + currentFangwei);
+//                System.out.println("turn: " + turn + " locations[turn]: " + locations[turn] + " currentFangwei: " + currentFangwei);
                 JPanel newNorth = new JPanel();
                 for (int i = 0; i < northPanel.getComponents().length; i++) {
                     JPanel centerPanel = (JPanel) northPanel.getComponent(i);
@@ -232,7 +241,7 @@ public class BlackjackDeckView extends ComponentView {
                     }
                 }
                 turn %= 4;
-                System.out.println(currentFangwei);
+//                System.out.println(currentFangwei);
             }
         });
     }
@@ -254,8 +263,14 @@ public class BlackjackDeckView extends ComponentView {
                 Image cardFace = getCardImage(card);
                 Rectangle r = new Rectangle(rect.x + offset * i, rect.y, cardWidth, cardHeight);
                 rects[i] = r;
-                CardView.drawCard(g, r.x, r.y, r.width, r.height, card, cardFace, backOfCard, deck.isComponentVisible(i, 0));
-                g.drawRoundRect(r.x, r.y, r.width, r.height, 15, 15);
+//                if (isShouGong != null && BooleanUtils.isTrue(isShouGong.get("" + deck.get(i).number + deck.get(i).type + deck.get(i).suite))) {
+//                    System.out.println(card.number);
+//                    CardView.drawCard(g, r.x, r.y, r.width + 15, r.height + 15, card, cardFace, backOfCard, deck.isComponentVisible(i, 0));
+//                    g.drawRoundRect(r.x, r.y, r.width + 15, r.height + 15, 15, 15);
+//                } else {
+                    CardView.drawCard(g, r.x, r.y, r.width, r.height, card, cardFace, backOfCard, deck.isComponentVisible(i, 0));
+                    g.drawRoundRect(r.x, r.y, r.width, r.height, 15, 15);
+//                }
             }
             if (cardHighlight != -1){
                 FrenchCard card = deck.get(cardHighlight);
