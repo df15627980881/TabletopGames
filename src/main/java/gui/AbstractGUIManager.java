@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.joining;
 
-public abstract class AbstractGUIManager {
+public abstract class AbstractGUIManager extends JFrame {
     protected GamePanel parent;
     protected Game game;
     protected Set<Integer> humanPlayerId;

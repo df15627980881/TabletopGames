@@ -342,12 +342,12 @@ public enum GameType {
     /**
      * Creates a graphical user interface for the given game type for game guide. Add here all games with a GUI available.
      */
-    public AbstractGUIManager createGUIManagerForGuide(GamePanel parent, Game game) {
+    public AbstractGUIManager createGUIManagerForGuide(GamePanel parent, Game game, int zhuangwei) {
         if (guiManagerClass == null) throw new AssertionError("No GUI manager class declared for the game: " + this);
 
         try {
-            Constructor<?> constructorGS = ConstructorUtils.getMatchingAccessibleConstructor(guiManagerClass, GamePanel.class, Game.class);
-            return (AbstractGUIManager) constructorGS.newInstance(parent, game);
+            Constructor<?> constructorGS = ConstructorUtils.getMatchingAccessibleConstructor(guiManagerClass, GamePanel.class, Game.class, Integer.class);
+            return (AbstractGUIManager) constructorGS.newInstance(parent, game, zhuangwei);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }

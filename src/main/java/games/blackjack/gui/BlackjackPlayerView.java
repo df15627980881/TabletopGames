@@ -3,6 +3,7 @@ package games.blackjack.gui;
 import core.components.Deck;
 import games.blackjack.BlackjackGameState;
 import core.components.FrenchCard;
+import gui.GamePanel;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -18,15 +19,15 @@ public class BlackjackPlayerView extends BlackjackDeckView{
 
     String extra;
 
-    public BlackjackPlayerView(Deck<FrenchCard>d, int playerID, String dataPath){
-        super(d, dataPath);
+    public BlackjackPlayerView(Deck<FrenchCard>d, int playerID, String dataPath, GamePanel parent, String[] locations){
+        super(d, dataPath, parent, locations);
         this.width = playerWidth + border*2;
         this.height = playerHeight + border + borderBottom;
         this.playerID = playerID;
     }
 
-    public BlackjackPlayerView(Deck<FrenchCard>d, int playerID, String dataPath, String extra){
-        super(d, dataPath);
+    public BlackjackPlayerView(Deck<FrenchCard>d, int playerID, String dataPath, String extra, GamePanel parent, String[] locations){
+        super(d, dataPath, parent, locations);
         this.width = playerWidth + border*2;
         this.height = playerHeight + border + borderBottom;
         this.playerID = playerID;
@@ -37,7 +38,7 @@ public class BlackjackPlayerView extends BlackjackDeckView{
     protected void paintComponent(Graphics g){
         drawDeck((Graphics2D) g, new Rectangle(border, border, playerWidth, cardHeight));
         g.setColor(Color.black);
-        g.drawString(Points + " points", border+playerWidth/2 - 20, border+cardHeight + 10);
+//        g.drawString(Points + " points", border+playerWidth/2 - 20, border+cardHeight + 10);
         if (StringUtils.isNotBlank(this.extra)) {
             g.setColor(Color.RED);
             g.drawString(this.extra, border+playerWidth/2 - 20, border+cardHeight + 26);

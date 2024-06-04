@@ -5,7 +5,9 @@ import core.AbstractPlayer;
 import core.CoreConstants;
 import core.Game;
 import core.actions.AbstractAction;
+import core.components.FrenchCard;
 import games.GameType;
+import games.blackjack.gui.BlackjackDeckView;
 import gui.AbstractGUIManager;
 import gui.GUI;
 import gui.GamePanel;
@@ -75,6 +77,8 @@ public class InterfaceTech extends GUI {
 
     private QuestionService questionService;
 
+    private JLabel currentJiangpai = new JLabel("NT");
+
     public InterfaceTech() {
     }
 
@@ -121,17 +125,36 @@ public class InterfaceTech extends GUI {
         tutorialDialog.setVisible(true);
     }
 
-    public void initIntroduceCards() {
+    public void initIntroduceCards(int zhuangwei, FrenchCard.Suite suite) {
         gameRunning = resetActionForGame();
         gameType = gameRunning.getGameType();
         gamePanel = new GamePanel();
         gamePanel.setVisible(false);
 
         buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        next = new JButton("Next");
+        next = new JButton("Restart");
+        JButton east = new JButton("East");
+        JButton west = new JButton("West");
+        JButton north = new JButton("North");
+        JButton south = new JButton("South");
         buttonPanel.add(next);
+        buttonPanel.add(north);
+        buttonPanel.add(east);
+        buttonPanel.add(south);
+        buttonPanel.add(west);
+        JButton diamond = new JButton("♦");
+        JButton spade = new JButton("♠");
+        JButton heart = new JButton("♥");
+        JButton club = new JButton("♣");
+        JButton nt = new JButton("NT");
+        buttonPanel.add(diamond);
+        buttonPanel.add(spade);
+        buttonPanel.add(heart);
+        buttonPanel.add(club);
+        buttonPanel.add(nt);
+        BlackjackDeckView.count = 0;
 
-        gui = gameType.createGUIManagerForGuide(gamePanel, gameRunning);
+        gui = gameType.createGUIManagerForGuide(gamePanel, gameRunning, zhuangwei);
         if (Objects.nonNull(wrapper)) {
             getContentPane().remove(wrapper);
         }
@@ -140,18 +163,86 @@ public class InterfaceTech extends GUI {
         wrapper.add(gamePanel);
         getContentPane().add(wrapper, BorderLayout.CENTER);
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        getContentPane().add(currentJiangpai, BorderLayout.EAST);
 //        introduceEachCards.setBorder(title);
         gamePanel.revalidate();
         gamePanel.setVisible(true);
         gamePanel.repaint();
         setFrameProperties();
+        BlackjackDeckView.suite = suite;
 //        this.introduceEachCards.setBorder(title);
-        DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200,
-                "Let's learn the points of each card."));
+//        DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200,
+//                "Let's learn the points of each card."));
         next.addActionListener(e -> {
-            getContentPane().remove(buttonPanel);
-            runSecondPart();
+//            getContentPane().remove(buttonPanel);
+            BlackjackDeckView.locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+            BlackjackDeckView.currentFangwei = 0;
+            BlackjackDeckView.count = 0;
+            BlackjackDeckView.turn = 0;
+            BlackjackDeckView.ggg = 0;
+            initIntroduceCards(0, null);
         });
+
+        north.addActionListener(e -> {
+//            getContentPane().remove(buttonPanel);
+//            initIntroduceCards(0);
+            BlackjackDeckView.locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+            BlackjackDeckView.currentFangwei = 0;
+            BlackjackDeckView.ggg = 0;
+            BlackjackDeckView.turn = 0;
+        });
+        east.addActionListener(e -> {
+//            getContentPane().remove(buttonPanel);
+//            initIntroduceCards(1);
+//            BlackjackDeckView.locations = new String[]{BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST, BorderLayout.NORTH};
+            BlackjackDeckView.locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+            BlackjackDeckView.currentFangwei = 1;
+            BlackjackDeckView.turn = 1;
+        });
+        south.addActionListener(e -> {
+//            getContentPane().remove(buttonPanel);
+//            initIntroduceCards(2);
+//            BlackjackDeckView.locations = new String[]{BorderLayout.SOUTH, BorderLayout.WEST, BorderLayout.NORTH, BorderLayout.EAST};
+            BlackjackDeckView.locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+            BlackjackDeckView.currentFangwei = 2;
+            BlackjackDeckView.turn = 2;
+//            BlackjackDeckView.ggg = 2;
+        });
+        west.addActionListener(e -> {
+//            getContentPane().remove(buttonPanel);
+//            initIntroduceCards(3);
+//            BlackjackDeckView.locations = new String[]{BorderLayout.WEST, BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH};
+            BlackjackDeckView.locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+            BlackjackDeckView.currentFangwei = 3;
+            BlackjackDeckView.turn = 3;
+//            BlackjackDeckView.ggg = 3;
+        });
+        diamond.addActionListener(e -> {
+            getContentPane().remove(currentJiangpai);
+            currentJiangpai = new JLabel("♦");
+            initIntroduceCards(0, FrenchCard.Suite.Diamonds);
+        });
+        spade.addActionListener(e -> {
+            getContentPane().remove(currentJiangpai);
+            currentJiangpai = new JLabel("♠");
+            initIntroduceCards(0, FrenchCard.Suite.Spades);
+        });
+        heart.addActionListener(e -> {
+            getContentPane().remove(currentJiangpai);
+            currentJiangpai = new JLabel("♥");
+            initIntroduceCards(0, FrenchCard.Suite.Hearts);
+        });
+        club.addActionListener(e -> {
+            getContentPane().remove(currentJiangpai);
+            currentJiangpai = new JLabel("♣");
+            initIntroduceCards(0, FrenchCard.Suite.Clubs);
+        });
+        nt.addActionListener(e -> {
+            getContentPane().remove(currentJiangpai);
+            currentJiangpai = new JLabel("NT");
+            initIntroduceCards(0, null);
+        });
+
     }
 
     public void buildInterface(boolean reset) {
@@ -389,13 +480,13 @@ public class InterfaceTech extends GUI {
 
     public void display() {
         try {
-            buildInterface(true);
+//            buildInterface(true);
 //            guiUpdater = new Timer(2000, event -> updateGUI());
 //            guiUpdater.start();
 //            return;
 
-            beforeGameIntroduce();
-            initIntroduceCards();
+//            beforeGameIntroduce();
+            initIntroduceCards(0, FrenchCard.Suite.Diamonds);
 
 //                lockResult.wait();
 //                showGameResult();
@@ -538,8 +629,8 @@ public class InterfaceTech extends GUI {
     }
 
     public static void main(String[] args) {
-        QuestionService questionService = new QuestionService(GameType.Blackjack);
-        (new InterfaceTech()).runQuestions(questionService.getQuestions(), questionService.getQuestions().keySet().stream().toList(), 0);
+//        QuestionService questionService = new QuestionService(GameType.Blackjack);
+//        (new InterfaceTech()).runQuestions(questionService.getQuestions(), questionService.getQuestions().keySet().stream().toList(), 0);
     }
 
     private Game resetActionForGame() {

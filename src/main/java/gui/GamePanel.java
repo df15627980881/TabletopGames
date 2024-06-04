@@ -9,6 +9,8 @@ public class GamePanel extends JComponent {
     boolean keepBackgroundRatio = true;
     float alpha = 0.3f;
 
+//    int turn = 0;
+
     public void setBackground(Image background) {
         this.background = background;
     }
@@ -50,4 +52,12 @@ public class GamePanel extends JComponent {
         }
         super.paintComponent(g);
     }
+
+//    public int getTurn() {
+//        return turn;
+//    }
+//
+//    public void setTurn(int turn) {
+//        this.turn = turn;
+//    }
 }
