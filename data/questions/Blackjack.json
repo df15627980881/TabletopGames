@@ -36,5 +36,51 @@
       }
     ],
     "answer": "A"
+  },
+  "3": {
+    "type": "optional",
+    "questionText": "What does it mean to \"bust\"?",
+    "options": [
+      {
+        "option": "A",
+        "optionText": "Your card count goes over 21."
+      },
+      {
+        "option": "B",
+        "optionText": "You may double down."
+      },
+      {
+        "option": "C",
+        "optionText": "To lose all of your money."
+      },
+      {
+        "option": "D",
+        "optionText": "To win the hand."
+      }
+    ],
+    "answer": "A"
+  },
+  "4": {
+    "type": "optional",
+    "questionText": "What is a \"push\"?",
+    "options": [
+      {
+        "option": "A",
+        "optionText": "To tie hands with the dealer."
+      },
+      {
+        "option": "B",
+        "optionText": "To tip the dealer"
+      },
+      {
+        "option": "C",
+        "optionText": "To lose the hand"
+      },
+      {
+        "option": "D",
+        "optionText": "To place a bet."
+      }
+    ],
+    "answer": "A"
   }
 }

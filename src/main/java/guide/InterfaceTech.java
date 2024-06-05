@@ -131,7 +131,7 @@ public class InterfaceTech extends GUI {
         next = new JButton("Next");
         buttonPanel.add(next);
 
-        gui = gameType.createGUIManagerForGuide(gamePanel, gameRunning);
+        gui = gameType.createGUIManagerForGuide(gamePanel, gameRunning, "");
         if (Objects.nonNull(wrapper)) {
             getContentPane().remove(wrapper);
         }
@@ -429,7 +429,7 @@ public class InterfaceTech extends GUI {
 //        System.out.println(seedsForWinWithBannedAction.size());
 //        gameResult = Objects.requireNonNull(seedsForWinWithBannedAction.entrySet().stream().findFirst().orElse(null)).getValue().b;
         if (indexx == 0) {
-            DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, Let's learn mechanism"));
+            DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, Let's learn some game results"));
         }
         if (param == null) {
             return;
@@ -445,7 +445,7 @@ public class InterfaceTech extends GUI {
         buildInterface(false);
         updateGUI();
         showActionFeedback = false;
-        DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Mechanism: " + param.getGameResult().toString()));
+        DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Game Result: " + param.getGameResult().toString()));
         // Just show last 7 actions
         SwingWorker<Void, AbstractAction> worker = processActionsAndIntroduce();
         worker.addPropertyChangeListener(evt -> {
@@ -510,6 +510,9 @@ public class InterfaceTech extends GUI {
             }
             options.add(new JRadioButton(option.toString()));
         }
+
+        ButtonGroup group = new ButtonGroup();
+        options.forEach(group::add);
 
         JPanel panel = new JPanel(new GridLayout(4, 1));
         options.forEach(panel::add);
