@@ -349,6 +349,8 @@ public class PartialObservableDeck<T extends Component> extends Deck<T> {
         return deckVisibility;
     }
 
+    public List<boolean[]> getElementVisibility() {return elementVisibility;}
+
     @Override
     public PartialObservableDeck<T> copy() {
         PartialObservableDeck<T> dp = new PartialObservableDeck<>(componentName, ownerId, deckVisibility, componentID);

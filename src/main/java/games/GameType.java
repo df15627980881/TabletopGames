@@ -64,6 +64,7 @@ import gametemplate.GTGUIManager;
 import gametemplate.GTGameState;
 import gametemplate.GTParameters;
 import gui.*;
+import guide.InterfaceTech;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import players.human.ActionController;
 import players.human.HumanGUIPlayer;
@@ -342,12 +343,12 @@ public enum GameType {
     /**
      * Creates a graphical user interface for the given game type for game guide. Add here all games with a GUI available.
      */
-    public AbstractGUIManager createGUIManagerForGuide(GamePanel parent, Game game, String purpose) {
+    public AbstractGUIManager createGUIManagerForGuide(GamePanel parent, Game game, String purpose, InterfaceTech interfaceTech) {
         if (guiManagerClass == null) throw new AssertionError("No GUI manager class declared for the game: " + this);
 
         try {
-            Constructor<?> constructorGS = ConstructorUtils.getMatchingAccessibleConstructor(guiManagerClass, GamePanel.class, Game.class, String.class);
-            return (AbstractGUIManager) constructorGS.newInstance(parent, game, purpose);
+            Constructor<?> constructorGS = ConstructorUtils.getMatchingAccessibleConstructor(guiManagerClass, GamePanel.class, Game.class, String.class, InterfaceTech.class);
+            return (AbstractGUIManager) constructorGS.newInstance(parent, game, purpose, interfaceTech);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }

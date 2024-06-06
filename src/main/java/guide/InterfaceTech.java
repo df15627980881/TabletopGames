@@ -31,7 +31,7 @@ public class InterfaceTech extends GUI {
 
     private Game gameResult;
 
-    private Game gameRunning;
+    public Game gameRunning;
 
     private List<GuideGenerator.SimulateForMechanismParam> simulateForMechanisms;
 
@@ -121,7 +121,7 @@ public class InterfaceTech extends GUI {
         tutorialDialog.setVisible(true);
     }
 
-    public void initIntroduceCards() {
+    public void initIntroduceCards(String purpose) {
         gameRunning = resetActionForGame();
         gameType = gameRunning.getGameType();
         gamePanel = new GamePanel();
@@ -131,7 +131,6 @@ public class InterfaceTech extends GUI {
         next = new JButton("Next");
         buttonPanel.add(next);
 
-        gui = gameType.createGUIManagerForGuide(gamePanel, gameRunning, "");
         if (Objects.nonNull(wrapper)) {
             getContentPane().remove(wrapper);
         }
@@ -146,12 +145,11 @@ public class InterfaceTech extends GUI {
         gamePanel.repaint();
         setFrameProperties();
 //        this.introduceEachCards.setBorder(title);
-        DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200,
-                "Let's learn the points of each card."));
-        next.addActionListener(e -> {
-            getContentPane().remove(buttonPanel);
-            runSecondPart();
-        });
+//        next.addActionListener(e -> {
+//            getContentPane().remove(buttonPanel);
+//            runSecondPart();
+//        });
+        gui = gameType.createGUIManagerForGuide(gamePanel, gameRunning, purpose, this);
     }
 
     public void buildInterface(boolean reset) {
@@ -206,7 +204,56 @@ public class InterfaceTech extends GUI {
         }
     }
 
-    private SwingWorker<Void, AbstractAction> processActionsAndIntroduce() {
+    public SwingWorker<Void, AbstractAction> processSpecificActions(List<AbstractAction> actions) {
+        SwingWorker<Void, AbstractAction> worker = new SwingWorker<Void, AbstractAction>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                for (AbstractAction action: actions) {
+
+                    synchronized (gameRunning) {
+//                        if (pair.b.equals(Countless))
+                        currentPlayer = gameRunning.getGameState().getCurrentPlayer();
+                        gameRunning.processOneAction(action);
+//                        initDialog();
+//                        gameRunning.notifyAll();
+                        Thread.sleep(2000);
+                        publish(action);
+                        System.out.println("TTT");
+                        synchronized (lock) {
+                            try {
+                                lock.wait();
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                return null;
+                            }
+                        }
+                    }
+
+                }
+                return null;
+            }
+
+            @Override
+            protected void process(List<AbstractAction> chunks) {
+                System.out.println("GGG");
+                for (AbstractAction action : chunks) {
+                    updateGUI();
+                    synchronized (lock) {
+                        lock.notifyAll();
+                    }
+                    break;
+                }
+            }
+
+            @Override
+            protected void done() {
+                updateGUI();
+            }
+        };
+        return worker;
+    }
+
+    public SwingWorker<Void, AbstractAction> processActionsAndIntroduce() {
 //        listenForDecisions();
         SwingWorker<Void, AbstractAction> worker = new SwingWorker<>() {
 
@@ -376,7 +423,7 @@ public class InterfaceTech extends GUI {
 //    }
 
 
-    private void updateGUI() {
+    public void updateGUI() {
         AbstractGameState gameState = gameRunning.getGameState().copy();
         int currentPlayer = gameState.getCurrentPlayer();
         AbstractPlayer player = gameRunning.getPlayers().get(currentPlayer);
@@ -395,7 +442,7 @@ public class InterfaceTech extends GUI {
 //            return;
 
             beforeGameIntroduce();
-            initIntroduceCards();
+            initIntroduceCards("All");
 
 //                lockResult.wait();
 //                showGameResult();
@@ -553,4 +600,7 @@ public class InterfaceTech extends GUI {
                 gameType.createForwardModel(null, gameResult.getPlayers().size()), gameState);
     }
 
+    public JButton getNext() {
+        return next;
+    }
 }

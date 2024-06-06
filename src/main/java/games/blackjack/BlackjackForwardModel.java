@@ -12,6 +12,8 @@ import games.blackjack.actions.Hit;
 import games.blackjack.actions.Stand;
 import guide.DialogUtils;
 import guide.InterfaceTech;
+import guide.PreGameState;
+import guide.PreGameStateUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.testng.collections.Lists;
@@ -35,20 +37,28 @@ public class BlackjackForwardModel extends StandardForwardModel {
         //Create a deck
         bjgs.playerDecks = new ArrayList<>();
 
+
         //create the playing deck
         bjgs.drawDeck = FrenchCard.generateDeck("DrawDeck", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
         //shuffle the cards
         bjgs.drawDeck.shuffle(new Random((bjgs.getGameParameters().getRandomSeed())));
+
+//        if (AbstractGameState.isGuide) {
+//            PreGameState preGameState = PreGameStateUtils.getBlackjack();
+//            bjgs.drawDeck =
+//        }
 
         bjgs.setFirstPlayer(0);
 
         //Create a hand for each player
         boolean[] visibility = new boolean[firstState.getNPlayers()];
         Arrays.fill(visibility, true);
-        for (int i = 0; i < bjgs.getNPlayers(); i++){
+        for (int i = 0; i < bjgs.getNPlayers(); i++) {
             PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + i + " deck", i, visibility);
             bjgs.playerDecks.add(playerDeck);
-            for (int card = 0; card < ((BlackjackParameters)bjgs.getGameParameters()).nCardsPerPlayer; card++) {
+        }
+        for (int card = 0; card < ((BlackjackParameters)bjgs.getGameParameters()).nCardsPerPlayer; card++) {
+            for (int i = 0; i < bjgs.getNPlayers(); i++) {
                 if (i == bjgs.dealerPlayer && i < ((BlackjackParameters)bjgs.getGameParameters()).nDealerCardsHidden) {
                     new Hit(i, false, true).execute(bjgs);
                 } else {

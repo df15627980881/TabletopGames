@@ -78,6 +78,7 @@ public abstract class AbstractGameState {
     protected Random redeterminisationRnd = new Random();
     public JFrame frame;
     private List<Dialog> dialogs;
+    public static boolean isGuide;
 
     /**
      * @param gameParameters - game parameters.
