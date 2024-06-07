@@ -3,6 +3,9 @@ package core;
 import core.actions.AbstractAction;
 import core.actions.ActionSpace;
 import core.actions.DoNothing;
+import core.components.FrenchCard;
+import core.components.PartialObservableDeck;
+import games.blackjack.BlackjackGameState;
 import utilities.ActionTreeNode;
 import utilities.ElapsedCpuChessTimer;
 
@@ -36,7 +39,6 @@ public abstract class AbstractForwardModel {
                     firstState.gameParameters.incrementActionS, firstState.gameParameters.incrementTurnS,
                     firstState.gameParameters.incrementRoundS, firstState.gameParameters.incrementMilestoneS);
         }
-
         _setup(firstState);
         firstState.addAllComponents();
     }

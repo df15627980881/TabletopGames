@@ -10,15 +10,14 @@ import core.components.PartialObservableDeck;
 import evaluation.metrics.Event;
 import games.blackjack.actions.Hit;
 import games.blackjack.actions.Stand;
-import guide.DialogUtils;
-import guide.InterfaceTech;
-import guide.PreGameState;
-import guide.PreGameStateUtils;
+import guide.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.testng.collections.Lists;
+import utilities.JSONUtils;
 import utilities.Pair;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,10 +41,12 @@ public class BlackjackForwardModel extends StandardForwardModel {
         bjgs.drawDeck = FrenchCard.generateDeck("DrawDeck", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
         //shuffle the cards
         bjgs.drawDeck.shuffle(new Random((bjgs.getGameParameters().getRandomSeed())));
-
-        if (AbstractGameState.isGuide) {
-            PreGameState preGameState = PreGameStateUtils.getBlackjack();
-            bjgs.drawDeck = preGameState.getDrawDeck();
+        System.out.println();
+        if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
+            PreGameState preGameState = GuideContext.deckForMechanism;
+            bjgs.drawDeck = preGameState.getDrawDeck().copy();
+        } else if (GuideContext.guideStage == GuideContext.GuideState.SHOW_GAME_RESULT) {
+            bjgs.drawDeck = GuideContext.deckForResult.get(GuideContext.deckForResultIndex).getDrawDeck().copy();
         }
 
         bjgs.setFirstPlayer(0);
@@ -71,23 +72,23 @@ public class BlackjackForwardModel extends StandardForwardModel {
     @Override
     protected void _afterAction(AbstractGameState gameState, AbstractAction action){
         BlackjackGameState bjgs = (BlackjackGameState) gameState;
-        System.out.println("####" + action);
         if (action instanceof Hit) {
             Hit hit = (Hit)action;
             // Check if bust or win score
             int points = bjgs.calculatePoints(hit.playerID);
 //            System.out.println("playerId: " + hit.playerID + " points: " + points);
 
-            if (AbstractGameState.isGuide && points >= ((BlackjackParameters)gameState.getGameParameters()).dealerStand && hit.playerID == ((BlackjackGameState) gameState).dealerPlayer) {
-                System.out.println("mcakjckas");
+            if (Objects.nonNull(GuideContext.frame) && points >=
+                    ((BlackjackParameters)gameState.getGameParameters()).dealerStand
+                    && hit.playerID == ((BlackjackGameState) gameState).dealerPlayer) {
                 _endTurn((BlackjackGameState) gameState);
                 return;
             }
 
             if (points > ((BlackjackParameters)gameState.getGameParameters()).winScore) {
                 gameState.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, hit.playerID);
-                if (Objects.nonNull(gameState.getFrame())) {
-                    gameState.getDialogs().add(DialogUtils.create(gameState.getFrame(), "Game Guide",
+                if (Objects.nonNull(GuideContext.frame)) {
+                    gameState.getDialogs().add(DialogUtils.create(GuideContext.frame, "Game Guide",
                             Boolean.TRUE, 300, 200, "<html><h2>Lose Game</h2><p>The player's" +
                                     " score is greater than 21.<p>"));
                 }

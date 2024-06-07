@@ -8,17 +8,22 @@ import games.blackjack.actions.Hit;
 import games.blackjack.actions.Stand;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import scala.Int;
 import utilities.JSONUtils;
 import utilities.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PreGameStateUtils {
 
-    public static PreGameState getBlackjack() {
-        JSONObject jsonObject = JSONUtils.loadJSONFile("data/preGameState/Blackjack.json");
+    public static PreGameState getBlackjack(String path) {
+        JSONObject jsonObject = JSONUtils.loadJSONFile(path);
         PreGameState result = new PreGameState();
+
+        String gameResultDesc = (String) jsonObject.get("gameResultDesc");
+        Integer playerCount = (Integer) jsonObject.get("playerCount");
 
         JSONArray optionsArray = (JSONArray) jsonObject.get("actions");
         List<Pair<Long, AbstractAction>> actions = new ArrayList<>();
@@ -56,29 +61,35 @@ public class PreGameStateUtils {
 
         deck.reverse();
 
+        result.setPlayerCount(playerCount);
         result.setPlayerIdAndActions(actions);
         result.setDrawDeck(deck);
+        result.setGameResultDesc(gameResultDesc);
         return result;
     }
 
     public static void generateDeckJson() {
 //        Deck<FrenchCard> deck = new Deck<>("aa", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
         Set<FrenchCard> deck = new LinkedHashSet<>();
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 5));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 10));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Jack, FrenchCard.Suite.Spades));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Ace, FrenchCard.Suite.Hearts));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Hearts, 10));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Clubs, 7));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Clubs, 8));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Ace, FrenchCard.Suite.Spades));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Ace, FrenchCard.Suite.Diamonds));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Spades, 5));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Queen, FrenchCard.Suite.Diamonds));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 8));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Clubs, 2));
-        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 7));
         deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 6));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Ace, FrenchCard.Suite.Diamonds));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Spades, 10));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Hearts, 9));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Clubs, 5));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Hearts, 5));
+
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 4));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 7));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Queen, FrenchCard.Suite.Clubs));
+//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.King, FrenchCard.Suite.Clubs));
+//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Queen, FrenchCard.Suite.Spades));
+//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 9));
+//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Spades, 10));
+//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 2));
+//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 6));
+//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Ace, FrenchCard.Suite.Clubs));
+//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Jack, FrenchCard.Suite.Diamonds));
+//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 6));
 
 
         for (int j=2; j<=10; ++j) {
@@ -125,7 +136,7 @@ public class PreGameStateUtils {
     }
 
     public static void main(String[] args) {
-//        generateDeckJson();
-        getBlackjack();
+        generateDeckJson();
+//        getBlackjack();
     }
 }

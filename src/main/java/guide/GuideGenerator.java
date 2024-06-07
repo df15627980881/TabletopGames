@@ -78,7 +78,6 @@ public class GuideGenerator {
                 if (!guideGenerator.resultAndActionSequencesMap.containsKey(playerResult)) {
                     AbstractGameState gameState = game.getGameState().copy();
                     gameState.reset(entry.getKey());
-                    gameState.setFrame(game.getGameState().getFrame());
                     Game newGame = new Game(game.getGameType(), game.getPlayers(),
                             game.getGameType().createForwardModel(null, game.getPlayers().size()), gameState);
                     guideGenerator.resultAndActionSequencesMap.put(playerResult, new SimulateForMechanismParam(entry.getKey(),
@@ -89,7 +88,6 @@ public class GuideGenerator {
 
         List<Game> gamesForPreviousActionShow = Lists.newArrayList(guideGenerator.getGamesForPreviousActionShow(seeds.get(0), initParam(gameType)));
 
-        PreGameState pre = PreGameStateUtils.getBlackjack();
         RandomPlayer player1 = new RandomPlayer();
         RandomPlayer player2 = new RandomPlayer();
         RandomPlayer player3 = new RandomPlayer();
@@ -97,7 +95,6 @@ public class GuideGenerator {
         RandomPlayer player5 = new RandomPlayer();
 
         ArrayList<AbstractPlayer> players = new ArrayList<>(Lists.newArrayList(player1, player2, player3, player4, player5));
-        AbstractGameState.isGuide = true;
         Long ss = System.currentTimeMillis();
         Game newGame = Game.runOne(GameType.valueOf(gameType), null, players, ss, false, null, null, 1);
         System.out.println(1);
@@ -256,7 +253,6 @@ public class GuideGenerator {
     public static Game runWithSpecificActionSequences(Long seed, Game gameInit, List<AbstractAction> actions) {
         AbstractGameState gameState = gameInit.getGameState().copy();
         gameState.reset(seed);
-        gameState.setFrame(gameInit.getGameState().getFrame());
         Game newGame = new Game(gameInit.getGameType(), gameInit.getPlayers(),
                 gameInit.getGameType().createForwardModel(null, gameInit.getPlayers().size()), gameState);
         actions.forEach(newGame::processOneAction);
@@ -266,7 +262,6 @@ public class GuideGenerator {
     public void getTriggerGameMechanics(Long seed, Game gameInit) {
         AbstractGameState gameState = gameInit.getGameState().copy();
         gameState.reset(seed);
-        gameState.setFrame(gameInit.getGameState().getFrame());
         Game newGame = new Game(gameInit.getGameType(), gameInit.getPlayers(),
                 gameInit.getGameType().createForwardModel(null, gameInit.getPlayers().size()), gameState);
         List<AbstractAction> actions = gameInit.getGameState().getHistory().stream().map(x -> x.b).toList();

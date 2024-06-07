@@ -43,20 +43,17 @@ public class BlackjackGUIManager extends AbstractGUIManager {
     Border highlightActive = BorderFactory.createLineBorder(new Color(47,132,220), 3);
     Border[] playerViewBorders;
 
-    List<FrenchCard> frenchCards;
-
     int indexx, playerId;
-    PreGameState preGameState;
 
     JTabbedPane pane;
 
     public BlackjackGUIManager(GamePanel parent, Game game, String purpose, InterfaceTech frame) {
         super(parent, game, purpose);
-        Deck<FrenchCard> deck = PreGameStateUtils.getBlackjack().getDrawDeck();
-        preGameState = PreGameStateUtils.getBlackjack();
+//        Deck<FrenchCard> deck = PreGameStateUtils.getBlackjack().getDrawDeck();
+//        preGameState = PreGameStateUtils.getBlackjack();
 
 //        deck.shuffle(new Random(preGameState.getSeed()));
-        frenchCards = deck.getComponents();
+//        frenchCards = deck.getComponents();
         indexx = 0;
         playerId = 0;
         UIManager.put("TabbedPane.contentOpaque", false);
@@ -271,6 +268,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
     }
 
     public void generateDirectionGuide(InterfaceTech frame, Map<Integer, PartialObservableDeck<FrenchCard>> playerIdAndDeck, boolean isAll) {
+        List<FrenchCard> frenchCards = GuideContext.deckForMechanism.getDrawDeck().getComponents();
         if (game != null){
             AbstractGameState gameState = game.getGameState();
             if (gameState != null){
@@ -421,7 +419,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         }
 
         frame.updateGUI();
-        List<Pair<Long, AbstractAction>> playerIdAndActions = preGameState.getPlayerIdAndActions();
+        List<Pair<Long, AbstractAction>> playerIdAndActions = GuideContext.deckForMechanism.getPlayerIdAndActions();
         List<AbstractAction> playerActions = playerIdAndActions.stream().filter(p -> p.a != game.getPlayers().size() - 1).map(pp -> pp.b).toList();
         List<AbstractAction> dealerActions = playerIdAndActions.stream().filter(p -> p.a == game.getPlayers().size() - 1).map(pp -> pp.b).toList();
 
@@ -525,7 +523,8 @@ public class BlackjackGUIManager extends AbstractGUIManager {
             if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
                 parent.repaint();
                 frame.showGameResult();
-                frame.runTertiaryPart(frame.simulateForMechanisms.get(0), 0);
+//                frame.runTertiaryPart(frame.simulateForMechanisms.get(0), 0);
+                frame.runGameResult();
             }
         });
         worker.execute();
@@ -533,6 +532,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
     }
 
     public void generatePointGuide(InterfaceTech frame) {
+        GuideContext.guideStage = GuideContext.GuideState.SHOW_MECHANISM_POINT;
         DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                 "Let's learn the points of each card."));
         JTabbedPane pane = new JTabbedPane();

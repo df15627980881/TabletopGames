@@ -12,16 +12,22 @@ import gui.GamePanel;
 import gui.views.ComponentView;
 import guide.param.Question;
 import org.apache.commons.collections4.CollectionUtils;
+import players.human.HumanGUIPlayer;
+import players.simple.RandomPlayer;
+import utilities.JSONUtils;
 import utilities.Pair;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class InterfaceTech extends GUI {
 
@@ -100,7 +106,33 @@ public class InterfaceTech extends GUI {
         this.showPreviousActions = false;
         this.gamesForPreviousActionShow = gamesForPreviousActionShow;
         this.questionService = new QuestionService(this.gameType);
-        gameResult.getGameState().setFrame(InterfaceTech.this);
+        this.next = new JButton("Next");
+
+        GuideContext.guideStage = GuideContext.GuideState.GUIDE_CLOSE;
+        GuideContext.frame = InterfaceTech.this;
+        GuideContext.deckForMechanism = PreGameStateUtils.getBlackjack("data/preGameState/Blackjack/Mechanism/Blackjack.json");
+        GuideContext.deckForResult = new ArrayList<>();
+        GuideContext.deckForSimulate = new ArrayList<>();
+        GuideContext.deckForResultIndex = 0;
+        GuideContext.deckForSimulateIndex = 0;
+
+        File[] files = JSONUtils.getAllFile("data/preGameState/Blackjack/GameResult");
+        if (files == null || files.length == 0) {
+            System.out.println("No gameResult game");
+        } else {
+            for (File file : files) {
+                GuideContext.deckForResult.add(PreGameStateUtils.getBlackjack("data/preGameState/Blackjack/GameResult/" + file.getName()));
+            }
+        }
+
+        files = JSONUtils.getAllFile("data/preGameState/Blackjack/Simulate");
+        if (files == null || files.length == 0) {
+            System.out.println("No gameResult game");
+        } else {
+            for (File file : files) {
+                GuideContext.deckForSimulate.add(PreGameStateUtils.getBlackjack("data/preGameState/Blackjack/Simulate/" + file.getName()));
+            }
+        }
     }
 
     public void initDialog() {
@@ -122,6 +154,7 @@ public class InterfaceTech extends GUI {
     }
 
     public void initIntroduceCards(String purpose) {
+        GuideContext.guideStage = GuideContext.GuideState.SHOW_MECHANISM_TURN;
         gameRunning = resetActionForGame();
         gameType = gameRunning.getGameType();
         gamePanel = new GamePanel();
@@ -191,6 +224,7 @@ public class InterfaceTech extends GUI {
 
     private void beforeGameIntroduce() {
         try {
+            GuideContext.guideStage = GuideContext.GuideState.SHOW_GAME_RULE;
             Method getRuleTextMethod = gui.getClass().getMethod("getRuleText");
             String ruleText = (String) getRuleTextMethod.invoke(gui);
             DialogUtils.show(DialogUtils.createFirstStep(InterfaceTech.this, "Game Guide", Boolean.TRUE,
@@ -449,9 +483,9 @@ public class InterfaceTech extends GUI {
 //            guiUpdater = new Timer(2000, event -> updateGUI());
 //            guiUpdater.start();
 //            return;
-
             beforeGameIntroduce();
             initIntroduceCards("All");
+//            runGameResult();
 
 //                lockResult.wait();
 //                showGameResult();
@@ -466,6 +500,7 @@ public class InterfaceTech extends GUI {
         }
     }
 
+    @Deprecated
     public void runSecondPart() {
         DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200,
                 "Now let's go through the game step by step, trying to understand what happens with each Action（・∀・）"));
@@ -481,10 +516,59 @@ public class InterfaceTech extends GUI {
         worker.execute();
     }
 
+    public void runGameResult() {
+        if (GuideContext.deckForResultIndex == 0) {
+            for (ActionListener actionListener : next.getActionListeners()) {
+                next.removeActionListener(actionListener);
+            }
+            next.addActionListener(e -> {
+                GuideContext.deckForResultIndex += 1;
+                runGameResult();
+            });
+            GuideContext.guideStage = GuideContext.GuideState.SHOW_GAME_RESULT;
+            DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, Let's learn some game results"));
+        }
+        if (GuideContext.deckForResultIndex >= GuideContext.deckForResult.size()) {
+//            getPreviousRecommendAction();
+            getContentPane().removeAll();
+            runQuestions(questionService.getQuestions(), questionService.getQuestions().keySet().stream().toList(), 0);
+            return;
+        }
+
+        PreGameState preGameState = GuideContext.deckForResult.get(GuideContext.deckForResultIndex);
+        Set<Long> playerIds = new LinkedHashSet<>(preGameState.getPlayerIdAndActions().stream().map(x -> x.a).collect(Collectors.toSet()));
+        List<AbstractAction> actions = new ArrayList<>(preGameState.getPlayerIdAndActions().stream().map(x -> x.b).toList());
+        List<AbstractPlayer> players = new ArrayList<>();
+        for (int i=0; i<playerIds.size(); ++i) {
+            players.add(new RandomPlayer());
+        }
+        gameResult = Game.runOne(gameType, null, players, System.currentTimeMillis(), false, null, null, 1);
+        buildInterface(true);
+        updateGUI();
+//        showActionFeedback = false;
+        actions.forEach(x -> {
+            gameRunning.processOneAction(x);
+            updateGUI();
+        });
+        DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getGameResultDesc()));
+
+// Just show last 7 actions
+//        SwingWorker<Void, AbstractAction> worker = processSpecificActions(actions);
+//        worker.addPropertyChangeListener(evt -> {
+//            if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
+//                GuideContext.deckForResultIndex += 1;
+//                runGameResult();
+//            }
+//        });
+//        worker.execute();
+    }
+
+    @Deprecated
     public void runTertiaryPart(GuideGenerator.SimulateForMechanismParam param, int indexx) {
 //        System.out.println(seedsForWinWithBannedAction.size());
 //        gameResult = Objects.requireNonNull(seedsForWinWithBannedAction.entrySet().stream().findFirst().orElse(null)).getValue().b;
         if (indexx == 0) {
+            GuideContext.guideStage = GuideContext.GuideState.SHOW_GAME_RESULT;
             DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, Let's learn some game results"));
         }
         if (param == null) {
@@ -516,15 +600,33 @@ public class InterfaceTech extends GUI {
         worker.execute();
     }
 
+    public void simulate() {
+        if (GuideContext.deckForSimulateIndex >= GuideContext.deckForSimulate.size()) {
+            return;
+        }
+        PreGameState preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
+        List<AbstractPlayer> players = new ArrayList<>();
+        for (int i=0; i<preGameState.getPlayerCount(); ++i) {
+//            players.add(new HumanGUIPlayer());
+        }
+    }
+
     /**
      *
      */
     public void getPreviousRecommendAction() {
         System.out.println("getPreviousRecommendAction start!");
+        for (ActionListener actionListener : next.getActionListeners()) {
+            next.removeActionListener(actionListener);
+        }
         if (gameType == GameType.Blackjack) {
             DialogUtils.show(DialogUtils.createWithoutPack(InterfaceTech.this, "Game Guide", Boolean.TRUE,
                     1200, 300, "<html><p>Winning tactics in Blackjack require that the player play each hand in the optimum way, and such strategy always takes into account what the dealer's upcard is. When the dealer's upcard is a good one, a 7, 8, 9, 10-card, or ace for example, the player should not stop drawing until a total of 17 or more is reached. When the dealer's upcard is a poor one, 4, 5, or 6, the player should stop drawing as soon as he gets a total of 12 or higher. The strategy here is never to take a card if there is any chance of going bust. The desire with this poor holding is to let the dealer hit and hopefully go over 21. Finally, when the dealer's up card is a fair one, 2 or 3, the player should stop with a total of 13 or higher. With a soft hand, the general strategy is to keep hitting until a total of at least 18 is reached. Thus, with an ace and a six (7 or 17), the player would not stop at 17, but would hit.</p></html>"));
+//            next.addActionListener(e -> {
+//                runQuestions();
+//            });
         }
+        GuideContext.guideStage = GuideContext.GuideState.SHOW_ACTIONS_EXECUTED_BY_MCTS;
         DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE,
                 300, 200, "Now let's look at some recommended actions from MCTS algorithm"));
         gameResult = gamesForPreviousActionShow.get(0);
@@ -547,6 +649,7 @@ public class InterfaceTech extends GUI {
             return;
         }
         if (indexx == 0) {
+            GuideContext.guideStage = GuideContext.GuideState.SHOW_QUESTIONS;
             DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE,
                     300, 200, "Now let's answer some questions to check if we make sense"));
         }
@@ -604,7 +707,6 @@ public class InterfaceTech extends GUI {
     private Game resetActionForGame() {
         AbstractGameState gameState = gameResult.getGameState().copy();
         gameState.reset(seed);
-        gameState.setFrame(InterfaceTech.this);
         return new Game(gameResult.getGameType(), gameResult.getPlayers(),
                 gameType.createForwardModel(null, gameResult.getPlayers().size()), gameState);
     }

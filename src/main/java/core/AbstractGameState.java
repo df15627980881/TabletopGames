@@ -76,9 +76,7 @@ public abstract class AbstractGameState {
     // redeterminisationRnd is used for redeterminisation only - this is to ensure that the main game is not affected
     // this is not initialised from any seed, as redeterminisation is used to hide data from players and cannot affect the game itself
     protected Random redeterminisationRnd = new Random();
-    public JFrame frame;
     private List<Dialog> dialogs;
-    public static boolean isGuide;
 
     /**
      * @param gameParameters - game parameters.
@@ -657,14 +655,6 @@ public abstract class AbstractGameState {
         result = 31 * result + Objects.hash(tick, nPlayers, roundCounter, turnCounter, turnOwner, firstPlayer);
         result = 31 * result + Arrays.hashCode(playerResults);
         return result;
-    }
-
-    public JFrame getFrame() {
-        return frame;
-    }
-
-    public void setFrame(JFrame frame) {
-        this.frame = frame;
     }
 
     public List<Dialog> getDialogs() {

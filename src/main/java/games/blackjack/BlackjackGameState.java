@@ -15,6 +15,7 @@ import java.util.*;
 
 public class BlackjackGameState extends AbstractGameState implements IPrintable {
     List<PartialObservableDeck<FrenchCard>> playerDecks;
+
     Deck<FrenchCard> drawDeck;
     int dealerPlayer;
 

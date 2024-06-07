@@ -1,5 +1,6 @@
 package utilities;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -374,5 +375,14 @@ public class JSONUtils {
             }
         }
         return json;
+    }
+
+    public static File[] getAllFile(String directoryPath) {
+        if (StringUtils.isBlank(directoryPath)) {
+            return null;
+        }
+
+        File folder = new File(directoryPath);
+        return folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
     }
 }

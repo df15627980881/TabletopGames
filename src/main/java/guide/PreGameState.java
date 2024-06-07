@@ -9,9 +9,13 @@ import java.util.List;
 
 public class PreGameState {
 
+    private Integer playerCount;
+
     private List<Pair<Long, AbstractAction>> playerIdAndActions;
 
     private Deck<FrenchCard> drawDeck;
+
+    private String gameResultDesc;
 
     public List<Pair<Long, AbstractAction>> getPlayerIdAndActions() {
         return playerIdAndActions;
@@ -27,5 +31,21 @@ public class PreGameState {
 
     public void setDrawDeck(Deck<FrenchCard> drawDeck) {
         this.drawDeck = drawDeck;
+    }
+
+    public String getGameResultDesc() {
+        return gameResultDesc;
+    }
+
+    public void setGameResultDesc(String gameResultDesc) {
+        this.gameResultDesc = gameResultDesc;
+    }
+
+    public Integer getPlayerCount() {
+        return playerCount;
+    }
+
+    public void setPlayerCount(Integer playerCount) {
+        this.playerCount = playerCount;
     }
 }
