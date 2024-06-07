@@ -1,9 +1,6 @@
 package games.blackjack.gui;
 
-import core.AbstractGameState;
-import core.AbstractPlayer;
-import core.CoreConstants;
-import core.Game;
+import core.*;
 import core.actions.AbstractAction;
 import core.components.Deck;
 import core.components.FrenchCard;
@@ -14,7 +11,9 @@ import gui.AbstractGUIManager;
 import gui.GamePanel;
 import gui.IScreenHighlight;
 import guide.*;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.testng.collections.Lists;
 import players.human.ActionController;
 import utilities.ImageIO;
 import utilities.Pair;
@@ -49,12 +48,14 @@ public class BlackjackGUIManager extends AbstractGUIManager {
     int indexx, playerId;
     PreGameState preGameState;
 
+    JTabbedPane pane;
+
     public BlackjackGUIManager(GamePanel parent, Game game, String purpose, InterfaceTech frame) {
         super(parent, game, purpose);
-        Deck<FrenchCard> deck = FrenchCard.generateDeck(frame.toString(), CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
+        Deck<FrenchCard> deck = PreGameStateUtils.getBlackjack().getDrawDeck();
         preGameState = PreGameStateUtils.getBlackjack();
 
-        deck.shuffle(new Random(preGameState.getSeed()));
+//        deck.shuffle(new Random(preGameState.getSeed()));
         frenchCards = deck.getComponents();
         indexx = 0;
         playerId = 0;
@@ -67,7 +68,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         } else if (MechanismEnum.POINT.getDescription().equals(purpose)) {
             generatePointGuide(frame);
         } else if (MechanismEnum.SOFT_HAND.getDescription().equals(purpose)) {
-            generateSoftHand(frame);
+//            generateSoftHand(frame);
         } else if (MechanismEnum.ALL.getDescription().equals(purpose)) {
             generatePointGuide(frame);
 //            generateDirectionGuide(frame, new HashMap<>(), true);
@@ -273,7 +274,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         if (game != null){
             AbstractGameState gameState = game.getGameState();
             if (gameState != null){
-                JTabbedPane pane = new JTabbedPane();
+                pane = new JTabbedPane();
                 JPanel main = new JPanel();
                 main.setOpaque(false);
                 main.setLayout(new BorderLayout());
@@ -424,8 +425,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         List<AbstractAction> playerActions = playerIdAndActions.stream().filter(p -> p.a != game.getPlayers().size() - 1).map(pp -> pp.b).toList();
         List<AbstractAction> dealerActions = playerIdAndActions.stream().filter(p -> p.a == game.getPlayers().size() - 1).map(pp -> pp.b).toList();
 
-        AtomicInteger i= new AtomicInteger();
-        SwingWorker<Void, AbstractAction> worker = frame.processSpecificActions(new ArrayList<>(playerActions));
+        SwingWorker<Void, AbstractAction> worker = frame.processSpecificActions(playerActions);
         frame.getNext().addActionListener(e -> {
             System.out.println("JSJSJ");
 //            frame.gameRunning.processOneAction(preGameState.getActions().get(i.get()));
@@ -434,14 +434,16 @@ public class BlackjackGUIManager extends AbstractGUIManager {
             worker.addPropertyChangeListener(evt -> {
                 if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
                     System.out.println("HDIUS");
+                    parent.removeAll();
                     BlackjackGameState gs = (BlackjackGameState) game.getGameState();
-                    int cur = gs.getDealerPlayer();
-                    BlackjackPlayerView playerHand = new BlackjackPlayerView(gs.getPlayerDecks().get(cur), cur, game.getGameType().getDataPath());
+                    int cur = game.getPlayers().size() - 1;
+                    BlackjackParameters gameParameters = (BlackjackParameters) gs.getGameParameters();
+                    BlackjackPlayerView playerHand = new BlackjackPlayerView(gs.getPlayerDecks().get(cur), cur, gameParameters.getDataPath());
                     playerHand.setOpaque(false);
                     // Get agent name
                     String[] split = game.getPlayers().get(cur).getClass().toString().split("\\.");
                     String agentName = split[split.length - 1];
-
+                    parent.setBackground(ImageIO.GetInstance().getImage("data/FrenchCards/table-background.jpg"));
                     // Create border, layouts and keep track of this view
                     TitledBorder title = BorderFactory.createTitledBorder(
                                 BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "DEALER [" + agentName + "]",
@@ -452,21 +454,81 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                     frame.updateGUI();
                     DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                             "Now the dealer shows the cards in his hand."));
-                    parent.repaint();
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
                         throw new RuntimeException(ex);
                     }
-                    DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-                            "The result is 7. Since the dealer's total number of cards is 17, " +
-                                    "which is in the interval [17,21], he only needs to perform the Stand operation."));
-                    System.out.println("MSDK");
-                    generateSoftHand(frame);
+                    pane = new JTabbedPane();
+                    JPanel main = new JPanel();
+                    main.setOpaque(false);
+                    main.setLayout(new BorderLayout());
+                    JPanel rules = new JPanel();
+                    pane.add("Main", main);
+                    pane.add("Rules", rules);
+                    JLabel ruleText = new JLabel(getRuleText());
+                    rules.add(ruleText);
+                    rules.setBackground(new Color(43, 108, 25, 111));
+                    JPanel mainGameArea = new JPanel();
+                    mainGameArea.setOpaque(false);
+                    mainGameArea.setLayout(new BorderLayout());
+
+                    String[] locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+                    JPanel[] sides = new JPanel[]{new JPanel(), new JPanel(), new JPanel(), new JPanel()};
+                    int next = 0;
+                    for (int i = 0; i < game.getPlayers().size(); i++) {
+                        sides[next].add(playerHands[i]);
+                        sides[next].setLayout(new GridBagLayout());
+                        sides[next].setOpaque(false);
+                        next = (next + 1) % (locations.length);
+                    }
+                    for (int i = 0; i < locations.length; i++) {
+                        mainGameArea.add(sides[i], locations[i]);
+                    }
+
+                    // Top area will show state information
+                    JPanel infoPanel = createGameStateInfoPanel("Blackjack", gs, width, defaultInfoPanelHeight);
+                    // Bottom area will show actions available
+//                JComponent actionPanel = createActionPanel(new IScreenHighlight[0], width, defaultActionPanelHeight, false);
+
+                    // Add all views to frame
+                    main.add(mainGameArea, BorderLayout.CENTER);
+                    main.add(infoPanel, BorderLayout.NORTH);
+//                main.add(actionPanel, BorderLayout.SOUTH);
+
+                    pane.add("Main", main);
+                    pane.add("Rules", rules);
+
+                    parent.setLayout(new BorderLayout());
+                    parent.add(pane, BorderLayout.CENTER);
+                    parent.setPreferredSize(new Dimension(width, height + defaultActionPanelHeight + defaultInfoPanelHeight + defaultCardHeight + 20));
+                    parent.revalidate();
+                    parent.setVisible(true);
+                    parent.repaint();
+
+                    processDealerAction(frame, dealerActions);
+//                    generateSoftHand(frame);
                 }
             });
             worker.execute();
         });
+
+    }
+
+    private void processDealerAction(InterfaceTech frame, List<AbstractAction> dealerActions) {
+        for (ActionListener actionListener : frame.getNext().getActionListeners()) {
+            frame.getNext().removeActionListener(actionListener);
+        }
+        System.out.println(dealerActions.size());
+        SwingWorker<Void, AbstractAction> worker = frame.processSpecificActions(new ArrayList<>(dealerActions));
+        worker.addPropertyChangeListener(evt -> {
+            if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
+                parent.repaint();
+                frame.showGameResult();
+                frame.runTertiaryPart(frame.simulateForMechanisms.get(0), 0);
+            }
+        });
+        worker.execute();
 
     }
 
@@ -569,13 +631,6 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         });
     }
 
-    public void generateSoftHand(InterfaceTech frame) {
-        for (ActionListener actionListener : frame.getNext().getActionListeners()) {
-            frame.getNext().removeActionListener(actionListener);
-        }
-        DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-                "generateSoftHand"));
-    }
 
     public static String getRuleText() {
         String rules = "<html><center><h1>Blackjack</h1></center><br/><hr><br/>";

@@ -95,15 +95,14 @@ public class GuideGenerator {
         RandomPlayer player3 = new RandomPlayer();
         RandomPlayer player4 = new RandomPlayer();
         RandomPlayer player5 = new RandomPlayer();
-        RandomPlayer player6 = new RandomPlayer();
-        RandomPlayer player7 = new RandomPlayer();
 
-        ArrayList<AbstractPlayer> players = new ArrayList<>(Lists.newArrayList(player1, player2, player3, player4, player5, player6, player7));
+        ArrayList<AbstractPlayer> players = new ArrayList<>(Lists.newArrayList(player1, player2, player3, player4, player5));
         AbstractGameState.isGuide = true;
-        Game newGame = Game.runOne(GameType.valueOf(gameType), null, players, pre.getSeed(), false, null, null, 1);
+        Long ss = System.currentTimeMillis();
+        Game newGame = Game.runOne(GameType.valueOf(gameType), null, players, ss, false, null, null, 1);
         System.out.println(1);
         guideGenerator.resultAndActionSequencesMap.forEach((k, v) -> System.out.printf("%-15s : %s%n", k, v));
-        SwingUtilities.invokeLater(() -> new InterfaceTech(pre.getSeed(), newGame, new ArrayList<>(guideGenerator.resultAndActionSequencesMap.values()), gamesForPreviousActionShow).display());
+        SwingUtilities.invokeLater(() -> new InterfaceTech(ss, newGame, new ArrayList<>(guideGenerator.resultAndActionSequencesMap.values()), gamesForPreviousActionShow).display());
 //        }
 
 

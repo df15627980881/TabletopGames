@@ -43,10 +43,10 @@ public class BlackjackForwardModel extends StandardForwardModel {
         //shuffle the cards
         bjgs.drawDeck.shuffle(new Random((bjgs.getGameParameters().getRandomSeed())));
 
-//        if (AbstractGameState.isGuide) {
-//            PreGameState preGameState = PreGameStateUtils.getBlackjack();
-//            bjgs.drawDeck =
-//        }
+        if (AbstractGameState.isGuide) {
+            PreGameState preGameState = PreGameStateUtils.getBlackjack();
+            bjgs.drawDeck = preGameState.getDrawDeck();
+        }
 
         bjgs.setFirstPlayer(0);
 
@@ -71,11 +71,19 @@ public class BlackjackForwardModel extends StandardForwardModel {
     @Override
     protected void _afterAction(AbstractGameState gameState, AbstractAction action){
         BlackjackGameState bjgs = (BlackjackGameState) gameState;
+        System.out.println("####" + action);
         if (action instanceof Hit) {
             Hit hit = (Hit)action;
             // Check if bust or win score
             int points = bjgs.calculatePoints(hit.playerID);
 //            System.out.println("playerId: " + hit.playerID + " points: " + points);
+
+            if (AbstractGameState.isGuide && points >= ((BlackjackParameters)gameState.getGameParameters()).dealerStand && hit.playerID == ((BlackjackGameState) gameState).dealerPlayer) {
+                System.out.println("mcakjckas");
+                _endTurn((BlackjackGameState) gameState);
+                return;
+            }
+
             if (points > ((BlackjackParameters)gameState.getGameParameters()).winScore) {
                 gameState.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, hit.playerID);
                 if (Objects.nonNull(gameState.getFrame())) {
@@ -150,7 +158,6 @@ public class BlackjackForwardModel extends StandardForwardModel {
                 // Dealer went bust, everyone else wins
                 bjgs.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, bjgs.dealerPlayer);
             }
-
             for (int i = 0; i < bjgs.getNPlayers()-1; i++) {  // Check all players and compare to dealer
                 if (bjgs.getPlayerResults()[i] != LOSE_GAME) {
                     if (score[bjgs.dealerPlayer] > params.winScore) {

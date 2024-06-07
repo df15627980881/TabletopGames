@@ -1,5 +1,4 @@
 {
-  "seed": 1717705373452,
   "actions": [
     {
       "player": 0,
@@ -7,11 +6,273 @@
     },
     {
       "player": 1,
-      "action": "Hit#1"
+      "action": "Stand"
     },
     {
       "player": 2,
       "action": "Stand"
+    },
+    {
+      "player": 3,
+      "action": "Hit"
+    },
+    {
+      "player": 3,
+      "action": "Hit"
+    },
+    {
+      "player": 4,
+      "action": "Hit"
     }
-  ]
+  ],
+  "deck": {
+    "name": "MECHANISM_SHOW",
+    "visibilityMode": "VISIBLE_TO_ALL",
+    "cards": [
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "10"
+      },
+      {
+        "type": "Jack",
+        "suite": "Spades"
+      },
+      {
+        "type": "Ace",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "10"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "8"
+      },
+      {
+        "type": "Ace",
+        "suite": "Spades"
+      },
+      {
+        "type": "Ace",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "5"
+      },
+      {
+        "type": "Queen",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "King",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "9"
+      },
+      {
+        "type": "Jack",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "9"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "10"
+      },
+      {
+        "type": "Jack",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Queen",
+        "suite": "Clubs"
+      },
+      {
+        "type": "King",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Ace",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "9"
+      },
+      {
+        "type": "Jack",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Queen",
+        "suite": "Hearts"
+      },
+      {
+        "type": "King",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "9"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "10"
+      },
+      {
+        "type": "Queen",
+        "suite": "Spades"
+      },
+      {
+        "type": "King",
+        "suite": "Spades"
+      }
+    ]
+  }
 }

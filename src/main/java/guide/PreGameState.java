@@ -9,19 +9,9 @@ import java.util.List;
 
 public class PreGameState {
 
-    private Long seed;
-
     private List<Pair<Long, AbstractAction>> playerIdAndActions;
 
     private Deck<FrenchCard> drawDeck;
-
-    public Long getSeed() {
-        return seed;
-    }
-
-    public void setSeed(Long seed) {
-        this.seed = seed;
-    }
 
     public List<Pair<Long, AbstractAction>> getPlayerIdAndActions() {
         return playerIdAndActions;

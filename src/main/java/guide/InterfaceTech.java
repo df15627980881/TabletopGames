@@ -33,7 +33,7 @@ public class InterfaceTech extends GUI {
 
     public Game gameRunning;
 
-    private List<GuideGenerator.SimulateForMechanismParam> simulateForMechanisms;
+    public List<GuideGenerator.SimulateForMechanismParam> simulateForMechanisms;
 
     private Long seed;
 
@@ -205,20 +205,15 @@ public class InterfaceTech extends GUI {
     }
 
     public SwingWorker<Void, AbstractAction> processSpecificActions(List<AbstractAction> actions) {
-        SwingWorker<Void, AbstractAction> worker = new SwingWorker<Void, AbstractAction>() {
+        SwingWorker<Void, AbstractAction> worker = new SwingWorker<>() {
             @Override
             protected Void doInBackground() throws Exception {
                 for (AbstractAction action: actions) {
 
                     synchronized (gameRunning) {
-//                        if (pair.b.equals(Countless))
                         currentPlayer = gameRunning.getGameState().getCurrentPlayer();
                         gameRunning.processOneAction(action);
-//                        initDialog();
-//                        gameRunning.notifyAll();
-                        Thread.sleep(2000);
                         publish(action);
-                        System.out.println("TTT");
                         synchronized (lock) {
                             try {
                                 lock.wait();
@@ -235,9 +230,23 @@ public class InterfaceTech extends GUI {
 
             @Override
             protected void process(List<AbstractAction> chunks) {
-                System.out.println("GGG");
                 for (AbstractAction action : chunks) {
+                    ArrayList<JDialog> dialogs = action.createDialogWithFeedbackForNewbie(
+                            InterfaceTech.this, gameRunning.getGameState(), currentPlayer);
+                    if (CollectionUtils.isNotEmpty(dialogs)) {
+                        dialogs.forEach(dialog -> {
+                            dialog.setLocationRelativeTo(InterfaceTech.this); // 相对主窗口居中
+                            dialog.setVisible(true);
+                        });
+                    }
+//                    updateGUI();
+                    gameRunning.getGameState().getDialogs().forEach(x -> {
+                        x.setLocationRelativeTo(InterfaceTech.this); // 相对主窗口居中
+                        x.setVisible(true);
+//                        updateGUI();
+                    });
                     updateGUI();
+                    gameRunning.getGameState().setDialogs(new ArrayList<>());
                     synchronized (lock) {
                         lock.notifyAll();
                     }
