@@ -36,7 +36,6 @@ public class Hit extends AbstractAction implements IPrintable {
     public boolean execute(AbstractGameState gameState) {
         BlackjackGameState bjgs = (BlackjackGameState) gameState;
         PartialObservableDeck<FrenchCard> playerHand = bjgs.getPlayerDecks().get(playerID);
-        System.out.println("***" + playerID);
         if (playerID != bjgs.getDealerPlayer()) {
             playerHand.add(bjgs.getDrawDeck().draw());
         } else {

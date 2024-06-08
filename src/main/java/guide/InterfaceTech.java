@@ -5,14 +5,20 @@ import core.AbstractPlayer;
 import core.CoreConstants;
 import core.Game;
 import core.actions.AbstractAction;
+import evaluation.listeners.MetricsGameListener;
+import evaluation.metrics.Event;
 import games.GameType;
 import gui.AbstractGUIManager;
 import gui.GUI;
 import gui.GamePanel;
+import gui.models.AITableModel;
 import gui.views.ComponentView;
 import guide.param.Question;
 import org.apache.commons.collections4.CollectionUtils;
+import players.PlayerType;
+import players.human.ActionController;
 import players.human.HumanGUIPlayer;
+import players.mcts.MCTSPlayer;
 import players.simple.RandomPlayer;
 import utilities.JSONUtils;
 import utilities.Pair;
@@ -69,6 +75,8 @@ public class InterfaceTech extends GUI {
 
     private JPanel buttonPanel;
     private JButton next;
+    private boolean paused, started;
+    private ActionController humanInputQueue;
 
     /**
      * In guide process, it isn't the same as that in gs
@@ -107,6 +115,7 @@ public class InterfaceTech extends GUI {
         this.gamesForPreviousActionShow = gamesForPreviousActionShow;
         this.questionService = new QuestionService(this.gameType);
         this.next = new JButton("Next");
+        this.paused = this.started = false;
 
         GuideContext.guideStage = GuideContext.GuideState.GUIDE_CLOSE;
         GuideContext.frame = InterfaceTech.this;
@@ -193,7 +202,8 @@ public class InterfaceTech extends GUI {
         }
         gamePanel = new GamePanel();
         gamePanel.setVisible(false);
-        gui = gameType.createGUIManager(gamePanel, gameRunning, null);
+//        gui = gameType.createGUIManager(gamePanel, gameRunning, null);
+        gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : gameType.createGUIManager(gamePanel, gameRunning, null);
 //        updateGUI();
         if (Objects.nonNull(wrapper)) {
             getContentPane().remove(wrapper);
@@ -467,14 +477,35 @@ public class InterfaceTech extends GUI {
 
 
     public void updateGUI() {
+//        AbstractGameState gameState = gameRunning.getGameState().copy();
+//        int currentPlayer = gameState.getCurrentPlayer();
+//        AbstractPlayer player = gameRunning.getPlayers().get(currentPlayer);
+//        if (gui != null) {
+//            gui.update(player, gameState, false);
+//        }
+
         AbstractGameState gameState = gameRunning.getGameState().copy();
         int currentPlayer = gameState.getCurrentPlayer();
         AbstractPlayer player = gameRunning.getPlayers().get(currentPlayer);
         if (gui != null) {
-            gui.update(player, gameState, false);
-//            frame.revalidate();
-//            frame.repaint();
+            gui.update(player, gameState, gameRunning.isHumanToMove());
+            if (!gameRunning.isHumanToMove() && paused) {
+                // in this case we allow a human to override an AI decision
+                try {
+                    if (humanInputQueue.hasAction()) {
+                        gameRunning.getForwardModel().next(gameState, humanInputQueue.getAction());
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (!gameRunning.isHumanToMove())
+                humanInputQueue.reset(); // clear out any actions clicked before their turn
+            // 调用这两个会导致visibility重置，原因未知...
+//            this.revalidate();
+//            this.repaint();
         }
+
     }
 
     public void display() {
@@ -484,7 +515,8 @@ public class InterfaceTech extends GUI {
 //            guiUpdater.start();
 //            return;
             beforeGameIntroduce();
-            initIntroduceCards("All");
+            simulate();
+//            initIntroduceCards("All");
 //            runGameResult();
 
 //                lockResult.wait();
@@ -601,14 +633,35 @@ public class InterfaceTech extends GUI {
     }
 
     public void simulate() {
+        if (GuideContext.deckForSimulateIndex == 0) {
+            this.humanInputQueue = new ActionController();
+            getContentPane().removeAll();
+        }
         if (GuideContext.deckForSimulateIndex >= GuideContext.deckForSimulate.size()) {
             return;
         }
         PreGameState preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
         List<AbstractPlayer> players = new ArrayList<>();
-        for (int i=0; i<preGameState.getPlayerCount(); ++i) {
-//            players.add(new HumanGUIPlayer());
+        for (int i=0; i<preGameState.getPlayerCount() - 1; ++i) {
+            players.add(PlayerType.valueOf("HumanGUIPlayer").createPlayerInstance(seed, humanInputQueue, null));
         }
+        players.add(new MCTSPlayer());
+        gameRunning = gameType.createGameInstance(players.size(), null);
+        gameRunning.reset(players);
+        gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
+        setFrameProperties();
+        guiUpdater = new Timer(10, event -> updateGUI());
+        guiUpdater.start();
+        gameRunning.setPaused(paused);
+        listenForDecisions();
+        gameRunning.run();
+        guiUpdater.stop();
+        // and update GUI to final game state
+        updateGUI();
+//        gameResult = Game.runOne(gameType, null, players, System.currentTimeMillis(), false, null, null, 1);
+//        buildInterface(true);
+//        updateGUI();
+//        System.out.println("simulateEnd");
     }
 
     /**
@@ -713,5 +766,49 @@ public class InterfaceTech extends GUI {
 
     public JButton getNext() {
         return next;
+    }
+
+    private void listenForDecisions() {
+        // add a listener to detect every time an action has been taken
+        gameRunning.addListener(new MetricsGameListener() {
+            @Override
+            public void onEvent(evaluation.metrics.Event event)
+            {
+                if(event.type == Event.GameEvent.ACTION_TAKEN)
+                    updateSampleActions(event.state.copy());
+            }
+        });
+
+        // and then do this at the start of the game
+        updateSampleActions(gameRunning.getGameState());
+    }
+
+    private void updateSampleActions(AbstractGameState state) {
+        if (state.isNotTerminal() && !gameRunning.isHumanToMove()) {
+            int nextPlayerID = state.getCurrentPlayer();
+            AbstractPlayer nextPlayer = gameRunning.getPlayers().get(nextPlayerID);
+            nextPlayer.getAction(state, nextPlayer.getForwardModel().computeAvailableActions(state, nextPlayer.getParameters().actionSpace));
+
+            JFrame AI_debug = new JFrame();
+            AI_debug.setTitle(String.format("Player %d, Tick %d, Round %d, Turn %d",
+                    nextPlayerID,
+                    gameRunning.getTick(),
+                    state.getRoundCounter(),
+                    state.getTurnCounter()));
+            Map<AbstractAction, Map<String, Object>> decisionStats = nextPlayer.getDecisionStats();
+            if (decisionStats.size() > 1) {
+                AITableModel AIDecisions = new AITableModel(nextPlayer.getDecisionStats());
+                JTable table = new JTable(AIDecisions);
+                table.setAutoCreateRowSorter(true);
+                table.setDefaultRenderer(Double.class, (table1, value, isSelected, hasFocus, row, column) -> new JLabel(String.format("%.2f", (Double) value)));
+                JScrollPane scrollPane = new JScrollPane(table);
+                table.setFillsViewportHeight(true);
+                AI_debug.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                AI_debug.add(scrollPane);
+                AI_debug.revalidate();
+                AI_debug.pack();
+                AI_debug.setVisible(true);
+            }
+        }
     }
 }

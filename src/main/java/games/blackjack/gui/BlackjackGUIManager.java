@@ -268,7 +268,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
     }
 
     public void generateDirectionGuide(InterfaceTech frame, Map<Integer, PartialObservableDeck<FrenchCard>> playerIdAndDeck, boolean isAll) {
-        List<FrenchCard> frenchCards = GuideContext.deckForMechanism.getDrawDeck().getComponents();
+        List<FrenchCard> frenchCards = new ArrayList<>(GuideContext.deckForMechanism.getDrawDeck().getComponents());
         if (game != null){
             AbstractGameState gameState = game.getGameState();
             if (gameState != null){
@@ -374,7 +374,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                     DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                             "So far all the cards in the first round have been issued."));
                 }
-                if (indexx == (game.getPlayers().size()) << 1) {
+                if (indexx >= (game.getPlayers().size()) << 1) {
                     DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                             "Now that all cards have been issued, the player to the left of the dealer begins to choose which Action to take."));
 //                    parent.removeAll();
@@ -425,13 +425,11 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
         SwingWorker<Void, AbstractAction> worker = frame.processSpecificActions(playerActions);
         frame.getNext().addActionListener(e -> {
-            System.out.println("JSJSJ");
 //            frame.gameRunning.processOneAction(preGameState.getActions().get(i.get()));
 //            i.addAndGet(1);
 //            frame.updateGUI();
             worker.addPropertyChangeListener(evt -> {
                 if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
-                    System.out.println("HDIUS");
                     parent.removeAll();
                     BlackjackGameState gs = (BlackjackGameState) game.getGameState();
                     int cur = game.getPlayers().size() - 1;
@@ -510,7 +508,6 @@ public class BlackjackGUIManager extends AbstractGUIManager {
             });
             worker.execute();
         });
-
     }
 
     private void processDealerAction(InterfaceTech frame, List<AbstractAction> dealerActions) {
@@ -532,6 +529,9 @@ public class BlackjackGUIManager extends AbstractGUIManager {
     }
 
     public void generatePointGuide(InterfaceTech frame) {
+        for (ActionListener actionListener : frame.getNext().getActionListeners()) {
+            frame.getNext().removeActionListener(actionListener);
+        }
         GuideContext.guideStage = GuideContext.GuideState.SHOW_MECHANISM_POINT;
         DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                 "Let's learn the points of each card."));

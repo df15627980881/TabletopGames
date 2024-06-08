@@ -6,6 +6,7 @@ import core.components.Deck;
 import core.components.FrenchCard;
 import games.blackjack.actions.Hit;
 import games.blackjack.actions.Stand;
+import org.apache.commons.collections4.CollectionUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import utilities.JSONUtils;
@@ -23,22 +24,23 @@ public class PreGameStateUtils {
         PreGameState result = new PreGameState();
 
         String gameResultDesc = (String) jsonObject.get("gameResultDesc");
-        Integer playerCount = (Integer) jsonObject.get("playerCount");
+        Integer playerCount = ((Long) jsonObject.get("playerCount")).intValue();
 
         JSONArray optionsArray = (JSONArray) jsonObject.get("actions");
         List<Pair<Long, AbstractAction>> actions = new ArrayList<>();
 
-        for (Object obj : optionsArray) {
-            JSONObject optionObj = (JSONObject) obj;
-            Long playerId = (Long) optionObj.get("player");
-            String actionText = (String) optionObj.get("action");
-            if ("Hit".equals(actionText)) {
-                actions.add(new Pair<>(playerId, new Hit(playerId.intValue(), true, false)));
-            } else if ("Stand".equals(actionText)) {
-                actions.add(new Pair<>(playerId, new Stand()));
+        if (CollectionUtils.isNotEmpty(optionsArray)) {
+            for (Object obj : optionsArray) {
+                JSONObject optionObj = (JSONObject) obj;
+                Long playerId = (Long) optionObj.get("player");
+                String actionText = (String) optionObj.get("action");
+                if ("Hit".equals(actionText)) {
+                    actions.add(new Pair<>(playerId, new Hit(playerId.intValue(), true, false)));
+                } else if ("Stand".equals(actionText)) {
+                    actions.add(new Pair<>(playerId, new Stand()));
+                }
             }
         }
-
         JSONObject deckObj = (JSONObject) jsonObject.get("deck");
         String deckName = (String) deckObj.get("name");
         String visibilityMode = (String) deckObj.get("visibilityMode");
