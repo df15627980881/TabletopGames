@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static core.CoreConstants.GameResult.GAME_ONGOING;
 import static games.GameType.*;
 
 
@@ -505,7 +506,6 @@ public class Game {
     }
 
     public final AbstractAction oneAction() {
-
         // we pause before each action is taken if running with a delay (e.g. for video recording with random players)
         if (turnPause > 0)
             synchronized (this) {
@@ -515,11 +515,11 @@ public class Game {
                     e.printStackTrace();
                 }
             }
-
         // This is the next player to be asked for a decision
         int activePlayer = gameState.getCurrentPlayer();
-        if (!gameState.isNotTerminalForPlayer(activePlayer))
+        if (!gameState.isNotTerminalForPlayer(activePlayer)) {
             throw new AssertionError("Player " + activePlayer + " is not allowed to move");
+        }
         AbstractPlayer currentPlayer = players.get(activePlayer);
         if (debug) System.out.printf("Starting oneAction for player %s%n", activePlayer);
 

@@ -17,6 +17,8 @@ public class PreGameState {
 
     private String gameResultDesc;
 
+    private String strategy;
+
     public List<Pair<Long, AbstractAction>> getPlayerIdAndActions() {
         return playerIdAndActions;
     }
@@ -47,5 +49,13 @@ public class PreGameState {
 
     public void setPlayerCount(Integer playerCount) {
         this.playerCount = playerCount;
+    }
+
+    public String getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(String strategy) {
+        this.strategy = strategy;
     }
 }

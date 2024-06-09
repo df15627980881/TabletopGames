@@ -41,12 +41,13 @@ public class BlackjackForwardModel extends StandardForwardModel {
         bjgs.drawDeck = FrenchCard.generateDeck("DrawDeck", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
         //shuffle the cards
         bjgs.drawDeck.shuffle(new Random((bjgs.getGameParameters().getRandomSeed())));
-        System.out.println();
         if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
             PreGameState preGameState = GuideContext.deckForMechanism;
             bjgs.drawDeck = preGameState.getDrawDeck().copy();
         } else if (GuideContext.guideStage == GuideContext.GuideState.SHOW_GAME_RESULT) {
             bjgs.drawDeck = GuideContext.deckForResult.get(GuideContext.deckForResultIndex).getDrawDeck().copy();
+        } else if (GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
+            bjgs.drawDeck = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex).getDrawDeck().copy();
         }
 
         bjgs.setFirstPlayer(0);

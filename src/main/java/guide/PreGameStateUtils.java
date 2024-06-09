@@ -24,6 +24,7 @@ public class PreGameStateUtils {
         PreGameState result = new PreGameState();
 
         String gameResultDesc = (String) jsonObject.get("gameResultDesc");
+        String strategy = (String) jsonObject.get("strategy");
         Integer playerCount = ((Long) jsonObject.get("playerCount")).intValue();
 
         JSONArray optionsArray = (JSONArray) jsonObject.get("actions");
@@ -67,6 +68,7 @@ public class PreGameStateUtils {
         result.setPlayerIdAndActions(actions);
         result.setDrawDeck(deck);
         result.setGameResultDesc(gameResultDesc);
+        result.setStrategy(strategy);
         return result;
     }
 
