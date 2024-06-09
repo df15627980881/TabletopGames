@@ -178,24 +178,6 @@ public class InterfaceTech extends GUI {
         };
     }
 
-    public void initDialog() {
-        // 创建对话框实例
-        tutorialDialog = new JDialog(this, "游戏教程", true);
-        tutorialDialog.setSize(300, 200);
-        tutorialDialog.setLayout(new BorderLayout());
-
-        JLabel label = new JLabel("<html><h2>欢迎来到游戏教程</h2><p>这里将介绍如何进行游戏。</p></html>");
-        label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        tutorialDialog.add(label, BorderLayout.CENTER);
-
-        JButton closeButton = new JButton("关闭");
-        closeButton.addActionListener(e -> tutorialDialog.dispose());
-        tutorialDialog.add(closeButton, BorderLayout.SOUTH);
-
-        tutorialDialog.setLocationRelativeTo(this); // 相对主窗口居中
-        tutorialDialog.setVisible(true);
-    }
-
     public void initIntroduceCards(String purpose) {
         GuideContext.guideStage = GuideContext.GuideState.SHOW_MECHANISM_TURN;
         gameRunning = resetActionForGame();
