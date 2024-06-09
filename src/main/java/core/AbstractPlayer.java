@@ -17,7 +17,6 @@ public abstract class AbstractPlayer {
     private AbstractForwardModel forwardModel;
     public PlayerParameters parameters;
     protected List<IPlayerDecorator> decorators;
-    private AbstractAction bannedAction;
 
     public AbstractPlayer(PlayerParameters params, String name) {
         this.parameters = params != null ? params : new PlayerParameters();
@@ -182,13 +181,5 @@ public abstract class AbstractPlayer {
 
     public Random getRnd() {
         return rnd;
-    }
-
-    public AbstractAction getBannedAction() {
-        return bannedAction;
-    }
-
-    public void setBannedAction(AbstractAction bannedAction) {
-        this.bannedAction = bannedAction;
     }
 }
