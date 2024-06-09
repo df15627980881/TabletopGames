@@ -1,35 +1,35 @@
 {
   "playerCount": 3,
   "gameResultDesc": "",
-  "strategy": "When the dealer's upcard is a poor one, 4, 5, or 6, the player should stop drawing as soon as he gets a total of 12 or higher. The strategy here is never to take a card if there is any chance of going bust. The desire with this poor holding is to let the dealer hit and hopefully go over 21.",
+  "strategy": "When the dealer's up card is a fair one, 2 or 3, the player should stop with a total of 13 or higher.",
   "deck": {
-    "name": "Deck02",
+    "name": "Deck03",
     "visibilityMode": "VISIBLE_TO_ALL",
     "cards": [
       {
         "type": "Number",
         "suite": "Diamonds",
-        "number": "7"
-      },
-      {
-        "type": "Number",
-        "suite": "Spades",
         "number": "3"
       },
       {
         "type": "Number",
-        "suite": "Clubs",
+        "suite": "Spades",
         "number": "6"
       },
       {
         "type": "Number",
         "suite": "Clubs",
-        "number": "5"
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "9"
       },
       {
         "type": "Number",
         "suite": "Hearts",
-        "number": "9"
+        "number": "7"
       },
       {
         "type": "King",
@@ -47,7 +47,7 @@
       {
         "type": "Number",
         "suite": "Diamonds",
-        "number": "3"
+        "number": "6"
       },
       {
         "type": "Queen",
@@ -71,7 +71,7 @@
       {
         "type": "Number",
         "suite": "Diamonds",
-        "number": "6"
+        "number": "7"
       },
       {
         "type": "Number",
@@ -108,12 +108,17 @@
       {
         "type": "Number",
         "suite": "Clubs",
-        "number": "3"
+        "number": "4"
       },
       {
         "type": "Number",
         "suite": "Clubs",
-        "number": "4"
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "6"
       },
       {
         "type": "Number",
@@ -124,11 +129,6 @@
         "type": "Number",
         "suite": "Clubs",
         "number": "8"
-      },
-      {
-        "type": "Number",
-        "suite": "Clubs",
-        "number": "9"
       },
       {
         "type": "Number",
@@ -175,12 +175,12 @@
       {
         "type": "Number",
         "suite": "Hearts",
-        "number": "7"
+        "number": "8"
       },
       {
         "type": "Number",
         "suite": "Hearts",
-        "number": "8"
+        "number": "9"
       },
       {
         "type": "Number",
@@ -207,17 +207,17 @@
       {
         "type": "Number",
         "suite": "Spades",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
         "number": "4"
       },
       {
         "type": "Number",
         "suite": "Spades",
         "number": "5"
-      },
-      {
-        "type": "Number",
-        "suite": "Spades",
-        "number": "6"
       },
       {
         "type": "Number",

@@ -1,20 +1,32 @@
 {
   "playerCount": 3,
   "gameResultDesc": "",
-  "strategy": "When the dealer's upcard is a poor one, 4, 5, or 6, the player should stop drawing as soon as he gets a total of 12 or higher. The strategy here is never to take a card if there is any chance of going bust. The desire with this poor holding is to let the dealer hit and hopefully go over 21.",
+  "strategy": "With a soft hand, the general strategy is to keep hitting until a total of at least 18 is reached. Thus, with an ace and a six (7 or 17), the player would not stop at 17, but would hit.",
   "deck": {
-    "name": "Deck02",
+    "name": "Deck04",
     "visibilityMode": "VISIBLE_TO_ALL",
     "cards": [
       {
+        "type": "Ace",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Ace",
+        "suite": "Clubs"
+      },
+      {
+        "type": "King",
+        "suite": "Hearts"
+      },
+      {
         "type": "Number",
         "suite": "Diamonds",
-        "number": "7"
+        "number": "8"
       },
       {
         "type": "Number",
         "suite": "Spades",
-        "number": "3"
+        "number": "4"
       },
       {
         "type": "Number",
@@ -23,16 +35,16 @@
       },
       {
         "type": "Number",
-        "suite": "Clubs",
-        "number": "5"
+        "suite": "Spades",
+        "number": "6"
       },
       {
         "type": "Number",
         "suite": "Hearts",
-        "number": "9"
+        "number": "2"
       },
       {
-        "type": "King",
+        "type": "Ace",
         "suite": "Diamonds"
       },
       {
@@ -47,7 +59,7 @@
       {
         "type": "Number",
         "suite": "Diamonds",
-        "number": "3"
+        "number": "6"
       },
       {
         "type": "Queen",
@@ -57,6 +69,11 @@
         "type": "Number",
         "suite": "Diamonds",
         "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "3"
       },
       {
         "type": "Number",
@@ -71,12 +88,7 @@
       {
         "type": "Number",
         "suite": "Diamonds",
-        "number": "6"
-      },
-      {
-        "type": "Number",
-        "suite": "Diamonds",
-        "number": "8"
+        "number": "7"
       },
       {
         "type": "Number",
@@ -97,7 +109,7 @@
         "suite": "Diamonds"
       },
       {
-        "type": "Ace",
+        "type": "King",
         "suite": "Diamonds"
       },
       {
@@ -114,6 +126,11 @@
         "type": "Number",
         "suite": "Clubs",
         "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "5"
       },
       {
         "type": "Number",
@@ -144,15 +161,6 @@
         "suite": "Clubs"
       },
       {
-        "type": "Ace",
-        "suite": "Clubs"
-      },
-      {
-        "type": "Number",
-        "suite": "Hearts",
-        "number": "2"
-      },
-      {
         "type": "Number",
         "suite": "Hearts",
         "number": "3"
@@ -185,18 +193,15 @@
       {
         "type": "Number",
         "suite": "Hearts",
+        "number": "9"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
         "number": "10"
       },
       {
         "type": "Queen",
-        "suite": "Hearts"
-      },
-      {
-        "type": "King",
-        "suite": "Hearts"
-      },
-      {
-        "type": "Ace",
         "suite": "Hearts"
       },
       {
@@ -207,17 +212,12 @@
       {
         "type": "Number",
         "suite": "Spades",
-        "number": "4"
+        "number": "3"
       },
       {
         "type": "Number",
         "suite": "Spades",
         "number": "5"
-      },
-      {
-        "type": "Number",
-        "suite": "Spades",
-        "number": "6"
       },
       {
         "type": "Number",
