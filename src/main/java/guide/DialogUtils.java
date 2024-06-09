@@ -1,15 +1,9 @@
 package guide;
 
-import core.AbstractGameState;
-import games.blackjack.gui.BlackjackGUIManager;
-
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
 
 public class DialogUtils {
-
-    private List<String> feedbacks;
 
     public static JDialog create(Frame frame, String title, boolean modal, Integer width, Integer height, String labelText) {
         JDialog tutorialDialog = new JDialog(frame, title, modal);
@@ -69,7 +63,7 @@ public class DialogUtils {
 
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
         contentPane.add(label1);
-        contentPane.add(Box.createVerticalStrut(10)); // 添加间距
+        contentPane.add(Box.createVerticalStrut(10));
         contentPane.add(label2);
 
         JButton closeButton = new JButton("Close");
