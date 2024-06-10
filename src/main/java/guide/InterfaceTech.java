@@ -5,13 +5,10 @@ import core.AbstractPlayer;
 import core.CoreConstants;
 import core.Game;
 import core.actions.AbstractAction;
-import evaluation.listeners.MetricsGameListener;
-import evaluation.metrics.Event;
 import games.GameType;
 import gui.AbstractGUIManager;
 import gui.GUI;
 import gui.GamePanel;
-import gui.models.AITableModel;
 import gui.views.ComponentView;
 import guide.param.Question;
 import org.apache.commons.collections4.CollectionUtils;
@@ -94,6 +91,8 @@ public class InterfaceTech extends GUI {
 
     private ActionListener startTrigger;
 
+    private boolean isFirstEnterStrategy;
+
     public InterfaceTech() {
     }
 
@@ -124,6 +123,7 @@ public class InterfaceTech extends GUI {
         this.end = this.paused = this.started = false;
         this.humanInputQueue = new ActionController();
         this.playersForSimulate = new ArrayList<>();
+        this.isFirstEnterStrategy = true;
 
         GuideContext.guideStage = GuideContext.GuideState.GUIDE_CLOSE;
         GuideContext.frame = InterfaceTech.this;
@@ -659,6 +659,10 @@ public class InterfaceTech extends GUI {
 //                started = true;
                 end = false;
                 getContentPane().remove(replay);
+                if (isFirstEnterStrategy) {
+                    DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!"));
+                    isFirstEnterStrategy = false;
+                }
                 startTrigger.actionPerformed(e);
                 simulate();
 //                GuideContext.deckForSimulateIndex += 1;

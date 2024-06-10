@@ -514,7 +514,6 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         for (ActionListener actionListener : frame.getNext().getActionListeners()) {
             frame.getNext().removeActionListener(actionListener);
         }
-        System.out.println(dealerActions.size());
         SwingWorker<Void, AbstractAction> worker = frame.processSpecificActions(new ArrayList<>(dealerActions));
         worker.addPropertyChangeListener(evt -> {
             if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {

@@ -17,6 +17,7 @@ import games.loveletter.cards.LoveLetterCard;
 import gui.AbstractGUIManager;
 import gui.GamePanel;
 import gui.IScreenHighlight;
+import guide.InterfaceTech;
 import players.human.ActionController;
 import utilities.ImageIO;
 
@@ -59,7 +60,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
     LoveLetterGameState llgs;
     LoveLetterForwardModel fm;
 
-    public LoveLetterGUIManager(GamePanel parent, Game game) {
+    public LoveLetterGUIManager(GamePanel parent, Game game, String purpose, InterfaceTech frame) {
         super(parent);
 
         UIManager.put("TabbedPane.contentOpaque", false);
@@ -177,6 +178,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
         parent.revalidate();
         parent.setVisible(true);
         parent.repaint();
+        System.out.println("GGG");
     }
 
     public LoveLetterGUIManager(GamePanel parent, Game game, ActionController ac, Set<Integer> humanID) {
