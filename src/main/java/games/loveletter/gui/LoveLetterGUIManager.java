@@ -28,10 +28,8 @@ import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 public class LoveLetterGUIManager extends AbstractGUIManager {
     // Settings for display areas
@@ -178,7 +176,11 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
         parent.revalidate();
         parent.setVisible(true);
         parent.repaint();
-        System.out.println("GGG");
+
+        frame.getNext().addActionListener(e -> {
+            parent.removeAll();
+            generate(frame, new HashMap<>(), true);
+        });
     }
 
     public LoveLetterGUIManager(GamePanel parent, Game game, ActionController ac, Set<Integer> humanID) {
