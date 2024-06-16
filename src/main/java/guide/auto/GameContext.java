@@ -13,8 +13,8 @@ public class GameContext {
         }
     }
 
-    public void execute(String strategy, Game game) {
-        gameStrategy.isValid(strategy, game);
+    public void execute(String strategy, Game game, Long seed) {
+        gameStrategy.isValid(strategy, game, seed);
     }
 
     public void exportJSON() {

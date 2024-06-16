@@ -138,8 +138,13 @@ public class BlackjackForwardModel extends StandardForwardModel {
 //                bjgs.getHistory().get(bjgs.getHistory().size()-1).a == bjgs.dealerPlayer &&
 //                (bjgs.getHistory().get(bjgs.getHistory().size()-1).b instanceof Stand ||
 //                        bjgs.getPlayerResults()[bjgs.getDealerPlayer()] == LOSE_GAME)) {
-        if (CollectionUtils.isNotEmpty(bjgs.getHistory())
-                && bjgs.getHistory().get(bjgs.getHistory().size()-1).a == bjgs.dealerPlayer) {
+//        boolean isOnePlayerGameGoing = false;
+//        for (int i=0; i<bjgs.getNPlayers()-1; ++i) {
+//            isOnePlayerGameGoing |= bjgs.getPlayerResults()[i] == GAME_ONGOING;
+//        }
+//        System.out.println();
+        if ((CollectionUtils.isNotEmpty(bjgs.getHistory())
+                && bjgs.getHistory().get(bjgs.getHistory().size()-1).a == bjgs.dealerPlayer)) {
 //            for (int i = 0; i < bjgs.getHistory().size(); i++) {
 //                System.out.println(bjgs.getHistory().get(i).a + " " + bjgs.getHistory().get(i).b);
 //            }

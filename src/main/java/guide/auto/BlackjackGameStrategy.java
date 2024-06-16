@@ -1,5 +1,6 @@
 package guide.auto;
 
+import core.AbstractGameState;
 import core.CoreConstants;
 import core.Game;
 import core.actions.AbstractAction;
@@ -7,6 +8,10 @@ import core.components.Deck;
 import core.components.FrenchCard;
 import core.components.PartialObservableDeck;
 import games.blackjack.BlackjackGameState;
+import games.blackjack.actions.Hit;
+import games.blackjack.actions.Stand;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import utilities.JSONUtils;
 import utilities.Pair;
@@ -26,10 +31,18 @@ public class BlackjackGameStrategy implements IGameStrategy {
     private final String gameResultStrategyText02 = "When the dealer's hand has not busted, the player with the highest score who has also not busted wins. If the players tie for the dealer's score, then they draw.";
     private final String gameResultStrategyText03 = "When the dealer busts, all players who have not busted win.";
 
+    private final String simulateStrategyText01 = "When the dealer's upcard is a good one, a 7, 8, 9, 10-card, or ace for example, the player should not stop drawing until a total of 17 or more is reached.";
+
+    private final String simulateStrategyText02 = "When the dealer's upcard is a poor one, 4, 5, or 6, the player should stop drawing as soon as he gets a total of 12 or higher. The strategy here is never to take a card if there is any chance of going bust. The desire with this poor holding is to let the dealer hit and hopefully go over 21.";
+
+    private final String simulateStrategyText03 = "When the dealer's up card is a fair one, 2 or 3, the player should stop with a total of 13 or higher.";
+
+    private final String simulateStrategyText04 = "With a soft hand, the general strategy is to keep hitting until a total of at least 18 is reached. Thus, with an ace and a six (7 or 17), the player would not stop at 17, but would hit.";
+
     public BlackjackStrategyEnum strategyEnum;
 
     @Override
-    public boolean isValid(String strategy, Game game) {
+    public boolean isValid(String strategy, Game game, Long seed) {
         if (StringUtils.isBlank(strategy) || Objects.isNull(game)) {
             return false;
         }
@@ -42,22 +55,233 @@ public class BlackjackGameStrategy implements IGameStrategy {
         
         if (BlackjackStrategyEnum.SIMULATE.getName().equals(strategy)) {
             this.strategyEnum = BlackjackStrategyEnum.SIMULATE;
-            isSimulate(game);
+            isSimulate(game, seed);
             return true;
         }
 
         return false;
     }
 
-    private void isSimulate(Game game) {
+    private void isSimulate(Game game, Long seed) {
         BlackjackGameState gs = (BlackjackGameState) game.getGameState();
         List<GameResultForJSON.Deck.Card> cards = new ArrayList<>();
         Deck<FrenchCard> allDeck = FrenchCard.generateDeck("DrawDeck", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
         //shuffle the cards
         allDeck.shuffle(new Random((gs.getGameParameters().getRandomSeed())));
 
+        Game initGame = resetActionForGame(game, seed);
+        gs = (BlackjackGameState) initGame.getGameState();
+        List<PartialObservableDeck<FrenchCard>> playerDecks = gs.getPlayerDecks();
         // case1: When the dealer's upcard is a good one, a 7, 8, 9, 10-card, or ace for example, the player should not stop drawing until a total of 17 or more is reached.
+        FrenchCard frenchCard = playerDecks.get(gs.getDealerPlayer()).getComponents().get(1);
+        if (frenchCard.type != FrenchCard.FrenchCardType.Number || (frenchCard.number >= 7 && frenchCard.number <= 10)) {
+            for (int i=0; i<gs.getNPlayers()-1; ++i) {
+                List<FrenchCard> components = gs.getPlayerDecks().get(i).getComponents();
+                assert components != null && components.size() == 2;
+                int sum = calDeckSum(components);
+                while (sum < 17) {
+                    initGame.processOneAction(new Hit(i, true, false));
+                    gs = (BlackjackGameState) initGame.getGameState();
+                    playerDecks = gs.getPlayerDecks();
+                    components = playerDecks.get(i).getComponents();
+                    sum = calDeckSum(components);
+                }
+                // The program is designed with when sum is equal to 21, player is no need to do Stand Action.
+                if (sum < 21) {
+                    initGame.processOneAction(new Stand());
+                    gs = (BlackjackGameState) initGame.getGameState();
+                    playerDecks = gs.getPlayerDecks();
+                    components = playerDecks.get(i).getComponents();
+                    sum = calDeckSum(components);
+                }
+            }
+            gs = (BlackjackGameState) initGame.getGameState();
+            while (calDeckSum(gs.getPlayerDecks().get(gs.getDealerPlayer()).getComponents()) < 17 && gs.getGameStatus() != CoreConstants.GameResult.GAME_END) {
+                initGame.processOneAction(new Hit(gs.getDealerPlayer(), true, false));
+                gs = (BlackjackGameState) initGame.getGameState();
+            }
+            assert gs.getGameStatus() == CoreConstants.GameResult.GAME_END;
+            boolean v = gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+            for (int i = 0; i < gs.getPlayerResults().length - 1; i++) {
+                v &= gs.getPlayerResults()[i] == CoreConstants.GameResult.WIN_GAME;
+            }
+            if (v && !strategyTextAndSimulate.containsKey(simulateStrategyText01)) {
+                for (Pair<Integer, AbstractAction> pair : gs.getHistory()) {
+                    System.out.println("1: " + pair.a + pair.b);
+                }
+                assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+                strategyTextAndSimulate.put(simulateStrategyText01, game);
+                return;
+            } else {
+                // reset initGame again
+                initGame = resetActionForGame(game, seed);
+                gs = (BlackjackGameState) initGame.getGameState();
+            }
+        }
 
+        // case2: When the dealer's upcard is a poor one, 4, 5, or 6, the player should stop drawing as soon as he gets a total of 12 or higher. The strategy here is never to take a card if there is any chance of going bust. The desire with this poor holding is to let the dealer hit and hopefully go over 21.
+        if (frenchCard.type == FrenchCard.FrenchCardType.Number && frenchCard.number >= 4 && frenchCard.number <= 6) {
+            for (int i=0; i<gs.getNPlayers()-1; ++i) {
+                List<FrenchCard> components = gs.getPlayerDecks().get(i).getComponents();
+                assert components != null && components.size() == 2;
+                int sum = calDeckSum(components);
+                while (sum < 12) {
+                    initGame.processOneAction(new Hit(i, true, false));
+                    gs = (BlackjackGameState) initGame.getGameState();
+                    playerDecks = gs.getPlayerDecks();
+                    components = playerDecks.get(i).getComponents();
+                    sum = calDeckSum(components);
+                }
+                // The program is designed with when sum is equal to 21, player is no need to do Stand Action.
+                if (sum < 21) {
+                    initGame.processOneAction(new Stand());
+                    gs = (BlackjackGameState) initGame.getGameState();
+                    playerDecks = gs.getPlayerDecks();
+                    components = playerDecks.get(i).getComponents();
+                    sum = calDeckSum(components);
+                }
+            }
+            gs = (BlackjackGameState) initGame.getGameState();
+            while (calDeckSum(gs.getPlayerDecks().get(gs.getDealerPlayer()).getComponents()) < 17 && gs.getGameStatus() != CoreConstants.GameResult.GAME_END) {
+                initGame.processOneAction(new Hit(gs.getDealerPlayer(), true, false));
+                gs = (BlackjackGameState) initGame.getGameState();
+            }
+            assert gs.getGameStatus() == CoreConstants.GameResult.GAME_END;
+            boolean v = gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+            for (int i = 0; i < gs.getPlayerResults().length - 1; i++) {
+                v &= gs.getPlayerResults()[i] == CoreConstants.GameResult.WIN_GAME;
+            }
+            if (v && !strategyTextAndSimulate.containsKey(simulateStrategyText02)) {
+                for (Pair<Integer, AbstractAction> pair : gs.getHistory()) {
+                    System.out.println("2: " + pair.a + pair.b);
+                }
+                assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+                strategyTextAndSimulate.put(simulateStrategyText02, game);
+                return;
+            } else {
+                // reset initGame again
+                initGame = resetActionForGame(game, seed);
+                gs = (BlackjackGameState) initGame.getGameState();
+            }
+        }
+
+        // Case3: When the dealer's up card is a fair one, 2 or 3, the player should stop with a total of 13 or higher.
+        if (frenchCard.type == FrenchCard.FrenchCardType.Number && frenchCard.number >= 2 && frenchCard.number <= 3) {
+            for (int i=0; i<gs.getNPlayers()-1; ++i) {
+                List<FrenchCard> components = gs.getPlayerDecks().get(i).getComponents();
+                assert components != null && components.size() == 2;
+                int sum = calDeckSum(components);
+                while (sum < 13) {
+                    initGame.processOneAction(new Hit(i, true, false));
+                    gs = (BlackjackGameState) initGame.getGameState();
+                    playerDecks = gs.getPlayerDecks();
+                    components = playerDecks.get(i).getComponents();
+                    sum = calDeckSum(components);
+                }
+                // The program is designed with when sum is equal to 21, player is no need to do Stand Action.
+                if (sum < 21) {
+                    initGame.processOneAction(new Stand());
+                    gs = (BlackjackGameState) initGame.getGameState();
+                    playerDecks = gs.getPlayerDecks();
+                    components = playerDecks.get(i).getComponents();
+                    sum = calDeckSum(components);
+                }
+            }
+            gs = (BlackjackGameState) initGame.getGameState();
+            while (calDeckSum(gs.getPlayerDecks().get(gs.getDealerPlayer()).getComponents()) < 17 && gs.getGameStatus() != CoreConstants.GameResult.GAME_END) {
+                initGame.processOneAction(new Hit(gs.getDealerPlayer(), true, false));
+                gs = (BlackjackGameState) initGame.getGameState();
+            }
+            assert gs.getGameStatus() == CoreConstants.GameResult.GAME_END;
+            boolean v = gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+            for (int i = 0; i < gs.getPlayerResults().length - 1; i++) {
+                v &= gs.getPlayerResults()[i] == CoreConstants.GameResult.WIN_GAME;
+            }
+            if (v && !strategyTextAndSimulate.containsKey(simulateStrategyText03)) {
+                for (Pair<Integer, AbstractAction> pair : gs.getHistory()) {
+                    System.out.println("3: " + pair.a + pair.b);
+                }
+                assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+                strategyTextAndSimulate.put(simulateStrategyText03, game);
+                return;
+            } else {
+                // reset initGame again
+                initGame = resetActionForGame(game, seed);
+                gs = (BlackjackGameState) initGame.getGameState();
+            }
+        }
+
+        // case 4: With a soft hand, the general strategy is to keep hitting until a total of at least 18 is reached. Thus, with an ace and a six (7 or 17), the player would not stop at 17, but would hit.
+        List<Integer> softHandPlayers = new ArrayList<>();
+        for (int i=0; i<gs.getNPlayers()-1; ++i) {
+            List<FrenchCard> components = gs.getPlayerDecks().get(i).getComponents();
+            assert components != null && components.size() == 2;
+            if (BooleanUtils.isFalse((components.get(0).type != FrenchCard.FrenchCardType.Number && components.get(1).type == FrenchCard.FrenchCardType.Number)
+                || (components.get(1).type != FrenchCard.FrenchCardType.Number && components.get(0).type == FrenchCard.FrenchCardType.Number))) {
+                continue;
+            }
+            softHandPlayers.add(i);
+            int sum = calDeckSum(components);
+            while (sum < 18) {
+                initGame.processOneAction(new Hit(i, true, false));
+                gs = (BlackjackGameState) initGame.getGameState();
+                playerDecks = gs.getPlayerDecks();
+                components = playerDecks.get(i).getComponents();
+                sum = calDeckSum(components);
+            }
+            // The program is designed with when sum is equal to 21, player is no need to do Stand Action.
+            if (sum < 21) {
+                initGame.processOneAction(new Stand());
+                gs = (BlackjackGameState) initGame.getGameState();
+                playerDecks = gs.getPlayerDecks();
+                components = playerDecks.get(i).getComponents();
+                sum = calDeckSum(components);
+            }
+        }
+        if (softHandPlayers.size() == gs.getNPlayers() - 1) {
+            gs = (BlackjackGameState) initGame.getGameState();
+            while (calDeckSum(gs.getPlayerDecks().get(gs.getDealerPlayer()).getComponents()) < 17 && gs.getGameStatus() != CoreConstants.GameResult.GAME_END) {
+                initGame.processOneAction(new Hit(gs.getDealerPlayer(), true, false));
+                gs = (BlackjackGameState) initGame.getGameState();
+            }
+            assert gs.getGameStatus() == CoreConstants.GameResult.GAME_END;
+            boolean v = gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME && CollectionUtils.isNotEmpty(softHandPlayers) && softHandPlayers.size() == gs.getNPlayers() - 1;
+            for (int i = 0; i < gs.getPlayerResults().length - 1; i++) {
+                v &= gs.getPlayerResults()[i] == CoreConstants.GameResult.WIN_GAME;
+            }
+            if (v && !strategyTextAndSimulate.containsKey(simulateStrategyText04)) {
+                for (Pair<Integer, AbstractAction> pair : gs.getHistory()) {
+                    System.out.println("4: " + pair.a + pair.b);
+                }
+                for (CoreConstants.GameResult playerResult : gs.getPlayerResults()) {
+                    System.out.println(playerResult);
+                }
+                assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+                strategyTextAndSimulate.put(simulateStrategyText04, game);
+                return;
+            } else {
+                // reset initGame again
+                initGame = resetActionForGame(game, seed);
+                gs = (BlackjackGameState) initGame.getGameState();
+            }
+        }
+    }
+
+    private int getWinGameCount(CoreConstants.GameResult[] results) {
+        int count = 0;
+        for (CoreConstants.GameResult result : results) {
+            if (result == CoreConstants.GameResult.WIN_GAME) {
+                count += 1;
+            }
+        }
+        return count;
+    }
+
+    private Game resetActionForGame(Game game, Long seed) {
+        AbstractGameState gameState = game.getGameState().copy();
+        gameState.reset(seed);
+        return new Game(game.getGameType(), game.getPlayers(),
+                game.getGameType().createForwardModel(null, game.getPlayers().size()), gameState);
     }
 
     @Override
@@ -106,6 +330,41 @@ public class BlackjackGameStrategy implements IGameStrategy {
 
                 JSONUtils.writeToJsonFile(gameResultForJSON, path + "/" + allFileSize++);
             }
+        } else if (strategyEnum == BlackjackStrategyEnum.SIMULATE) {
+            path += "/Simulate";
+            File[] allFiles = JSONUtils.getAllFile(path);
+            int allFileSize = allFiles == null ? 0 : allFiles.length;
+            assert strategyTextAndSimulate.size() == 4;
+            for (Map.Entry<String, Game> entry : strategyTextAndSimulate.entrySet()) {
+                Game game = entry.getValue();
+                BlackjackGameState gs = (BlackjackGameState) game.getGameState();
+                GameResultForJSON gameResultForJSON = new GameResultForJSON();
+                gameResultForJSON.setPlayerCount(gs.getNPlayers());
+                gameResultForJSON.setGameResultDesc("");
+                gameResultForJSON.setStrategy(entry.getKey());
+
+                GameResultForJSON.Deck deck = new GameResultForJSON.Deck();
+                deck.setName(String.valueOf(allFiles == null ? 0 : allFiles.length));
+                deck.setVisibilityMode("VISIBLE_TO_ALL");
+
+                List<GameResultForJSON.Deck.Card> cards = new ArrayList<>();
+                Deck<FrenchCard> allDeck = FrenchCard.generateDeck("DrawDeck", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
+                //shuffle the cards
+                allDeck.shuffle(new Random((gs.getGameParameters().getRandomSeed())));
+                for (FrenchCard frenchCard : allDeck.getComponents()) {
+                    GameResultForJSON.Deck.Card card = new GameResultForJSON.Deck.Card();
+                    card.setSuite(frenchCard.suite.name());
+                    if (FrenchCard.FrenchCardType.Number == frenchCard.type)
+                        card.setNumber(String.valueOf(frenchCard.number));
+                    card.setType(frenchCard.type.name());
+                    cards.add(card);
+                }
+                assert cards.size() == 52;
+                deck.setCards(cards);
+                gameResultForJSON.setDeck(deck);
+
+                JSONUtils.writeToJsonFile(gameResultForJSON, path + "/" + allFileSize++);
+            }
         }
     }
 
@@ -114,7 +373,21 @@ public class BlackjackGameStrategy implements IGameStrategy {
         if (this.strategyEnum == BlackjackStrategyEnum.GAME_RESULT) {
             return strategyTextAndGameResults.size() == 3;
         }
+        if (this.strategyEnum == BlackjackStrategyEnum.SIMULATE) {
+            return strategyTextAndSimulate.size() == 4;
+        }
         return false;
+    }
+
+    private int calDeckSum(List<FrenchCard> cards) {
+        int sum = 0;
+        for (FrenchCard card : cards) {
+            if (card.type != FrenchCard.FrenchCardType.Number)
+                sum += 10;
+            else
+                sum += card.number;
+        }
+        return sum;
     }
 
     private void isGameResult(Game game) {
@@ -124,16 +397,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
         int nPlayer = gs.getNPlayers();
         int[] handSum = new int[nPlayer];
         for (int i=0; i<nPlayer; ++i) {
-            PartialObservableDeck<FrenchCard> deck = playerDecks.get(i);
-            List<FrenchCard> cards = deck.getComponents();
-            int sum = 0;
-            for (FrenchCard card : cards) {
-                if (card.type != FrenchCard.FrenchCardType.Number)
-                    sum += 10;
-                else
-                    sum += card.number;
-            }
-            handSum[i] = sum;
+            handSum[i] = calDeckSum(playerDecks.get(i).getComponents());
         }
 
         int nNotBustPlayerExcludeDealer = 0;
@@ -198,6 +462,16 @@ public class BlackjackGameStrategy implements IGameStrategy {
         private String gameResultDesc;
 
         private Deck deck;
+
+        private String strategy;
+
+        public String getStrategy() {
+            return strategy;
+        }
+
+        public void setStrategy(String strategy) {
+            this.strategy = strategy;
+        }
 
         public int getPlayerCount() {
             return playerCount;
