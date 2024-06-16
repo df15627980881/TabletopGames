@@ -78,7 +78,7 @@ public class Hit extends AbstractAction implements IPrintable {
 
     @Override
     public String toString() {
-        return "Hit " + playerID;
+        return "Hit";
     }
 
     @Override

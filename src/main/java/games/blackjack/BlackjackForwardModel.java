@@ -36,7 +36,6 @@ public class BlackjackForwardModel extends StandardForwardModel {
         //Create a deck
         bjgs.playerDecks = new ArrayList<>();
 
-
         //create the playing deck
         bjgs.drawDeck = FrenchCard.generateDeck("DrawDeck", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
         //shuffle the cards
@@ -171,6 +170,24 @@ public class BlackjackForwardModel extends StandardForwardModel {
                         bjgs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, i);
                     } else if (score[bjgs.dealerPlayer] == score[i]) {
                         bjgs.setPlayerResult(CoreConstants.GameResult.DRAW_GAME, i);
+                    }
+                }
+            }
+
+            // set dealer's result
+            if (bjgs.getPlayerResults()[bjgs.dealerPlayer] != CoreConstants.GameResult.LOSE_GAME) {
+                int maxScore = Arrays.stream(score).filter(x -> x <= params.winScore).max().getAsInt();
+                for (int i = 0; i < bjgs.getNPlayers() - 1; i++) {
+                    if (score[i] > score[bjgs.dealerPlayer]) {
+                        bjgs.setPlayerResult(CoreConstants.GameResult.LOSE_GAME, bjgs.dealerPlayer);
+                        break;
+                    }
+                    if (score[i] == maxScore && score[bjgs.dealerPlayer] == maxScore) {
+                        bjgs.setPlayerResult(CoreConstants.GameResult.DRAW_GAME, bjgs.dealerPlayer);
+                        break;
+                    }
+                    if (i == bjgs.getNPlayers() - 2) {
+                        bjgs.setPlayerResult(CoreConstants.GameResult.WIN_GAME, bjgs.dealerPlayer);
                     }
                 }
             }
