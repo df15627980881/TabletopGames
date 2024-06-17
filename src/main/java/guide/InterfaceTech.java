@@ -934,12 +934,12 @@ public class InterfaceTech extends GUI {
         (new InterfaceTech()).runQuestions(questionService.getQuestions(), questionService.getQuestions().keySet().stream().toList(), 0);
     }
 
-    private Game resetActionForGame() {
-        AbstractGameState gameState = gameResult.getGameState().copy();
-        gameState.reset(seed);
-        return new Game(gameResult.getGameType(), gameResult.getPlayers(),
-                gameType.createForwardModel(null, gameResult.getPlayers().size()), gameState);
-    }
+        private Game resetActionForGame() {
+            AbstractGameState gameState = gameResult.getGameState().copy();
+            gameState.reset(seed);
+            return new Game(gameResult.getGameType(), gameResult.getPlayers(),
+                    gameType.createForwardModel(null, gameResult.getPlayers().size()), gameState);
+        }
 
     public JButton getNext() {
         return next;

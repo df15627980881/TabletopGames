@@ -58,6 +58,7 @@ public class BlackjackForwardModel extends StandardForwardModel {
             PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + i + " deck", i, visibility);
             bjgs.playerDecks.add(playerDeck);
         }
+
         for (int card = 0; card < ((BlackjackParameters)bjgs.getGameParameters()).nCardsPerPlayer; card++) {
             for (int i = 0; i < bjgs.getNPlayers(); i++) {
                 if (i == bjgs.dealerPlayer && i < ((BlackjackParameters)bjgs.getGameParameters()).nDealerCardsHidden) {
@@ -66,6 +67,19 @@ public class BlackjackForwardModel extends StandardForwardModel {
                     new Hit(i).execute(bjgs);
                 }
             }
+        }
+
+        if (GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
+            PartialObservableDeck<FrenchCard> playerDeck = bjgs.playerDecks.get(bjgs.getNPlayers()-1);
+            // need allocate new address because it may edit bjgs directly by shallow copy
+            visibility = new boolean[firstState.getNPlayers()];
+            Arrays.fill(visibility, true);
+            visibility[0] = false;
+            ArrayList<boolean[]> elementVisibility = (ArrayList<boolean[]>) playerDeck.getElementVisibility();
+            // Because PartialObservableDeck#add method add the element at the first place......
+            elementVisibility.set(0, visibility);
+            playerDeck.setVisibility(elementVisibility);
+            bjgs.playerDecks.set(bjgs.getNPlayers()-1, playerDeck);
         }
     }
 
@@ -133,6 +147,19 @@ public class BlackjackForwardModel extends StandardForwardModel {
     }
 
     private void _endTurn(BlackjackGameState bjgs) {
+        if (GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS && bjgs.getCurrentPlayer() == bjgs.dealerPlayer) {
+            List<PartialObservableDeck<FrenchCard>> playerDecks = bjgs.playerDecks;
+            boolean[] visibility = new boolean[bjgs.getNPlayers()];
+            Arrays.fill(visibility, true);
+            PartialObservableDeck<FrenchCard> playerDeck = playerDecks.get(bjgs.getNPlayers()-1);
+            ArrayList<boolean[]> elementVisibility = (ArrayList<boolean[]>) playerDeck.getElementVisibility();
+            for (int i=0; i<elementVisibility.size(); ++i) {
+                elementVisibility.set(i, visibility);
+            }
+            playerDeck.setVisibility(elementVisibility);
+            playerDecks.set(bjgs.getNPlayers()-1, playerDeck);
+//            bjgs.setPlayerDecks(playerDecks);
+        }
 //        if (bjgs.getTurnCounter() >= bjgs.getNPlayers()) {
 //        if (CollectionUtils.isNotEmpty(bjgs.getHistory()) &&
 //                bjgs.getHistory().get(bjgs.getHistory().size()-1).a == bjgs.dealerPlayer &&
