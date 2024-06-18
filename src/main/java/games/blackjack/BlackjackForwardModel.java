@@ -1,30 +1,22 @@
 package games.blackjack;
 
-import com.beust.ah.A;
 import core.AbstractGameState;
 import core.CoreConstants;
 import core.StandardForwardModel;
 import core.actions.AbstractAction;
+import core.components.Deck;
 import core.components.FrenchCard;
 import core.components.PartialObservableDeck;
-import evaluation.metrics.Event;
 import games.blackjack.actions.Hit;
 import games.blackjack.actions.Stand;
-import guide.*;
+import guide.DialogUtils;
+import guide.GuideContext;
+import guide.PreGameState;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
-import org.testng.collections.Lists;
-import utilities.JSONUtils;
-import utilities.Pair;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static core.CoreConstants.GameResult.*;
-import static core.CoreConstants.GameResult.LOSE_GAME;
-import static evaluation.metrics.Event.GameEvent.TURN_OVER;
 
 
 public class BlackjackForwardModel extends StandardForwardModel {
@@ -41,7 +33,7 @@ public class BlackjackForwardModel extends StandardForwardModel {
         //shuffle the cards
         bjgs.drawDeck.shuffle(new Random((bjgs.getGameParameters().getRandomSeed())));
         if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
-            PreGameState preGameState = GuideContext.deckForMechanism;
+            PreGameState<FrenchCard> preGameState = GuideContext.deckForMechanism;
             bjgs.drawDeck = preGameState.getDrawDeck().copy();
         } else if (GuideContext.guideStage == GuideContext.GuideState.SHOW_GAME_RESULT) {
             bjgs.drawDeck = GuideContext.deckForResult.get(GuideContext.deckForResultIndex).getDrawDeck().copy();
@@ -71,7 +63,7 @@ public class BlackjackForwardModel extends StandardForwardModel {
 
         if (GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
             PartialObservableDeck<FrenchCard> playerDeck = bjgs.playerDecks.get(bjgs.getNPlayers()-1);
-            // need allocate new address because it may edit bjgs directly by shallow copy
+            // need allocate new address because it will modify bjgs directly by shallow copy
             visibility = new boolean[firstState.getNPlayers()];
             Arrays.fill(visibility, true);
             visibility[0] = false;

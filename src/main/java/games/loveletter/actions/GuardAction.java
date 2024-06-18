@@ -1,9 +1,16 @@
 package games.loveletter.actions;
 
+import core.AbstractGameState;
 import core.components.Deck;
 import core.interfaces.IPrintable;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.cards.LoveLetterCard;
+import guide.DialogUtils;
+import org.testng.Assert;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * The guard allows to attempt guessing another player's card. If the guess is correct, the targeted opponent
@@ -40,5 +47,27 @@ public class GuardAction extends PlayCard implements IPrintable {
     @Override
     public GuardAction copy() {
         return this;
+    }
+
+    @Override
+    public ArrayList<JDialog> createDialogWithFeedbackForNewbie(Frame frame, AbstractGameState gameState, int currentPlayer) {
+        ArrayList<JDialog> results = new ArrayList<>();
+        Assert.assertEquals(currentPlayer, playerID);
+        LoveLetterGameState llgs = (LoveLetterGameState) gameState;
+        Deck<LoveLetterCard> opponentDeck = llgs.getPlayerHandCards().get(targetPlayer);
+        LoveLetterCard card = opponentDeck.peek();
+        if (card.cardType == this.targetCardType) {
+            results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>King Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer
+                            + "'s hand(guessing " + targetCardType + ", the actual card is " + card.cardType +
+                            "), the result is that Player " + playerID + "'s guess is correct, leading to Player "
+                            + targetPlayer + " being eliminated.</p></html>"));
+        } else {
+            results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>King Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer
+                            + "'s hand(guessing " + targetCardType + ", the actual card is " + card.cardType +
+                            "), the result is that Player " + playerID + "'s guess is wrong, leading nothing.</p></html>"));
+        }
+        return results;
     }
 }

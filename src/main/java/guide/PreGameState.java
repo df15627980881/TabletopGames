@@ -1,19 +1,20 @@
 package guide;
 
 import core.actions.AbstractAction;
+import core.components.Card;
 import core.components.Deck;
 import core.components.FrenchCard;
 import utilities.Pair;
 
 import java.util.List;
 
-public class PreGameState {
+public class PreGameState<T extends Card> {
 
     private Integer playerCount;
 
     private List<Pair<Long, AbstractAction>> playerIdAndActions;
 
-    private Deck<FrenchCard> drawDeck;
+    private Deck<T> drawDeck;
 
     private String gameResultDesc;
 
@@ -27,11 +28,11 @@ public class PreGameState {
         this.playerIdAndActions = playerIdAndActions;
     }
 
-    public Deck<FrenchCard> getDrawDeck() {
+    public Deck<T> getDrawDeck() {
         return drawDeck;
     }
 
-    public void setDrawDeck(Deck<FrenchCard> drawDeck) {
+    public void setDrawDeck(Deck<T> drawDeck) {
         this.drawDeck = drawDeck;
     }
 

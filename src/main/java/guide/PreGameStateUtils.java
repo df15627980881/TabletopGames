@@ -2,10 +2,13 @@ package guide;
 
 import core.CoreConstants;
 import core.actions.AbstractAction;
+import core.components.Card;
 import core.components.Deck;
 import core.components.FrenchCard;
+import games.GameType;
 import games.blackjack.actions.Hit;
 import games.blackjack.actions.Stand;
+import games.loveletter.cards.LoveLetterCard;
 import org.apache.commons.collections4.CollectionUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,9 +22,15 @@ import java.util.Set;
 
 public class PreGameStateUtils {
 
-    public static PreGameState getBlackjack(String path) {
+    public static PreGameState<? extends Card> get(GameType gameType, String path) {
+        if (gameType == GameType.Blackjack) return getBlackjack(path);
+        if (gameType == GameType.LoveLetter) return getLoveLetter(path);
+        return null;
+    }
+
+    public static PreGameState<FrenchCard> getBlackjack(String path) {
         JSONObject jsonObject = JSONUtils.loadJSONFile(path);
-        PreGameState result = new PreGameState();
+        PreGameState<FrenchCard> result = new PreGameState<>();
 
         String gameResultDesc = (String) jsonObject.get("gameResultDesc");
         String strategy = (String) jsonObject.get("strategy");
@@ -70,6 +79,11 @@ public class PreGameStateUtils {
         result.setGameResultDesc(gameResultDesc);
         result.setStrategy(strategy);
         return result;
+    }
+
+    public static PreGameState<LoveLetterCard> getLoveLetter(String path) {
+        // TODO: @yuanxilan
+        return new PreGameState<>();
     }
 
     public static void generateDeckJson() {

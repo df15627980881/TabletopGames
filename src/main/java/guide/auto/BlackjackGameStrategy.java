@@ -27,6 +27,10 @@ public class BlackjackGameStrategy implements IGameStrategy {
 
     public static Map<String, Game> strategyTextAndSimulate = new HashMap<>();
 
+    // When you want to add a new strategy, please modify this count
+    private final int gameResultStrategyCount = 3;
+    private final int simulateStrategyCount = 4;
+
     private final String gameResultStrategyText01 = "When the dealer's total number of cards is the highest in the game and doesn't bust, the dealer wins and the remaining players lose the game.";
     private final String gameResultStrategyText02 = "When the dealer's hand has not busted, the player with the highest score who has also not busted wins. If the players tie for the dealer's score, then they draw.";
     private final String gameResultStrategyText03 = "When the dealer busts, all players who have not busted win.";
@@ -64,7 +68,6 @@ public class BlackjackGameStrategy implements IGameStrategy {
 
     private void isSimulate(Game game, Long seed) {
         BlackjackGameState gs = (BlackjackGameState) game.getGameState();
-        List<GameResultForJSON.Deck.Card> cards = new ArrayList<>();
         Deck<FrenchCard> allDeck = FrenchCard.generateDeck("DrawDeck", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
         //shuffle the cards
         allDeck.shuffle(new Random((gs.getGameParameters().getRandomSeed())));
@@ -279,6 +282,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
 
     private Game resetActionForGame(Game game, Long seed) {
         AbstractGameState gameState = game.getGameState().copy();
+        // Don't use gameState.gameParameter.randomSeed
         gameState.reset(seed);
         return new Game(game.getGameType(), game.getPlayers(),
                 game.getGameType().createForwardModel(null, game.getPlayers().size()), gameState);
@@ -291,7 +295,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
             path += "/GameResult";
             File[] allFiles = JSONUtils.getAllFile(path);
             int allFileSize = allFiles == null ? 0 : allFiles.length;
-            assert strategyTextAndGameResults.size() == 3;
+            assert strategyTextAndGameResults.size() == gameResultStrategyCount;
             for (Map.Entry<String, Game> entry : strategyTextAndGameResults.entrySet()) {
                 Game game = entry.getValue();
                 BlackjackGameState gs = (BlackjackGameState) game.getGameState();
@@ -334,7 +338,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
             path += "/Simulate";
             File[] allFiles = JSONUtils.getAllFile(path);
             int allFileSize = allFiles == null ? 0 : allFiles.length;
-            assert strategyTextAndSimulate.size() == 4;
+            assert strategyTextAndSimulate.size() == simulateStrategyCount;
             for (Map.Entry<String, Game> entry : strategyTextAndSimulate.entrySet()) {
                 Game game = entry.getValue();
                 BlackjackGameState gs = (BlackjackGameState) game.getGameState();
@@ -371,10 +375,10 @@ public class BlackjackGameStrategy implements IGameStrategy {
     @Override
     public boolean isEnd() {
         if (this.strategyEnum == BlackjackStrategyEnum.GAME_RESULT) {
-            return strategyTextAndGameResults.size() == 3;
+            return strategyTextAndGameResults.size() == gameResultStrategyCount;
         }
         if (this.strategyEnum == BlackjackStrategyEnum.SIMULATE) {
-            return strategyTextAndSimulate.size() == 4;
+            return strategyTextAndSimulate.size() == simulateStrategyCount;
         }
         return false;
     }
@@ -568,6 +572,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
 
             public static class Card implements Serializable {
 
+                @Serial
                 private static final long serialVersionUID = -2903022719017140496L;
 
                 private String type;

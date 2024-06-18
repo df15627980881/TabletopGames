@@ -5,6 +5,7 @@ import core.AbstractPlayer;
 import core.CoreConstants;
 import core.Game;
 import core.actions.AbstractAction;
+import core.components.FrenchCard;
 import games.GameType;
 import gui.AbstractGUIManager;
 import gui.GUI;
@@ -127,27 +128,27 @@ public class InterfaceTech extends GUI {
 
         GuideContext.guideStage = GuideContext.GuideState.GUIDE_CLOSE;
         GuideContext.frame = InterfaceTech.this;
-        GuideContext.deckForMechanism = PreGameStateUtils.getBlackjack("data/preGameState/Blackjack/Mechanism/Blackjack.json");
+        GuideContext.deckForMechanism = PreGameStateUtils.get(gameType, "data/preGameState/" + gameType.name() + "/Mechanism/" + gameType.name() + ".json");
         GuideContext.deckForResult = new ArrayList<>();
         GuideContext.deckForSimulate = new ArrayList<>();
         GuideContext.deckForResultIndex = 0;
         GuideContext.deckForSimulateIndex = 0;
 
-        File[] files = JSONUtils.getAllFile("data/preGameState/Blackjack/GameResult");
+        File[] files = JSONUtils.getAllFile("data/preGameState/" + gameType.name() + "/GameResult");
         if (files == null || files.length == 0) {
             System.out.println("No gameResult game");
         } else {
             for (File file : files) {
-                GuideContext.deckForResult.add(PreGameStateUtils.getBlackjack("data/preGameState/Blackjack/GameResult/" + file.getName()));
+                GuideContext.deckForResult.add(PreGameStateUtils.get(gameType, "data/preGameState/" + gameType.name() + "/GameResult/" + file.getName()));
             }
         }
 
-        files = JSONUtils.getAllFile("data/preGameState/Blackjack/Simulate");
+        files = JSONUtils.getAllFile("data/preGameState/" + gameType.name() + "/Simulate");
         if (files == null || files.length == 0) {
             System.out.println("No gameResult game");
         } else {
             for (File file : files) {
-                GuideContext.deckForSimulate.add(PreGameStateUtils.getBlackjack("data/preGameState/Blackjack/Simulate/" + file.getName()));
+                GuideContext.deckForSimulate.add(PreGameStateUtils.get(gameType, "data/preGameState/" + gameType.name() + "/Simulate/" + file.getName()));
             }
         }
 
@@ -581,7 +582,7 @@ public class InterfaceTech extends GUI {
         }
 
 
-        PreGameState preGameState = GuideContext.deckForResult.get(GuideContext.deckForResultIndex);
+        PreGameState<FrenchCard> preGameState = GuideContext.deckForResult.get(GuideContext.deckForResultIndex);
         Set<Long> playerIds = new LinkedHashSet<>(preGameState.getPlayerIdAndActions().stream().map(x -> x.a).collect(Collectors.toSet()));
         List<AbstractAction> actions = new ArrayList<>(preGameState.getPlayerIdAndActions().stream().map(x -> x.b).toList());
         List<AbstractPlayer> players = new ArrayList<>();
@@ -679,6 +680,48 @@ public class InterfaceTech extends GUI {
 //            }
 //        });
 //        worker.execute();
+    }
+
+    public void prepareSimulate() {
+        GuideContext.guideStage = GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS;
+        for (ActionListener actionListener : next.getActionListeners()) {
+            next.removeActionListener(actionListener);
+        }
+        PreGameState preGameState2 = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
+        for (int i=0; i<preGameState2.getPlayerCount() - 1; ++i) {
+            playersForSimulate.add(PlayerType.valueOf("HumanGUIPlayer").createPlayerInstance(seed, humanInputQueue, null));
+        }
+        playersForSimulate.add(new MCTSPlayer());
+        replay.addActionListener(e -> {
+            GuideContext.deckForSimulateIndex -= 1;
+            Assert.assertTrue(GuideContext.deckForSimulateIndex >= 0);
+            end = false;
+            getContentPane().remove(replay);
+            gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
+            gameRunning.reset(playersForSimulate);
+            gameRunning.setTurnPause(200);
+            gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
+            setFrameProperties();
+            buildInterface(false);
+            startTrigger.actionPerformed(e);
+            next.setEnabled(false);
+        });
+        next.addActionListener(e -> {
+            gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
+            gameRunning.reset(playersForSimulate);
+            gameRunning.setTurnPause(200);
+            gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
+            setFrameProperties();
+            buildInterface(false);
+            end = false;
+            getContentPane().remove(replay);
+            if (isFirstEnterStrategy) {
+                DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!"));
+                isFirstEnterStrategy = false;
+            }
+            startTrigger.actionPerformed(e);
+            simulate();
+        });
     }
 
     @Deprecated

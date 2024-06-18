@@ -6,6 +6,12 @@ import core.components.PartialObservableDeck;
 import core.interfaces.IPrintable;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.cards.LoveLetterCard;
+import guide.DialogUtils;
+import org.testng.Assert;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * The Priest allows a player to see another player's hand cards.
@@ -42,5 +48,15 @@ public class PriestAction extends PlayCard implements IPrintable {
         PriestAction copy = new PriestAction(cardIdx, playerID, targetPlayer, canExecuteEffect, discard);
         copy.targetCardType = targetCardType;
         return copy;
+    }
+
+    @Override
+    public ArrayList<JDialog> createDialogWithFeedbackForNewbie(Frame frame, AbstractGameState gameState, int currentPlayer) {
+        ArrayList<JDialog> results = new ArrayList<>();
+        Assert.assertEquals(currentPlayer, playerID);
+        results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                "<html><h2>Priest Action</h2><p>The player" + playerID + " saw the card in player" + targetPlayer
+                        + "'s hand, and the result is targetCardType.</p></html>"));
+        return results;
     }
 }

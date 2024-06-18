@@ -1,10 +1,20 @@
 package games.loveletter.actions;
 
+import core.AbstractGameState;
 import core.CoreConstants.VisibilityMode;
+import core.actions.AbstractAction;
 import core.components.Deck;
 import core.interfaces.IPrintable;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.cards.LoveLetterCard;
+import guide.DialogUtils;
+import guide.auto.LoveLetterGameStrategy;
+import org.testng.Assert;
+import utilities.Pair;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 
 
 /**
@@ -41,5 +51,15 @@ public class KingAction extends PlayCard implements IPrintable {
     @Override
     public KingAction copy() {
         return this;
+    }
+
+    @Override
+    public ArrayList<JDialog> createDialogWithFeedbackForNewbie(Frame frame, AbstractGameState gameState, int currentPlayer) {
+        ArrayList<JDialog> results = new ArrayList<>();
+        Assert.assertEquals(currentPlayer, playerID);
+        results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                "<html><h2>King Action</h2><p>The player" + playerID + " and the player" + targetPlayer
+                        + " will exchange the cards in their hands  .</p></html>"));
+        return results;
     }
 }

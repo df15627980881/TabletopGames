@@ -1,5 +1,7 @@
 package guide;
 
+import core.components.Card;
+
 import java.util.List;
 
 public class GuideContext {
