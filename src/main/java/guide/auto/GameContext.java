@@ -11,6 +11,9 @@ public class GameContext {
         if (gameType == GameType.Blackjack) {
             this.gameStrategy = new BlackjackGameStrategy();
         }
+        if (gameType == GameType.LoveLetter) {
+            this.gameStrategy = new LoveLetterGameStrategy();
+        }
     }
 
     public void execute(String strategy, Game game, Long seed) {

@@ -2,16 +2,18 @@ package guide.auto;
 
 import core.Game;
 import core.actions.AbstractAction;
+import core.components.PartialObservableDeck;
 import games.loveletter.LoveLetterGameState;
+import games.loveletter.actions.PlayCard;
+import games.loveletter.cards.LoveLetterCard;
 import org.apache.commons.lang3.StringUtils;
+import utilities.JSONUtils;
 import utilities.Pair;
 
+import java.io.File;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class LoveLetterGameStrategy implements IGameStrategy {
 
@@ -19,13 +21,16 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
     public static Map<String, Game> strategyTextAndSimulate = new HashMap<>();
 
+    public static List<PartialObservableDeck<LoveLetterCard>> tmpCardsForReserve;
+    public static boolean tmpCardsForReserveSwitch = false;
+
     // When you want to add a new strategy, please modify this count
     private final int mechanismStrategyCount = 3;
     private final int simulateStrategyCount = 4;
 
     private LoveLetterStrategyEnum loveLetterStrategyEnum;
 
-    private static Game gameForMechanism;
+    private static Pair<Long, Game> gameForMechanism;
 
     @Override
     public boolean isValid(String strategy, Game game, Long seed) {
@@ -35,7 +40,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
         if (LoveLetterStrategyEnum.MECHANISM.getName().equals(strategy)) {
             this.loveLetterStrategyEnum = LoveLetterStrategyEnum.MECHANISM;
-            isMechanism(game);
+            isMechanism(game, seed);
             return true;
         }
 
@@ -51,19 +56,71 @@ public class LoveLetterGameStrategy implements IGameStrategy {
     private void isSimulate(Game game, Long seed) {
     }
 
-    private void isMechanism(Game game) {
+    private void isMechanism(Game game, Long seed) {
         // case1: For introducing the role each action
         LoveLetterGameState gs = (LoveLetterGameState) game.getGameState();
         List<Pair<Integer, AbstractAction>> history = gs.getHistory();
-        Map<AbstractAction, Boolean> vis = new HashMap<>();
+        Map<String, Boolean> vis = new HashMap<>();
+        int limitActionCount = 0;
         for (Pair<Integer, AbstractAction> pair : history) {
-            vis.put(pair.b, true);
+            PlayCard playCard = (PlayCard) pair.b;
+            vis.put(playCard.getCardType().name(), true);
+            limitActionCount += 1;
+            if (limitActionCount >= 20) break;
         }
-        if (vis.size() == 6) gameForMechanism = game;
+        System.out.println(vis.size() + " " + history.size());
+        if (vis.size() == 8) {
+            gameForMechanism = new Pair<>(seed, game);
+        }
     }
 
     @Override
     public void exportJson() {
+        assert isEnd();
+        String path = "data/preGameState/LoveLetter";
+        if (this.loveLetterStrategyEnum == LoveLetterStrategyEnum.MECHANISM) {
+            path += "/Mechanism";
+            File[] allFiles = JSONUtils.getAllFile(path);
+            int allFileSize = allFiles == null ? 0 : allFiles.length;
+            assert gameForMechanism != null;
+            GameResultForJSON gameResultForJSON = new GameResultForJSON();
+            gameResultForJSON.setPlayerCount(gameForMechanism.b.getPlayers().size());
+
+            List<Pair<Integer, AbstractAction>> history = gameForMechanism.b.getGameState().getHistory();
+            List<GameResultForJSON.Action> actions = new ArrayList<>();
+            for (Pair<Integer, AbstractAction> pair : history) {
+                GameResultForJSON.Action action = new GameResultForJSON.Action();
+                action.setPlayer(pair.a);
+                action.setAction((PlayCard) pair.b);
+                actions.add(action);
+            }
+            List<GameResultForJSON.Deck> decks = new ArrayList<>();
+            for (PartialObservableDeck<LoveLetterCard> a : tmpCardsForReserve) {
+                List<LoveLetterCard> components = new ArrayList<>(a.copy().getComponents());
+
+                GameResultForJSON.Deck deck = new GameResultForJSON.Deck();
+                List<GameResultForJSON.Deck.Card> cards = new ArrayList<>();
+                for (LoveLetterCard component : components) {
+                    GameResultForJSON.Deck.Card card = new GameResultForJSON.Deck.Card();
+                    card.setCardType(component.cardType.name());
+                    cards.add(card);
+                }
+                deck.setCards(cards);
+                deck.setName(String.valueOf(allFiles == null ? 0 : allFiles.length));
+                deck.setVisibilityMode("VISIBLE_TO_ALL");
+                decks.add(deck);
+            }
+
+            gameResultForJSON.setHistoryText(gameForMechanism.b.getGameState().getHistoryAsText());
+            gameResultForJSON.setActions(actions);
+            gameResultForJSON.setGameResultDesc("");
+            gameResultForJSON.setSeed(gameForMechanism.a);
+            gameResultForJSON.setStrategy(null);
+            gameResultForJSON.setDecks(decks);
+
+            JSONUtils.writeToJsonFile(gameResultForJSON, path + "/" + allFileSize);
+
+        }
 
     }
 
@@ -101,9 +158,30 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
         private String gameResultDesc;
 
-        private GameResultForJSON.Deck deck;
+        // this can instead deck
+        private Long seed;
+
+        private List<GameResultForJSON.Deck> decks;
+
+        private List<String> historyText;
 
         private String strategy;
+
+        public List<String> getHistoryText() {
+            return historyText;
+        }
+
+        public void setHistoryText(List<String> historyText) {
+            this.historyText = historyText;
+        }
+
+        public Long getSeed() {
+            return seed;
+        }
+
+        public void setSeed(Long seed) {
+            this.seed = seed;
+        }
 
         public int getPlayerCount() {
             return playerCount;
@@ -129,12 +207,12 @@ public class LoveLetterGameStrategy implements IGameStrategy {
             this.gameResultDesc = gameResultDesc;
         }
 
-        public Deck getDeck() {
-            return deck;
+        public List<Deck> getDecks() {
+            return decks;
         }
 
-        public void setDeck(Deck deck) {
-            this.deck = deck;
+        public void setDecks(List<Deck> decks) {
+            this.decks = decks;
         }
 
         public String getStrategy() {
@@ -152,7 +230,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
             private int player;
 
-            private String action;
+            private PlayCard action;
 
             public int getPlayer() {
                 return player;
@@ -162,11 +240,11 @@ public class LoveLetterGameStrategy implements IGameStrategy {
                 this.player = player;
             }
 
-            public String getAction() {
+            public PlayCard getAction() {
                 return action;
             }
 
-            public void setAction(String action) {
+            public void setAction(PlayCard action) {
                 this.action = action;
             }
         }
@@ -210,34 +288,14 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
                 @Serial
                 private static final long serialVersionUID = 1539693350338665166L;
-                private String type;
+                private String cardType;
 
-                private String suite;
-
-                private String number;
-
-                public String getType() {
-                    return type;
+                public String getCardType() {
+                    return cardType;
                 }
 
-                public void setType(String type) {
-                    this.type = type;
-                }
-
-                public String getSuite() {
-                    return suite;
-                }
-
-                public void setSuite(String suite) {
-                    this.suite = suite;
-                }
-
-                public String getNumber() {
-                    return number;
-                }
-
-                public void setNumber(String number) {
-                    this.number = number;
+                public void setCardType(String cardType) {
+                    this.cardType = cardType;
                 }
             }
         }

@@ -16,9 +16,17 @@ public class PreGameState<T extends Card> {
 
     private Deck<T> drawDeck;
 
+    /**
+     * If the game has more than 1 rounds, use this
+     */
+    private List<Deck<T>> drawDecks;
+    private int indexx = 0;
+
     private String gameResultDesc;
 
     private String strategy;
+
+    private Long seed;
 
     public List<Pair<Long, AbstractAction>> getPlayerIdAndActions() {
         return playerIdAndActions;
@@ -58,5 +66,34 @@ public class PreGameState<T extends Card> {
 
     public void setStrategy(String strategy) {
         this.strategy = strategy;
+    }
+
+    public Long getSeed() {
+        return seed;
+    }
+
+    public void setSeed(Long seed) {
+        this.seed = seed;
+    }
+
+    public List<Deck<T>> getDrawDecks() {
+        return drawDecks;
+    }
+
+    public void setDrawDecks(List<Deck<T>> drawDecks) {
+        this.drawDecks = drawDecks;
+    }
+
+    public int getIndexx() {
+        return indexx;
+    }
+
+    public void setIndexx(int indexx) {
+        this.indexx = indexx;
+    }
+
+    public void addIndexx() {
+        this.indexx += 1;
+        this.indexx %= drawDecks.size();
     }
 }

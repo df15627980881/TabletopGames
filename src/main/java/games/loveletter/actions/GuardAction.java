@@ -1,6 +1,7 @@
 package games.loveletter.actions;
 
 import core.AbstractGameState;
+import core.CoreConstants;
 import core.components.Deck;
 import core.interfaces.IPrintable;
 import games.loveletter.LoveLetterGameState;
@@ -56,15 +57,15 @@ public class GuardAction extends PlayCard implements IPrintable {
         LoveLetterGameState llgs = (LoveLetterGameState) gameState;
         Deck<LoveLetterCard> opponentDeck = llgs.getPlayerHandCards().get(targetPlayer);
         LoveLetterCard card = opponentDeck.peek();
-        if (card.cardType == this.targetCardType) {
+        if (llgs.getPlayerResults()[targetPlayer] == CoreConstants.GameResult.LOSE_ROUND) {
             results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-                    "<html><h2>King Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer
-                            + "'s hand(guessing " + targetCardType + ", the actual card is " + card.cardType +
+                    "<html><h2>Guard Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer
+                            + "'s hand(guessing " + targetCardType + ", the actual card is " + targetCardType +
                             "), the result is that Player " + playerID + "'s guess is correct, leading to Player "
                             + targetPlayer + " being eliminated.</p></html>"));
         } else {
             results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-                    "<html><h2>King Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer
+                    "<html><h2>Guard Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer
                             + "'s hand(guessing " + targetCardType + ", the actual card is " + card.cardType +
                             "), the result is that Player " + playerID + "'s guess is wrong, leading nothing.</p></html>"));
         }

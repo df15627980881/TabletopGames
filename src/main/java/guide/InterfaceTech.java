@@ -38,7 +38,7 @@ public class InterfaceTech extends GUI {
 
     private GameType gameType;
 
-    private Game gameResult;
+    public Game gameResult;
 
     public Game gameRunning;
 
@@ -128,7 +128,7 @@ public class InterfaceTech extends GUI {
 
         GuideContext.guideStage = GuideContext.GuideState.GUIDE_CLOSE;
         GuideContext.frame = InterfaceTech.this;
-        GuideContext.deckForMechanism = PreGameStateUtils.get(gameType, "data/preGameState/" + gameType.name() + "/Mechanism/" + gameType.name() + ".json");
+        GuideContext.deckForMechanism = PreGameStateUtils.get(gameType, "data/preGameState/" + gameType.name() + "/Mechanism/" + 0 + ".json");
         GuideContext.deckForResult = new ArrayList<>();
         GuideContext.deckForSimulate = new ArrayList<>();
         GuideContext.deckForResultIndex = 0;
@@ -273,7 +273,6 @@ public class InterfaceTech extends GUI {
             @Override
             protected Void doInBackground() throws Exception {
                 for (AbstractAction action: actions) {
-
                     synchronized (gameRunning) {
                         currentPlayer = gameRunning.getGameState().getCurrentPlayer();
                         gameRunning.processOneAction(action);
@@ -977,7 +976,7 @@ public class InterfaceTech extends GUI {
         (new InterfaceTech()).runQuestions(questionService.getQuestions(), questionService.getQuestions().keySet().stream().toList(), 0);
     }
 
-    private Game resetActionForGame() {
+    public Game resetActionForGame() {
         AbstractGameState gameState = gameResult.getGameState().copy();
         gameState.reset(seed);
         return new Game(gameResult.getGameType(), gameResult.getPlayers(),

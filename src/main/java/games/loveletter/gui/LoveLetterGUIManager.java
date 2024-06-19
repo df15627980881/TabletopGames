@@ -8,6 +8,7 @@ import core.actions.AbstractAction;
 import core.components.Deck;
 import core.components.FrenchCard;
 import core.components.PartialObservableDeck;
+import games.GameType;
 import games.loveletter.LoveLetterForwardModel;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.LoveLetterParameters;
@@ -20,9 +21,12 @@ import gui.IScreenHighlight;
 import guide.DialogUtils;
 import guide.GuideContext;
 import guide.InterfaceTech;
+import guide.PreGameState;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.curator.shaded.com.google.common.collect.Lists;
 import players.human.ActionController;
+import players.mcts.MCTSPlayer;
 import utilities.ImageIO;
 import utilities.Pair;
 
@@ -68,7 +72,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
     List<LoveLetterCard> cards;
 
     public LoveLetterGUIManager(GamePanel parent, Game game, String purpose, InterfaceTech frame) {
-        super(parent);
+        super(parent, game, purpose);
 
         UIManager.put("TabbedPane.contentOpaque", false);
         UIManager.put("TabbedPane.opaque", false);
@@ -456,7 +460,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
             llgs = (LoveLetterGameState)gameState.copy();
             for (int i = 0; i < gameState.getNPlayers(); i++) {
                 boolean front = i == gameState.getCurrentPlayer() && gameState.getCoreGameParameters().alwaysDisplayCurrentPlayer
-                        || humanPlayerId.contains(i)
+                        || (CollectionUtils.isNotEmpty(humanPlayerId) && humanPlayerId.contains(i))
                         || gameState.getCoreGameParameters().alwaysDisplayFullObservable;
                 playerHands[i].update(llgs, front);
 
@@ -485,7 +489,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
             for (LoveLetterCard.CardType cardType : LoveLetterCard.CardType.values()) {
                 cards.add(new LoveLetterCard(cardType));
             }
-            Collections.shuffle(cards, new Random(System.currentTimeMillis()));
+            Collections.shuffle(cards, new Random(GuideContext.deckForMechanism.getSeed()));
             DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                     "First of all, all the cards are hidden, and you can only view your card"));
         } else if (indexx == 1) {
@@ -678,7 +682,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
             for (ActionListener actionListener : frame.getNext().getActionListeners()) {
                 frame.getNext().removeActionListener(actionListener);
             }
-            List<LoveLetterCard> loveLetterCards = new ArrayList<>(GuideContext.deckForMechanism.getDrawDeck().getComponents());
+//            List<LoveLetterCard> loveLetterCards = new ArrayList<>(GuideContext.deckForMechanism.getDrawDeck().getComponents());
             if (game != null) {
                 AbstractGameState gameState = game.getGameState();
                 fm = (LoveLetterForwardModel) game.getForwardModel();
@@ -809,6 +813,18 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
                     parent.revalidate();
                     parent.setVisible(true);
                     parent.repaint();
+
+                    PreGameState<LoveLetterCard> deckForMechanism = GuideContext.deckForMechanism;
+                    deckForMechanism.setIndexx(0);
+                    List<AbstractPlayer> players = new ArrayList<>();
+                    for (int i=0; i<deckForMechanism.getPlayerCount(); ++i) players.add(new MCTSPlayer());
+                    Game game = Game.runOne(GameType.LoveLetter, null, players, deckForMechanism.getSeed(), false, null, null, 1);
+                    frame.gameResult = game;
+                    AbstractGameState gameState1 = game.getGameState().copy();
+                    gameState1.reset(deckForMechanism.getSeed());
+                    deckForMechanism.setIndexx(0);
+                    frame.gameRunning = new Game(game.getGameType(), game.getPlayers(),
+                            GameType.LoveLetter.createForwardModel(null, game.getPlayers().size()), gameState1);
                     simulateActions(frame, playerIdAndDeck);
                     return;
                 }
@@ -818,9 +834,13 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
         List<Pair<Long, AbstractAction>> playerIdAndActions = GuideContext.deckForMechanism.getPlayerIdAndActions();
         List<AbstractAction> actions = playerIdAndActions.stream().map(pp -> pp.b).toList();
         SwingWorker<Void, AbstractAction> worker = frame.processSpecificActions(actions);
+        for (ActionListener actionListener : frame.getNext().getActionListeners()) {
+            frame.getNext().removeActionListener(actionListener);
+        }
         frame.getNext().addActionListener(e -> {
             worker.addPropertyChangeListener(evt -> {
                 if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
+                    parent.repaint();
                     System.out.println("Finish");
                 }
             });

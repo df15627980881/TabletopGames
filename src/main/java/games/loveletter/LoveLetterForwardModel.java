@@ -1,5 +1,6 @@
 package games.loveletter;
 
+import com.google.common.collect.Lists;
 import core.*;
 import core.actions.AbstractAction;
 import core.actions.ActionSpace;
@@ -9,11 +10,16 @@ import core.interfaces.ITreeActionSpace;
 import games.GameType;
 import games.loveletter.actions.PlayCard;
 import games.loveletter.cards.LoveLetterCard;
+import guide.GuideContext;
+import guide.PreGameState;
+import guide.auto.GameContext;
 import utilities.ActionTreeNode;
 
 import java.util.*;
 
 import static core.CoreConstants.*;
+import static guide.auto.LoveLetterGameStrategy.tmpCardsForReserve;
+import static guide.auto.LoveLetterGameStrategy.tmpCardsForReserveSwitch;
 
 
 public class LoveLetterForwardModel extends StandardForwardModel implements ITreeActionSpace {
@@ -58,15 +64,35 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
 
         // Add all cards to the draw pile
         llgs.drawPile.clear();
-        for (HashMap.Entry<LoveLetterCard.CardType, Integer> entry : llp.cardCounts.entrySet()) {
-            for (int i = 0; i < entry.getValue(); i++) {
-                LoveLetterCard card = new LoveLetterCard(entry.getKey());
-                llgs.drawPile.add(card);
+        if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
+            PreGameState<LoveLetterCard> deckForMechanism = GuideContext.deckForMechanism;
+            System.out.println("Round begin, " + deckForMechanism.getIndexx());
+            List<LoveLetterCard> reverse = Lists.reverse(deckForMechanism.getDrawDecks().get(deckForMechanism.getIndexx()).getComponents());
+            GuideContext.deckForMechanism.addIndexx();
+            for (LoveLetterCard component : reverse) {
+                llgs.drawPile.add(component.copy());
+            }
+        } else {
+            for (HashMap.Entry<LoveLetterCard.CardType, Integer> entry : llp.cardCounts.entrySet()) {
+                for (int i = 0; i < entry.getValue(); i++) {
+                    LoveLetterCard card = new LoveLetterCard(entry.getKey());
+                    llgs.drawPile.add(card);
+                }
+            }
+
+            llgs.drawPile.shuffle(llgs.getRnd());
+//            llgs.drawPile.stream().forEach(System.out::print);
+//            System.out.println("");
+            if (tmpCardsForReserveSwitch) {
+                tmpCardsForReserve.add(llgs.drawPile.copy());
+                System.out.println("----");
+                for (int i=0; i<5; ++i) {
+                    System.out.println(llgs.drawPile.get(i));
+                }
+                System.out.println("****");
             }
         }
-
         // Remove one card from the game
-        llgs.drawPile.shuffle(llgs.getRnd());
         llgs.removedCard = llgs.drawPile.draw();
 
         // In min-player game, N more cards are on the side, but visible to all players at all times
@@ -76,7 +102,6 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
                 llgs.reserveCards.add(llgs.drawPile.draw());
             }
         }
-
         // Set up player hands and discards
         if (llgs.getPlayerHandCards().isEmpty()) {
             // new game set up

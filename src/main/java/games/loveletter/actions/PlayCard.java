@@ -83,6 +83,7 @@ public class PlayCard extends AbstractAction {
                 from.remove(card);
                 to.add(card);
             } else {
+                System.err.println("No card in hand matching the required type " + cardType);
                 throw new AssertionError("No card in hand matching the required type");
             }
         }
