@@ -25,6 +25,8 @@ import javax.swing.Timer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -93,6 +95,7 @@ public class InterfaceTech extends GUI {
     private ActionListener startTrigger;
 
     private boolean isFirstEnterStrategy;
+
 
     public InterfaceTech() {
     }
@@ -298,13 +301,23 @@ public class InterfaceTech extends GUI {
                             InterfaceTech.this, gameRunning.getGameState(), currentPlayer);
                     if (CollectionUtils.isNotEmpty(dialogs)) {
                         dialogs.forEach(dialog -> {
-                            dialog.setLocationRelativeTo(InterfaceTech.this); // 相对主窗口居中
+                            dialog.addWindowListener(new WindowAdapter() {
+                                @Override
+                                public void windowClosed(WindowEvent e) {
+                                    gamePanel.revalidate();
+                                    gamePanel.repaint();
+                                }
+                            });
+
+                        });
+                        dialogs.forEach(dialog -> {
+                            dialog.setLocationRelativeTo(InterfaceTech.this);
                             dialog.setVisible(true);
                         });
                     }
 //                    updateGUI();
                     gameRunning.getGameState().getDialogs().forEach(x -> {
-                        x.setLocationRelativeTo(InterfaceTech.this); // 相对主窗口居中
+                        x.setLocationRelativeTo(InterfaceTech.this);
                         x.setVisible(true);
 //                        updateGUI();
                     });

@@ -13,6 +13,7 @@ import games.loveletter.cards.LoveLetterCard;
 import guide.GuideContext;
 import guide.PreGameState;
 import guide.auto.GameContext;
+import org.testng.Assert;
 import utilities.ActionTreeNode;
 
 import java.util.*;
@@ -66,7 +67,7 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
         llgs.drawPile.clear();
         if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
             PreGameState<LoveLetterCard> deckForMechanism = GuideContext.deckForMechanism;
-            System.out.println("Round begin, " + deckForMechanism.getIndexx());
+//            System.out.println("Round begin, " + deckForMechanism.getIndexx());
             List<LoveLetterCard> reverse = Lists.reverse(deckForMechanism.getDrawDecks().get(deckForMechanism.getIndexx()).getComponents());
             GuideContext.deckForMechanism.addIndexx();
             for (LoveLetterCard component : reverse) {
@@ -85,11 +86,11 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
 //            System.out.println("");
             if (tmpCardsForReserveSwitch) {
                 tmpCardsForReserve.add(llgs.drawPile.copy());
-                System.out.println("----");
-                for (int i=0; i<5; ++i) {
-                    System.out.println(llgs.drawPile.get(i));
-                }
-                System.out.println("****");
+//                System.out.println("----");
+//                for (int i=0; i<5; ++i) {
+//                    System.out.println(llgs.drawPile.get(i));
+//                }
+//                System.out.println("****");
             }
         }
         // Remove one card from the game

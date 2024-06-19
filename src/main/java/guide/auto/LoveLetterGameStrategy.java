@@ -7,6 +7,7 @@ import games.loveletter.LoveLetterGameState;
 import games.loveletter.actions.PlayCard;
 import games.loveletter.cards.LoveLetterCard;
 import org.apache.commons.lang3.StringUtils;
+import org.testng.Assert;
 import utilities.JSONUtils;
 import utilities.Pair;
 
@@ -95,6 +96,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
                 actions.add(action);
             }
             List<GameResultForJSON.Deck> decks = new ArrayList<>();
+            tmpCardsForReserve = tmpCardsForReserve.subList(1, tmpCardsForReserve.size());
             for (PartialObservableDeck<LoveLetterCard> a : tmpCardsForReserve) {
                 List<LoveLetterCard> components = new ArrayList<>(a.copy().getComponents());
 
@@ -117,6 +119,10 @@ public class LoveLetterGameStrategy implements IGameStrategy {
             gameResultForJSON.setSeed(gameForMechanism.a);
             gameResultForJSON.setStrategy(null);
             gameResultForJSON.setDecks(decks);
+
+            LoveLetterGameState gs = (LoveLetterGameState) gameForMechanism.b.getGameState();
+//            System.out.println(gs.getRoundCounter());
+//            Assert.assertEquals(gs.getRoundCounter(), tmpCardsForReserve.size() - 1);
 
             JSONUtils.writeToJsonFile(gameResultForJSON, path + "/" + allFileSize);
 

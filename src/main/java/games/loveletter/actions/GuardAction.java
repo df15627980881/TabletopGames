@@ -7,6 +7,7 @@ import core.interfaces.IPrintable;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.cards.LoveLetterCard;
 import guide.DialogUtils;
+import org.apache.curator.shaded.com.google.common.collect.Lists;
 import org.testng.Assert;
 
 import javax.swing.*;
@@ -55,6 +56,10 @@ public class GuardAction extends PlayCard implements IPrintable {
         ArrayList<JDialog> results = new ArrayList<>();
         Assert.assertEquals(currentPlayer, playerID);
         LoveLetterGameState llgs = (LoveLetterGameState) gameState;
+        if (targetPlayer == -1) {
+            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>Guard Action</h2><p>No one can be guessed. Nothing happen.</p></html>"));
+        }
         Deck<LoveLetterCard> opponentDeck = llgs.getPlayerHandCards().get(targetPlayer);
         LoveLetterCard card = opponentDeck.peek();
         if (llgs.getPlayerResults()[targetPlayer] == CoreConstants.GameResult.LOSE_ROUND) {

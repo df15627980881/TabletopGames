@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 
 import static core.CoreConstants.GameResult.GAME_ONGOING;
 import static games.GameType.*;
+import static guide.auto.LoveLetterGameStrategy.tmpCardsForReserve;
 
 
 public class Game {

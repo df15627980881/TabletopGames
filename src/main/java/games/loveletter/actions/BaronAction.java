@@ -1,6 +1,7 @@
 package games.loveletter.actions;
 
 import core.AbstractGameState;
+import core.CoreConstants;
 import core.components.Deck;
 import core.components.PartialObservableDeck;
 import core.interfaces.IPrintable;
@@ -8,6 +9,7 @@ import games.loveletter.LoveLetterGameState;
 import games.loveletter.LoveLetterParameters;
 import games.loveletter.cards.LoveLetterCard;
 import guide.DialogUtils;
+import org.apache.curator.shaded.com.google.common.collect.Lists;
 import org.testng.Assert;
 import utilities.Pair;
 
@@ -71,26 +73,23 @@ public class BaronAction extends PlayCard implements IPrintable {
     public ArrayList<JDialog> createDialogWithFeedbackForNewbie(Frame frame, AbstractGameState gameState, int currentPlayer) {
         ArrayList<JDialog> results = new ArrayList<>();
         Assert.assertEquals(currentPlayer, playerID);
-        int winner = -1;
+
+        LoveLetterGameState llgs = (LoveLetterGameState) gameState;
+        if (llgs.getPlayerResults()[targetPlayer] == CoreConstants.GameResult.LOSE_ROUND) {
+            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>Baron Action</h2><p>The player" + playerID + " and the player" + targetPlayer
+                            + " compare the values of the cards in their hands, resulting in " +
+                            "Player" + playerID + " winning the game and Player" + targetPlayer + " being eliminated.</p></html>"));
+        }
+        if (llgs.getPlayerResults()[playerID] == CoreConstants.GameResult.LOSE_ROUND) {
+            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>Baron Action</h2><p>The player" + playerID + " and the player" + targetPlayer
+                            + " compare the values of the cards in their hands, resulting in " +
+                            "Player" + targetPlayer + " winning the game and Player" + playerID + " being eliminated.</p></html>"));
+        }
         results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-                "<html><h2>Baron Action</h2><p>aaa"));
-        // TODO: @yuanxilan
-//        System.out.println(gameState.getHistory().get(gameState.getHistory().size()-1));
-//        if (targetCardType.getValue() > otherCardInHand.getValue()) winner = targetPlayer;
-//        if (targetCardType.getValue() < otherCardInHand.getValue()) winner = playerID;
-//        if (winner == -1) {
-//            results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-//                    "<html><h2>Baron Action</h2><p>The player" + playerID + " and the player" + targetPlayer
-//                            + " compare the values of the cards in their hands (" + otherCardInHand + " and " +
-//                            targetCardType + " respectively), resulting in drawing and nobody being eliminated.</p></html>"));
-//        } else {
-//            results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-//                    "<html><h2>Baron Action</h2><p>The player" + playerID + " and the player" + targetPlayer
-//                            + " compare the values of the cards in their hands (" + otherCardInHand + " and " +
-//                            targetCardType + " respectively), resulting in Player " + winner +
-//                            " winning and Player " + (winner == playerID ? targetPlayer : playerID)
-//                            + " being eliminated.</p></html>"));
-//        }
+                    "<html><h2>Baron Action</h2><p>The player" + playerID + " and the player" + targetPlayer
+                            + " compare the values of the cards in their hands, resulting in drawing and nobody being eliminated.</p></html>"));
         return results;
     }
 

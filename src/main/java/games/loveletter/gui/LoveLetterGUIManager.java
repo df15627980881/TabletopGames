@@ -825,6 +825,7 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
                     deckForMechanism.setIndexx(0);
                     frame.gameRunning = new Game(game.getGameType(), game.getPlayers(),
                             GameType.LoveLetter.createForwardModel(null, game.getPlayers().size()), gameState1);
+                    frame.updateGUI();
                     simulateActions(frame, playerIdAndDeck);
                     return;
                 }
