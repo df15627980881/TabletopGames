@@ -125,15 +125,10 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
             gameResultForJSON.setHistoryText(gameForMechanism.b.getGameState().getHistoryAsText());
             gameResultForJSON.setActions(actions);
-            gameResultForJSON.setRnds(rnds);
             gameResultForJSON.setGameResultDesc("");
             gameResultForJSON.setSeed(gameForMechanism.a);
             gameResultForJSON.setStrategy(null);
             gameResultForJSON.setDecks(decks);
-
-            LoveLetterGameState gs = (LoveLetterGameState) gameForMechanism.b.getGameState();
-//            System.out.println(gs.getRoundCounter());
-//            Assert.assertEquals(gs.getRoundCounter(), tmpCardsForReserve.size() - 1);
 
             JSONUtils.writeToJsonFile(gameResultForJSON, path + "/" + allFileSize);
 
@@ -212,17 +207,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
         private List<String> historyText;
 
-        private List<Long> rnds;
-
         private String strategy;
-
-        public List<Long> getRnds() {
-            return rnds;
-        }
-
-        public void setRnds(List<Long> rnds) {
-            this.rnds = rnds;
-        }
 
         public List<String> getHistoryText() {
             return historyText;

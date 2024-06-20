@@ -804,7 +804,8 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
             worker.addPropertyChangeListener(evt -> {
                 if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
                     parent.repaint();
-                    System.out.println("Finish");
+                    System.out.println("FinishActionIntroduce");
+                    frame.runGameResult();
                 }
             });
             worker.execute();

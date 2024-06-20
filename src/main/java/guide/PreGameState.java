@@ -22,8 +22,6 @@ public class PreGameState<T extends Card> {
     private List<Deck<T>> drawDecks;
     private int indexx = 0;
 
-    private List<Long> rnds;
-
     private String gameResultDesc;
 
     private String strategy;
@@ -36,14 +34,6 @@ public class PreGameState<T extends Card> {
 
     public void setPlayerIdAndActions(List<Pair<Long, AbstractAction>> playerIdAndActions) {
         this.playerIdAndActions = playerIdAndActions;
-    }
-
-    public List<Long> getRnds() {
-        return rnds;
-    }
-
-    public void setRnds(List<Long> rnds) {
-        this.rnds = rnds;
     }
 
     public Deck<T> getDrawDeck() {
