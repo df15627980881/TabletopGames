@@ -15,6 +15,7 @@ import utilities.ElapsedCpuChessTimer;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -141,7 +142,9 @@ public abstract class AbstractForwardModel {
     public final void next(AbstractGameState currentState, AbstractAction action) {
         if (action != null) {
             int player = currentState.getCurrentPlayer();
-            GuideContext.gameStrategy.recordDeck(currentState);
+            if (Objects.nonNull(GuideContext.gameStrategy)) {
+                GuideContext.gameStrategy.recordDeck(currentState);
+            }
             currentState.recordAction(action, player);
             _next(currentState, action);
         } else {

@@ -13,6 +13,7 @@ import org.testng.Assert;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * The guard allows to attempt guessing another player's card. If the guess is correct, the targeted opponent
@@ -56,12 +57,16 @@ public class GuardAction extends PlayCard implements IPrintable {
         ArrayList<JDialog> results = new ArrayList<>();
         Assert.assertEquals(currentPlayer, playerID);
         LoveLetterGameState llgs = (LoveLetterGameState) gameState;
-        if (targetPlayer == -1 || cardType == null) {
+        if (targetPlayer == -1) {
             return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                     "<html><h2>Guard Action</h2><p>No one can be guessed. Nothing happen.</p></html>"));
         }
         Deck<LoveLetterCard> opponentDeck = llgs.getPlayerHandCards().get(targetPlayer);
         LoveLetterCard card = opponentDeck.peek();
+        if (Objects.isNull(card)) {
+            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>Guard Action</h2><p>No one can be guessed. Nothing happen.</p></html>"));
+        }
         if (llgs.getPlayerResults()[targetPlayer] == CoreConstants.GameResult.LOSE_ROUND) {
             results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                     "<html><h2>Guard Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer
