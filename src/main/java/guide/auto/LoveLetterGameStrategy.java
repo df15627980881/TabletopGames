@@ -74,8 +74,13 @@ public class LoveLetterGameStrategy implements IGameStrategy {
             limitActionCount += 1;
             if (limitActionCount >= 20) break;
         }
-        System.out.println(vis.size() + " " + history.size());
-        if (vis.size() == 8) {
+        HashSet<LoveLetterCard.CardType> cardTypesAppear = new HashSet<>();
+        for (int i=0; i<10; ++i) {
+            PlayCard playCard = (PlayCard) history.get(i).b;
+            cardTypesAppear.add(playCard.getCardType());
+        }
+        System.out.println(vis.size() + " " + history.size() + " " + cardTypesAppear.size());
+        if (vis.size() == 8 && cardTypesAppear.size() == 8) {
             gameForMechanism = new Pair<>(seed, game);
         }
     }

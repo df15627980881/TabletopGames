@@ -38,7 +38,7 @@ public class GuideGenerator {
 
     private final Map<CoreConstants.GameResult, SimulateForMechanismParam> resultAndActionSequencesMap;
 
-    private static final String gameType = "Blackjack";
+    private static final String gameType = "LoveLetter";
 
     public GuideGenerator() {
         this.resultAndActionSequencesMap = new HashMap<>();
@@ -107,8 +107,8 @@ public class GuideGenerator {
         RandomPlayer player5 = new RandomPlayer();
 
         ArrayList<AbstractPlayer> players = new ArrayList<>(Lists.newArrayList(player1, player2, player3
-//        ));
-                , player4, player5));
+        ));
+//                , player4, player5));
         Long ss = System.currentTimeMillis();
         Game newGame = Game.runOne(GameType.valueOf(gameType), null, players, ss, false, null, null, 1);
 //        System.out.println(1);

@@ -80,19 +80,6 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
                 }
             }
             llgs.drawPile.shuffle(llgs.getRnd());
-
-//            llgs.drawPile.stream().forEach(System.out::print);
-//            System.out.println("");
-            if (tmpCardsForReserveSwitch) {
-//                tmpCardsForReserve.add(llgs.drawPile.copy());
-                rnds.add(llgs.getRnd().nextLong());
-//                System.out.println("----");
-//                for (int i=0; i<5; ++i) {
-//                    System.out.println(llgs.drawPile.get(i));
-//                }
-//                System.out.println("****");
-            }
-
         }
         // Remove one card from the game
         llgs.removedCard = llgs.drawPile.draw();
@@ -109,7 +96,11 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
             // new game set up
             for (int i = 0; i < llgs.getNPlayers(); i++) {
                 boolean[] visible = new boolean[llgs.getNPlayers()];
-                if (llgs.getCoreGameParameters().partialObservable) {
+                if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
+                    // In guide, we make the player0 as new user play.
+                    System.out.println("GKSKS");
+                    Arrays.fill(visible, i == 0);
+                } else if (llgs.getCoreGameParameters().partialObservable) {
                     visible[i] = true;
                 } else {
                     Arrays.fill(visible, true);
