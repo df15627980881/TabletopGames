@@ -383,6 +383,11 @@ public class BlackjackGameStrategy implements IGameStrategy {
         return false;
     }
 
+    @Override
+    public void recordDeck(AbstractGameState gameState) {
+        // Do nothing Because it has one round.
+    }
+
     private int calDeckSum(List<FrenchCard> cards) {
         int sum = 0;
         for (FrenchCard card : cards) {

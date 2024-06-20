@@ -12,6 +12,7 @@ import core.interfaces.IGamePhase;
 import evaluation.listeners.IGameListener;
 import evaluation.metrics.Event;
 import games.GameType;
+import games.loveletter.cards.LoveLetterCard;
 import utilities.ElapsedCpuChessTimer;
 import utilities.Pair;
 
@@ -24,6 +25,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static core.CoreConstants.GameResult.GAME_ONGOING;
+import static guide.auto.LoveLetterGameStrategy.tmpCardsForReserve;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -77,6 +79,15 @@ public abstract class AbstractGameState {
     // this is not initialised from any seed, as redeterminisation is used to hide data from players and cannot affect the game itself
     protected Random redeterminisationRnd = new Random();
     private List<Dialog> dialogs;
+    public List<PartialObservableDeck<LoveLetterCard>> nowDecks = new ArrayList<>();
+
+    public List<PartialObservableDeck<LoveLetterCard>> getNowDecks() {
+        return nowDecks;
+    }
+
+    public void setNowDecks(List<PartialObservableDeck<LoveLetterCard>> nowDecks) {
+        this.nowDecks = nowDecks;
+    }
 
     /**
      * @param gameParameters - game parameters.
@@ -111,6 +122,8 @@ public abstract class AbstractGameState {
         actionsInProgress.clear();
         rnd = new Random(gameParameters.randomSeed);
         dialogs = new ArrayList<>();
+        tmpCardsForReserve = new ArrayList<>();
+        nowDecks = new ArrayList<>();
     }
 
     /**

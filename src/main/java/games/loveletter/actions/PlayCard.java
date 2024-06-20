@@ -6,7 +6,12 @@ import core.components.Deck;
 import core.components.PartialObservableDeck;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.cards.LoveLetterCard;
+import guide.DialogUtils;
+import org.apache.curator.shaded.com.google.common.collect.Lists;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class PlayCard extends AbstractAction {
@@ -162,5 +167,27 @@ public class PlayCard extends AbstractAction {
 
     public int getCardIdx() {
         return cardIdx;
+    }
+
+    @Override
+    public ArrayList<JDialog> createDialogWithFeedbackForNewbie(Frame frame, AbstractGameState gameState, int currentPlayer) {
+        if (this.cardType == LoveLetterCard.CardType.Princess) {
+            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>Princess Action</h2><p>The other card cannot be played, " +
+                            "so only the princess can be played. The player is eliminated.</p></html>"));
+        }
+        if (this.cardType == LoveLetterCard.CardType.Countess) {
+            if (this.forcedCountessCardType != null) {
+                return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                        "<html><h2>Countess Action</h2><p>Since the other card in your hand is "
+                                + this.forcedCountessCardType + ", the Countess will be played.</p></html>"));
+            } else {
+                return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                        "<html><h2>Countess Action</h2><p>Nothing happen.</p></html>"));
+            }
+        }
+        // I think there's no way to visit here...
+        System.err.println("createDialogWithFeedbackForNewbie???");
+        return Lists.newArrayList();
     }
 }

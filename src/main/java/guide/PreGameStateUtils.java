@@ -172,6 +172,14 @@ public class PreGameStateUtils {
             drawDecks.add(deck);
         }
 
+        JSONArray rndsArray = (JSONArray) jsonObject.get("rnds");
+        List<Long> rnds = new ArrayList<>();
+        for (Object obj : rndsArray) {
+            Long rnd = (Long) obj;
+            rnds.add(rnd);
+        }
+
+        result.setRnds(rnds);
         result.setPlayerCount(playerCount);
         result.setPlayerIdAndActions(actions);
         result.setDrawDecks(drawDecks);

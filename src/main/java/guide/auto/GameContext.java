@@ -2,6 +2,7 @@ package guide.auto;
 
 import core.Game;
 import games.GameType;
+import guide.GuideContext;
 
 public class GameContext {
 
@@ -14,6 +15,7 @@ public class GameContext {
         if (gameType == GameType.LoveLetter) {
             this.gameStrategy = new LoveLetterGameStrategy();
         }
+        GuideContext.gameStrategy = this.gameStrategy;
     }
 
     public void execute(String strategy, Game game, Long seed) {

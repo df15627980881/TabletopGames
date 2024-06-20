@@ -13,14 +13,14 @@ import games.loveletter.cards.LoveLetterCard;
 import guide.GuideContext;
 import guide.PreGameState;
 import guide.auto.GameContext;
+import org.apache.commons.collections4.CollectionUtils;
 import org.testng.Assert;
 import utilities.ActionTreeNode;
 
 import java.util.*;
 
 import static core.CoreConstants.*;
-import static guide.auto.LoveLetterGameStrategy.tmpCardsForReserve;
-import static guide.auto.LoveLetterGameStrategy.tmpCardsForReserveSwitch;
+import static guide.auto.LoveLetterGameStrategy.*;
 
 
 public class LoveLetterForwardModel extends StandardForwardModel implements ITreeActionSpace {
@@ -67,7 +67,6 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
         llgs.drawPile.clear();
         if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
             PreGameState<LoveLetterCard> deckForMechanism = GuideContext.deckForMechanism;
-//            System.out.println("Round begin, " + deckForMechanism.getIndexx());
             List<LoveLetterCard> reverse = Lists.reverse(deckForMechanism.getDrawDecks().get(deckForMechanism.getIndexx()).getComponents());
             GuideContext.deckForMechanism.addIndexx();
             for (LoveLetterCard component : reverse) {
@@ -80,18 +79,20 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
                     llgs.drawPile.add(card);
                 }
             }
-
             llgs.drawPile.shuffle(llgs.getRnd());
+
 //            llgs.drawPile.stream().forEach(System.out::print);
 //            System.out.println("");
             if (tmpCardsForReserveSwitch) {
-                tmpCardsForReserve.add(llgs.drawPile.copy());
+//                tmpCardsForReserve.add(llgs.drawPile.copy());
+                rnds.add(llgs.getRnd().nextLong());
 //                System.out.println("----");
 //                for (int i=0; i<5; ++i) {
 //                    System.out.println(llgs.drawPile.get(i));
 //                }
 //                System.out.println("****");
             }
+
         }
         // Remove one card from the game
         llgs.removedCard = llgs.drawPile.draw();

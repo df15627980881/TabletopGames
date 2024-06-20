@@ -75,6 +75,10 @@ public class BaronAction extends PlayCard implements IPrintable {
         Assert.assertEquals(currentPlayer, playerID);
 
         LoveLetterGameState llgs = (LoveLetterGameState) gameState;
+        if (targetPlayer == -1) {
+            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>Baron Action</h2><p>No one can be guessed. Nothing happen.</p></html>"));
+        }
         if (llgs.getPlayerResults()[targetPlayer] == CoreConstants.GameResult.LOSE_ROUND) {
             return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                     "<html><h2>Baron Action</h2><p>The player" + playerID + " and the player" + targetPlayer

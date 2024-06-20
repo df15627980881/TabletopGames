@@ -1,6 +1,7 @@
 package guide;
 
 import core.components.Card;
+import guide.auto.IGameStrategy;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ public class GuideContext {
     public static int deckForSimulateIndex;
 
     public static InterfaceTech frame;
+
+    public static IGameStrategy gameStrategy;
 
     /**
      * 0 - guide close

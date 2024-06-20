@@ -56,7 +56,7 @@ public class GuardAction extends PlayCard implements IPrintable {
         ArrayList<JDialog> results = new ArrayList<>();
         Assert.assertEquals(currentPlayer, playerID);
         LoveLetterGameState llgs = (LoveLetterGameState) gameState;
-        if (targetPlayer == -1) {
+        if (targetPlayer == -1 || cardType == null) {
             return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                     "<html><h2>Guard Action</h2><p>No one can be guessed. Nothing happen.</p></html>"));
         }

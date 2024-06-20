@@ -297,6 +297,7 @@ public class InterfaceTech extends GUI {
             @Override
             protected void process(List<AbstractAction> chunks) {
                 for (AbstractAction action : chunks) {
+                    System.out.println(action.getString(gameRunning.getGameState()));
                     ArrayList<JDialog> dialogs = action.createDialogWithFeedbackForNewbie(
                             InterfaceTech.this, gameRunning.getGameState(), currentPlayer);
                     if (CollectionUtils.isNotEmpty(dialogs)) {
@@ -304,6 +305,11 @@ public class InterfaceTech extends GUI {
                             dialog.addWindowListener(new WindowAdapter() {
                                 @Override
                                 public void windowClosed(WindowEvent e) {
+                                    try {
+                                        Thread.sleep(50);
+                                    } catch (InterruptedException ex) {
+                                        throw new RuntimeException(ex);
+                                    }
                                     gamePanel.revalidate();
                                     gamePanel.repaint();
                                 }

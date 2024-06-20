@@ -1,7 +1,10 @@
 package guide.auto;
 
+import core.AbstractGameState;
+import core.CoreConstants;
 import core.Game;
 import core.actions.AbstractAction;
+import core.components.Deck;
 import core.components.PartialObservableDeck;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.actions.PlayCard;
@@ -15,6 +18,7 @@ import java.io.File;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LoveLetterGameStrategy implements IGameStrategy {
 
@@ -23,6 +27,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
     public static Map<String, Game> strategyTextAndSimulate = new HashMap<>();
 
     public static List<PartialObservableDeck<LoveLetterCard>> tmpCardsForReserve;
+    public static List<Long> rnds;
     public static boolean tmpCardsForReserveSwitch = false;
 
     // When you want to add a new strategy, please modify this count
@@ -96,8 +101,8 @@ public class LoveLetterGameStrategy implements IGameStrategy {
                 actions.add(action);
             }
             List<GameResultForJSON.Deck> decks = new ArrayList<>();
-            tmpCardsForReserve = tmpCardsForReserve.subList(1, tmpCardsForReserve.size());
-            for (PartialObservableDeck<LoveLetterCard> a : tmpCardsForReserve) {
+//            tmpCardsForReserve = tmpCardsForReserve.subList(1, tmpCardsForReserve.size());
+            for (PartialObservableDeck<LoveLetterCard> a : gameForMechanism.b.getGameState().getNowDecks()) {
                 List<LoveLetterCard> components = new ArrayList<>(a.copy().getComponents());
 
                 GameResultForJSON.Deck deck = new GameResultForJSON.Deck();
@@ -115,6 +120,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
             gameResultForJSON.setHistoryText(gameForMechanism.b.getGameState().getHistoryAsText());
             gameResultForJSON.setActions(actions);
+            gameResultForJSON.setRnds(rnds);
             gameResultForJSON.setGameResultDesc("");
             gameResultForJSON.setSeed(gameForMechanism.a);
             gameResultForJSON.setStrategy(null);
@@ -128,6 +134,36 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
         }
 
+    }
+
+    @Override
+    public void recordDeck(AbstractGameState gs) {
+        LoveLetterGameState gameState = (LoveLetterGameState) gs;
+        List<Deck<LoveLetterCard>> playerDiscardCards = gameState.getPlayerDiscardCards();
+        playerDiscardCards = playerDiscardCards.stream().filter(x -> x.getComponents().size() == 0).toList();
+        if (playerDiscardCards.size() != gameState.getNPlayers() || !tmpCardsForReserveSwitch) return;
+        List<PartialObservableDeck<LoveLetterCard>> playerHandCards = gameState.getPlayerHandCards();
+        playerHandCards = playerHandCards.stream().filter(x -> x.getComponents().size() == 0).collect(Collectors.toList());
+        if (playerHandCards.size() == gameState.getNPlayers()) return;
+        playerHandCards = gameState.getPlayerHandCards();
+        PartialObservableDeck<LoveLetterCard> deck = new PartialObservableDeck<>("das", gameState.getPlayerHandCards().get(0).getDeckVisibility());
+        deck.add(gameState.getRemovedCard().copy());
+        int currentPlayer = gameState.getCurrentPlayer();
+        for (int i=currentPlayer, j=0; i<gameState.getNPlayers() && j<gameState.getNPlayers(); i=(i+1)%gameState.getNPlayers(), ++j) {
+            if (j == currentPlayer)
+                deck.add(playerHandCards.get(j).get(1).copy());
+            else
+                deck.add(playerHandCards.get(j).get(0).copy());
+        }
+        deck.add(playerHandCards.get(currentPlayer).get(0).copy());
+
+        for (int i=0; i<gameState.getRemainingCards(); ++i) deck.add(gameState.getDrawPile().get(i).copy());
+        deck.reverse();
+        gameState.getNowDecks().add(deck);
+//        System.out.println(gameState.getNowDecks().size());
+        int count = (int) Arrays.stream(gameState.getPlayerResults()).filter(x -> x == CoreConstants.GameResult.GAME_ONGOING).count();
+        Assert.assertEquals(count, gameState.getNPlayers());
+        Assert.assertEquals(deck.getComponents().size(), 16);
     }
 
     @Override
@@ -171,7 +207,17 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
         private List<String> historyText;
 
+        private List<Long> rnds;
+
         private String strategy;
+
+        public List<Long> getRnds() {
+            return rnds;
+        }
+
+        public void setRnds(List<Long> rnds) {
+            this.rnds = rnds;
+        }
 
         public List<String> getHistoryText() {
             return historyText;
