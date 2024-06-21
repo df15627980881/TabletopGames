@@ -2,6 +2,7 @@ package games.loveletter.actions;
 
 import core.AbstractGameState;
 import core.CoreConstants;
+import core.components.Deck;
 import core.components.PartialObservableDeck;
 import core.interfaces.IPrintable;
 import games.loveletter.LoveLetterGameState;
@@ -59,9 +60,13 @@ public class PriestAction extends PlayCard implements IPrintable {
     public ArrayList<JDialog> createDialogWithFeedbackForNewbie(Frame frame, AbstractGameState gameState, int currentPlayer) {
         ArrayList<JDialog> results = new ArrayList<>();
         Assert.assertEquals(currentPlayer, playerID);
+        LoveLetterGameState llgs = (LoveLetterGameState) gameState;
+        Deck<LoveLetterCard> opponentDeck = llgs.getPlayerHandCards().get(targetPlayer);
+        LoveLetterCard card = opponentDeck.peek();
+        Assert.assertNotNull(card);
         results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                 "<html><h2>Priest Action</h2><p>The player" + playerID + " saw the card in player" + targetPlayer
-                        + "'s hand, and the result is targetCardType.</p></html>"));
+                        + "'s hand, and the result is " + card.cardType + ".</p></html>"));
         return results;
     }
 }

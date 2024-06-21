@@ -10,6 +10,8 @@ import games.loveletter.LoveLetterGameState;
 import games.loveletter.actions.PlayCard;
 import games.loveletter.cards.LoveLetterCard;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import utilities.JSONUtils;
 import utilities.Pair;
@@ -80,7 +82,13 @@ public class LoveLetterGameStrategy implements IGameStrategy {
         }
 
         // case2: there are no cards left in the draw pile
-        strategyTextAndGameResults.put(gameResultStrategyText02, game);
+        int remainPlayerCount = 0;
+        List<PartialObservableDeck<LoveLetterCard>> playerHandCards = gs.getPlayerHandCards();
+        for (PartialObservableDeck<LoveLetterCard> playerHandCard : playerHandCards) {
+            remainPlayerCount += playerHandCard.getComponents().size() != 0 ? 1 : 0;
+        }
+        if (remainPlayerCount > 1)
+            strategyTextAndGameResults.put(gameResultStrategyText02, game);
     }
 
     private void isSimulate(Game game, Long seed) {

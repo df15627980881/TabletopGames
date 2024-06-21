@@ -77,7 +77,7 @@ public class PrinceAction extends PlayCard implements IPrintable {
         ArrayList<JDialog> results = new ArrayList<>();
         Assert.assertEquals(currentPlayer, playerID);
         results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-                "<html><h2>Prince Action</h2><p>Player" + playerID +" plays prince to player " + targetPlayer +
+                "<html><h2>Prince Action</h2><p>Player" + playerID +" plays prince to player" + targetPlayer +
                         ", and player" + targetPlayer + " discards the current card and draws a new card.</p></html>"));
         return results;
     }

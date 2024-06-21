@@ -68,10 +68,10 @@ public class GuardAction extends PlayCard implements IPrintable {
         }
         Deck<LoveLetterCard> opponentDeck = llgs.getPlayerHandCards().get(targetPlayer);
         LoveLetterCard card = opponentDeck.peek();
-        if (Objects.isNull(card)) {
-            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-                    "<html><h2>Guard Action</h2><p>No one can be guessed. Nothing happen.</p></html>"));
-        }
+//        if (Objects.isNull(card)) {
+//            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+//                    "<html><h2>Guard Action</h2><p>No one can be guessed. Nothing happen.</p></html>"));
+//        }
         if (llgs.getPlayerResults()[targetPlayer] == CoreConstants.GameResult.LOSE_ROUND) {
             results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                     "<html><h2>Guard Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer

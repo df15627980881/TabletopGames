@@ -6,11 +6,79 @@
       "action": {
         "playerID": 0,
         "targetPlayer": 2,
+        "cardType": "Priest",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": -1,
+        "cardType": "Countess",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 0,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Prince"
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Prince"
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": -1,
+        "cardType": "Handmaid",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 0,
         "cardType": "Guard",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1,
         "targetCardType": "Princess"
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": -1,
+        "cardType": "Handmaid",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
       }
     },
     {
@@ -22,7 +90,7 @@
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1,
-        "targetCardType": "Countess"
+        "targetCardType": "Priest"
       }
     },
     {
@@ -52,7 +120,42 @@
       "action": {
         "playerID": 1,
         "targetPlayer": 0,
-        "cardType": "Baron",
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Baron"
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 1,
+        "cardType": "King",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Countess"
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 0,
+        "cardType": "Priest",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1
@@ -67,7 +170,7 @@
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1,
-        "targetCardType": "Countess"
+        "targetCardType": "Priest"
       }
     },
     {
@@ -80,6 +183,17 @@
         "discard": true,
         "cardIdx": -1,
         "targetCardType": "Countess"
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 0,
+        "cardType": "Priest",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
       }
     },
     {
@@ -98,6 +212,425 @@
       "player": 0,
       "action": {
         "playerID": 0,
+        "targetPlayer": -1,
+        "cardType": "Handmaid",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 1,
+        "cardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 1,
+        "cardType": "King",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 1,
+        "cardType": "Baron",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": -1,
+        "cardType": "Countess",
+        "forcedCountessCardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": -1,
+        "cardType": "Handmaid",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": -1,
+        "cardType": "Countess",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 1,
+        "cardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": -1,
+        "cardType": "Princess",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 1,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Priest"
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 0,
+        "cardType": "Baron",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": -1,
+        "cardType": "Handmaid",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 1,
+        "cardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 1,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "King"
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "King"
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": -1,
+        "cardType": "Handmaid",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 0,
+        "cardType": "Baron",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": -1,
+        "cardType": "Princess",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 1,
+        "cardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Priest"
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": -1,
+        "cardType": "Countess",
+        "forcedCountessCardType": "King",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Priest"
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 1,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Priest"
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Priest"
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 1,
+        "cardType": "Priest",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 2,
+        "cardType": "Priest",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 1,
+        "cardType": "Priest",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 1,
+        "cardType": "Baron",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": -1,
+        "cardType": "Countess",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 2,
+        "cardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": -1,
+        "cardType": "Handmaid",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 0,
+        "cardType": "Priest",
+        "canExecuteEffect": false,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 0,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Princess"
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 1,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Handmaid"
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 2,
+        "cardType": "Priest",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Baron"
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 1,
+        "cardType": "Baron",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
         "targetPlayer": -1,
         "cardType": "Countess",
         "forcedCountessCardType": "King",
@@ -110,23 +643,12 @@
       "player": 2,
       "action": {
         "playerID": 2,
-        "targetPlayer": 0,
-        "cardType": "Baron",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 0,
+        "targetPlayer": 1,
         "cardType": "Guard",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1,
-        "targetCardType": "Countess"
+        "targetCardType": "Handmaid"
       }
     },
     {
@@ -134,22 +656,23 @@
       "action": {
         "playerID": 0,
         "targetPlayer": 2,
-        "cardType": "Priest",
+        "cardType": "Guard",
         "canExecuteEffect": true,
         "discard": true,
-        "cardIdx": -1
+        "cardIdx": -1,
+        "targetCardType": "Prince"
       }
     },
     {
       "player": 1,
       "action": {
         "playerID": 1,
-        "targetPlayer": 0,
+        "targetPlayer": 2,
         "cardType": "Guard",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1,
-        "targetCardType": "Priest"
+        "targetCardType": "King"
       }
     },
     {
@@ -169,213 +692,19 @@
       "action": {
         "playerID": 0,
         "targetPlayer": 2,
-        "cardType": "Baron",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 1,
-        "cardType": "Baron",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 0,
         "cardType": "Guard",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1,
-        "targetCardType": "Countess"
+        "targetCardType": "Prince"
       }
     },
     {
-      "player": 2,
+      "player": 1,
       "action": {
-        "playerID": 2,
-        "targetPlayer": -1,
-        "cardType": "Handmaid",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 1,
+        "playerID": 1,
+        "targetPlayer": 2,
         "cardType": "Priest",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": -1,
-        "cardType": "Handmaid",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": -1,
-        "cardType": "Countess",
-        "forcedCountessCardType": "Prince",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 2,
-        "cardType": "Baron",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 0,
-        "cardType": "King",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Prince"
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": -1,
-        "cardType": "Princess",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Prince"
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 2,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Countess"
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 0,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "King"
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": -1,
-        "cardType": "Countess",
-        "forcedCountessCardType": "Prince",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Prince"
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 0,
-        "cardType": "Baron",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 1,
-        "cardType": "Baron",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 2,
-        "cardType": "King",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1
@@ -393,35 +722,22 @@
       }
     },
     {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 0,
+        "cardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
       "player": 1,
       "action": {
         "playerID": 1,
         "targetPlayer": 2,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "King"
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Prince"
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": -1,
-        "cardType": "Handmaid",
+        "cardType": "Baron",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1
@@ -431,20 +747,31 @@
       "player": 0,
       "action": {
         "playerID": 0,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Prince"
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
         "targetPlayer": 1,
         "cardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Princess"
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 0,
+        "cardType": "King",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1
@@ -463,119 +790,6 @@
       }
     },
     {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 2,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "King"
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 2,
-        "cardType": "Priest",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 0,
-        "cardType": "Priest",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Prince"
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 2,
-        "cardType": "King",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 0,
-        "cardType": "Prince",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": -1,
-        "cardType": "Countess",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 0,
-        "cardType": "Priest",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Princess"
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": -1,
-        "cardType": "Handmaid",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
       "player": 1,
       "action": {
         "playerID": 1,
@@ -590,18 +804,29 @@
       "player": 2,
       "action": {
         "playerID": 2,
-        "targetPlayer": -1,
-        "cardType": "Guard",
+        "targetPlayer": 2,
+        "cardType": "Priest",
         "canExecuteEffect": false,
         "discard": true,
         "cardIdx": -1
       }
     },
     {
-      "player": 0,
+      "player": 1,
       "action": {
-        "playerID": 0,
+        "playerID": 1,
         "targetPlayer": 2,
+        "cardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 1,
         "cardType": "Guard",
         "canExecuteEffect": true,
         "discard": true,
@@ -613,29 +838,6 @@
       "player": 1,
       "action": {
         "playerID": 1,
-        "targetPlayer": 0,
-        "cardType": "King",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Countess"
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
         "targetPlayer": 2,
         "cardType": "Baron",
         "canExecuteEffect": true,
@@ -647,99 +849,6 @@
       "player": 1,
       "action": {
         "playerID": 1,
-        "targetPlayer": 0,
-        "cardType": "Prince",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Princess"
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 2,
-        "cardType": "Prince",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 0,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Baron"
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 0,
-        "cardType": "Baron",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 2,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Prince"
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "King"
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 2,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Handmaid"
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
         "targetPlayer": -1,
         "cardType": "Princess",
         "canExecuteEffect": true,
@@ -748,6 +857,30 @@
       }
     },
     {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": 0,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Handmaid"
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 1,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Prince"
+      }
+    },
+    {
       "player": 1,
       "action": {
         "playerID": 1,
@@ -762,22 +895,36 @@
       "player": 2,
       "action": {
         "playerID": 2,
-        "targetPlayer": -1,
-        "cardType": "Handmaid",
+        "targetPlayer": 0,
+        "cardType": "Guard",
         "canExecuteEffect": true,
         "discard": true,
-        "cardIdx": -1
+        "cardIdx": -1,
+        "targetCardType": "Priest"
       }
     },
     {
       "player": 1,
       "action": {
         "playerID": 1,
-        "targetPlayer": -1,
-        "cardType": "Baron",
-        "canExecuteEffect": false,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
         "discard": true,
-        "cardIdx": -1
+        "cardIdx": -1,
+        "targetCardType": "Baron"
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Baron"
       }
     },
     {
@@ -785,10 +932,34 @@
       "action": {
         "playerID": 2,
         "targetPlayer": 1,
-        "cardType": "King",
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Countess"
+      }
+    },
+    {
+      "player": 0,
+      "action": {
+        "playerID": 0,
+        "targetPlayer": 1,
+        "cardType": "Priest",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1
+      }
+    },
+    {
+      "player": 1,
+      "action": {
+        "playerID": 1,
+        "targetPlayer": 2,
+        "cardType": "Guard",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1,
+        "targetCardType": "Countess"
       }
     },
     {
@@ -807,42 +978,7 @@
       "player": 0,
       "action": {
         "playerID": 0,
-        "targetPlayer": 2,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Princess"
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 0,
-        "cardType": "Priest",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
         "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Handmaid"
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 2,
         "cardType": "Priest",
         "canExecuteEffect": true,
         "discard": true,
@@ -864,109 +1000,6 @@
       "player": 2,
       "action": {
         "playerID": 2,
-        "targetPlayer": 0,
-        "cardType": "Baron",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": -1,
-        "cardType": "Countess",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 0,
-        "cardType": "Baron",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 2,
-        "cardType": "Prince",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 1,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Prince"
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 2,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Baron"
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
-        "targetPlayer": 2,
-        "cardType": "Priest",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 0,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Baron"
-      }
-    },
-    {
-      "player": 0,
-      "action": {
-        "playerID": 0,
-        "targetPlayer": 2,
-        "cardType": "Guard",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1,
-        "targetCardType": "Countess"
-      }
-    },
-    {
-      "player": 1,
-      "action": {
-        "playerID": 1,
         "targetPlayer": -1,
         "cardType": "Handmaid",
         "canExecuteEffect": true,
@@ -975,23 +1008,12 @@
       }
     },
     {
-      "player": 2,
-      "action": {
-        "playerID": 2,
-        "targetPlayer": 2,
-        "cardType": "Prince",
-        "canExecuteEffect": true,
-        "discard": true,
-        "cardIdx": -1
-      }
-    },
-    {
       "player": 0,
       "action": {
         "playerID": 0,
-        "targetPlayer": -1,
-        "cardType": "Countess",
-        "canExecuteEffect": true,
+        "targetPlayer": 0,
+        "cardType": "Baron",
+        "canExecuteEffect": false,
         "discard": true,
         "cardIdx": -1
       }
@@ -1001,7 +1023,19 @@
       "action": {
         "playerID": 1,
         "targetPlayer": 0,
-        "cardType": "Baron",
+        "cardType": "Prince",
+        "canExecuteEffect": true,
+        "discard": true,
+        "cardIdx": -1
+      }
+    },
+    {
+      "player": 2,
+      "action": {
+        "playerID": 2,
+        "targetPlayer": -1,
+        "cardType": "Countess",
+        "forcedCountessCardType": "Prince",
         "canExecuteEffect": true,
         "discard": true,
         "cardIdx": -1
@@ -1009,14 +1043,38 @@
     }
   ],
   "gameResultDesc": "there are no cards left in the draw pile",
-  "seed": 1718963143066,
+  "seed": 1719000360020,
   "decks": [
     {
       "name": "0",
       "visibilityMode": "VISIBLE_TO_ALL",
       "cards": [
         {
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "Priest"
+        },
+        {
           "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Countess"
+        },
+        {
+          "cardType": "Princess"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Guard"
         },
         {
           "cardType": "Guard"
@@ -1025,7 +1083,10 @@
           "cardType": "Prince"
         },
         {
-          "cardType": "Handmaid"
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Priest"
         },
         {
           "cardType": "King"
@@ -1034,34 +1095,7 @@
           "cardType": "Guard"
         },
         {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
           "cardType": "Baron"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Princess"
-        },
-        {
-          "cardType": "Countess"
-        },
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Priest"
         }
       ]
     },
@@ -1073,6 +1107,9 @@
           "cardType": "Guard"
         },
         {
+          "cardType": "Baron"
+        },
+        {
           "cardType": "Priest"
         },
         {
@@ -1082,40 +1119,37 @@
           "cardType": "Guard"
         },
         {
+          "cardType": "Priest"
+        },
+        {
+          "cardType": "Prince"
+        },
+        {
           "cardType": "Guard"
         },
         {
-          "cardType": "Princess"
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Guard"
         },
         {
           "cardType": "Handmaid"
         },
         {
-          "cardType": "Priest"
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Princess"
+        },
+        {
+          "cardType": "King"
         },
         {
           "cardType": "Baron"
         },
         {
           "cardType": "Countess"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "King"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Prince"
         }
       ]
     },
@@ -1124,70 +1158,19 @@
       "visibilityMode": "VISIBLE_TO_ALL",
       "cards": [
         {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Countess"
-        },
-        {
-          "cardType": "Handmaid"
+          "cardType": "Guard"
         },
         {
           "cardType": "Guard"
         },
         {
-          "cardType": "Baron"
+          "cardType": "Prince"
         },
         {
-          "cardType": "Baron"
+          "cardType": "Handmaid"
         },
         {
           "cardType": "Princess"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "King"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Handmaid"
-        }
-      ]
-    },
-    {
-      "name": "0",
-      "visibilityMode": "VISIBLE_TO_ALL",
-      "cards": [
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Handmaid"
         },
         {
           "cardType": "Countess"
@@ -1196,25 +1179,22 @@
           "cardType": "Baron"
         },
         {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Princess"
+          "cardType": "Baron"
         },
         {
           "cardType": "King"
         },
         {
-          "cardType": "Guard"
+          "cardType": "Priest"
         },
         {
           "cardType": "Prince"
         },
         {
-          "cardType": "Guard"
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Priest"
         },
         {
           "cardType": "Guard"
@@ -1232,22 +1212,34 @@
       "visibilityMode": "VISIBLE_TO_ALL",
       "cards": [
         {
-          "cardType": "Baron"
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Guard"
         },
         {
           "cardType": "Princess"
         },
         {
-          "cardType": "Guard"
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "Handmaid"
         },
         {
           "cardType": "Prince"
         },
         {
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "King"
+        },
+        {
           "cardType": "Guard"
         },
         {
-          "cardType": "Prince"
+          "cardType": "Baron"
         },
         {
           "cardType": "Countess"
@@ -1256,25 +1248,13 @@
           "cardType": "Guard"
         },
         {
-          "cardType": "Baron"
-        },
-        {
           "cardType": "Guard"
         },
         {
-          "cardType": "Handmaid"
+          "cardType": "Guard"
         },
         {
           "cardType": "Priest"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "King"
-        },
-        {
-          "cardType": "Guard"
         },
         {
           "cardType": "Priest"
@@ -1286,43 +1266,34 @@
       "visibilityMode": "VISIBLE_TO_ALL",
       "cards": [
         {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "King"
-        },
-        {
           "cardType": "Prince"
         },
         {
           "cardType": "Baron"
         },
         {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
           "cardType": "Baron"
+        },
+        {
+          "cardType": "Priest"
         },
         {
           "cardType": "Countess"
         },
         {
-          "cardType": "Guard"
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Priest"
         },
         {
           "cardType": "Guard"
+        },
+        {
+          "cardType": "Handmaid"
         },
         {
           "cardType": "Princess"
@@ -1331,94 +1302,7 @@
           "cardType": "Guard"
         },
         {
-          "cardType": "Prince"
-        }
-      ]
-    },
-    {
-      "name": "0",
-      "visibilityMode": "VISIBLE_TO_ALL",
-      "cards": [
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Princess"
-        },
-        {
           "cardType": "Guard"
-        },
-        {
-          "cardType": "Countess"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "King"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Handmaid"
-        }
-      ]
-    },
-    {
-      "name": "0",
-      "visibilityMode": "VISIBLE_TO_ALL",
-      "cards": [
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Princess"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Priest"
         },
         {
           "cardType": "Guard"
@@ -1428,126 +1312,6 @@
         },
         {
           "cardType": "Guard"
-        },
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Countess"
-        }
-      ]
-    },
-    {
-      "name": "0",
-      "visibilityMode": "VISIBLE_TO_ALL",
-      "cards": [
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Princess"
-        },
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Countess"
-        },
-        {
-          "cardType": "King"
-        }
-      ]
-    },
-    {
-      "name": "0",
-      "visibilityMode": "VISIBLE_TO_ALL",
-      "cards": [
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Countess"
-        },
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Baron"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Priest"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "King"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Princess"
         }
       ]
     },
@@ -1559,40 +1323,22 @@
           "cardType": "King"
         },
         {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Handmaid"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
-          "cardType": "Prince"
-        },
-        {
-          "cardType": "Guard"
-        },
-        {
           "cardType": "Priest"
         },
         {
           "cardType": "Guard"
         },
         {
-          "cardType": "Princess"
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "Guard"
         },
         {
           "cardType": "Baron"
         },
         {
-          "cardType": "Baron"
+          "cardType": "Prince"
         },
         {
           "cardType": "Handmaid"
@@ -1601,244 +1347,483 @@
           "cardType": "Countess"
         },
         {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Princess"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
           "cardType": "Priest"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Handmaid"
+        }
+      ]
+    },
+    {
+      "name": "0",
+      "visibilityMode": "VISIBLE_TO_ALL",
+      "cards": [
+        {
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "King"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Countess"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Priest"
+        },
+        {
+          "cardType": "Priest"
+        },
+        {
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "Princess"
+        }
+      ]
+    },
+    {
+      "name": "0",
+      "visibilityMode": "VISIBLE_TO_ALL",
+      "cards": [
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Priest"
+        },
+        {
+          "cardType": "Priest"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "King"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "Countess"
+        },
+        {
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Princess"
+        }
+      ]
+    },
+    {
+      "name": "0",
+      "visibilityMode": "VISIBLE_TO_ALL",
+      "cards": [
+        {
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Princess"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Priest"
+        },
+        {
+          "cardType": "King"
+        },
+        {
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Countess"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Priest"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Baron"
+        }
+      ]
+    },
+    {
+      "name": "0",
+      "visibilityMode": "VISIBLE_TO_ALL",
+      "cards": [
+        {
+          "cardType": "Princess"
+        },
+        {
+          "cardType": "Priest"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Handmaid"
+        },
+        {
+          "cardType": "Priest"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "King"
+        },
+        {
+          "cardType": "Countess"
+        },
+        {
+          "cardType": "Guard"
+        },
+        {
+          "cardType": "Prince"
+        },
+        {
+          "cardType": "Baron"
+        },
+        {
+          "cardType": "Prince"
         }
       ]
     }
   ],
   "historyText": [
-    "Player 0 : Guard (0 guess 2 holds card Princess)",
-    "TURN_OVER",
-    "Player 1 : Guard (1 guess 2 holds card Countess)",
-    "TURN_OVER",
-    "Player 2 : Priest (2 sees card of 1)",
-    "Priest sees Prince",
-    "TURN_OVER",
-    "Player 0 : Prince (2 discards card and draws a new card)",
-    "Player 2 discards Handmaid",
-    "TURN_OVER",
-    "Player 1 : Baron (1 compares cards with 0)",
-    "Killed player: 1,1,Baron,1",
-    "TURN_OVER",
-    "Player 2 : Guard (2 guess 0 holds card Countess)",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 2 holds card Countess)",
-    "TURN_OVER",
-    "Player 2 : Guard (2 guess 0 holds card Handmaid)",
-    "TURN_OVER",
-    "Player 0 : Countess (auto discard with King)",
-    "TURN_OVER",
-    "Player 2 : Baron (2 compares cards with 0)",
-    "Killed player: 2,0,Baron,2",
-    "Winner only player left: 2 (Baron)",
-    "ROUND_OVER",
-    "Player 2 : Guard (2 guess 0 holds card Countess)",
-    "TURN_OVER",
-    "Player 0 : Priest (0 sees card of 2)",
+    "Player 0 : Priest: see p2",
     "Priest sees Guard",
     "TURN_OVER",
-    "Player 1 : Guard (1 guess 0 holds card Priest)",
+    "Player 1 : Countess (no effect)",
     "TURN_OVER",
-    "Player 2 : Guard (2 guess 1 holds card Handmaid)",
-    "Killed player: 2,1,Guard,2",
-    "Guard guess correct!",
+    "Player 2 : Guard: guess p0 has Prince",
     "TURN_OVER",
-    "Player 0 : Baron (0 compares cards with 2)",
-    "Killed player: 0,2,Baron,0",
-    "Winner only player left: 0 (Baron)",
+    "Player 0 : Guard: guess p2 has Prince",
+    "TURN_OVER",
+    "Player 1 : Handmaid (1 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p0 has Princess",
+    "TURN_OVER",
+    "Player 0 : Handmaid (0 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 1 : Guard: guess p2 has Priest",
+    "TURN_OVER",
+    "Player 2 : Priest: see p1",
+    "Priest sees Prince",
+    "TURN_OVER",
+    "Player 0 : Prince: p2",
+    "Killed player: 0,2,Prince,0",
+    "Player 2 discards Princess and loses!",
+    "TURN_OVER",
+    "Player 1 : Guard: guess p0 has Baron",
+    "TURN_OVER",
+    "Player 0 : King: swap with p1",
+    "No more cards remaining. Winners: [0]",
     "ROUND_OVER",
-    "Player 0 : Baron (0 compares cards with 1)",
+    "Player 0 : Guard: guess p2 has Countess",
+    "TURN_OVER",
+    "Player 1 : Priest: see p0",
+    "Priest sees Baron",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p0 has Priest",
+    "TURN_OVER",
+    "Player 0 : Guard: guess p2 has Countess",
+    "TURN_OVER",
+    "Player 1 : Priest: see p0",
+    "Priest sees Baron",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p0 has Handmaid",
+    "TURN_OVER",
+    "Player 0 : Handmaid (0 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 1 : Prince: p1",
+    "Player 1 discards Handmaid",
+    "TURN_OVER",
+    "Player 2 : King: swap with p1",
+    "TURN_OVER",
+    "Player 0 : Baron: compare with p1",
+    "Killed player: 0,0,Baron,0",
+    "TURN_OVER",
+    "Player 1 : Countess (auto discard with Prince)",
+    "No more cards remaining. Winners: [2]",
+    "ROUND_OVER",
+    "Player 2 : Handmaid (2 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 0 : Countess (no effect)",
+    "TURN_OVER",
+    "Player 1 : Prince: p1",
+    "Player 1 discards Baron",
+    "TURN_OVER",
+    "Player 2 : Princess (2 loses the game)",
+    "TURN_OVER",
+    "Player 0 : Guard: guess p1 has Priest",
+    "TURN_OVER",
+    "Player 1 : Baron: compare with p0",
+    "Killed player: 1,0,Baron,1",
+    "TURN_OVER",
+    "Player 2 : Handmaid (2 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 1 : Prince: p1",
+    "Player 1 discards Priest",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p1 has King",
+    "TURN_OVER",
+    "Player 1 : Guard: guess p2 has King",
+    "Killed player: 1,2,Guard,1",
+    "Guard guess correct!",
+    "Winner only player left: 1 (Guard)",
+    "ROUND_OVER",
+    "Player 1 : Handmaid (1 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 2 : Baron: compare with p0",
+    "Killed player: 2,0,Baron,2",
+    "TURN_OVER",
+    "Player 1 : Princess (1 loses the game)",
+    "TURN_OVER",
+    "Player 2 : Prince: p1",
+    "Player 1 discards Prince",
+    "TURN_OVER",
+    "Player 1 : Guard: guess p2 has Priest",
+    "TURN_OVER",
+    "Player 2 : Countess (auto discard with King)",
+    "TURN_OVER",
+    "Player 1 : Guard: guess p2 has Priest",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p1 has Priest",
+    "TURN_OVER",
+    "Player 1 : Guard: guess p2 has Priest",
+    "TURN_OVER",
+    "Player 2 : Priest: see p1",
+    "Priest sees Baron",
+    "TURN_OVER",
+    "Player 1 : Priest: see p2",
+    "Priest sees King",
+    "No more cards remaining. Winners: [2]",
+    "ROUND_OVER",
+    "Player 2 : Priest: see p1",
+    "Priest sees Baron",
+    "TURN_OVER",
+    "Player 0 : Baron: compare with p1",
     "Killed player: 0,1,Baron,0",
     "TURN_OVER",
-    "Player 2 : Guard (2 guess 0 holds card Countess)",
+    "Player 2 : Countess (no effect)",
+    "TURN_OVER",
+    "Player 0 : Prince: p2",
+    "Player 2 discards Handmaid",
+    "TURN_OVER",
+    "Player 2 : Handmaid (2 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 0 : Priest: see p0",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p0 has Princess",
     "Killed player: 2,0,Guard,2",
     "Guard guess correct!",
     "Winner only player left: 2 (Guard)",
     "ROUND_OVER",
-    "Player 2 : Handmaid (2 is protected until their next turn)",
+    "Player 2 : Guard: guess p1 has Handmaid",
     "TURN_OVER",
-    "Player 0 : Priest (0 sees card of 1)",
-    "Priest sees Priest",
-    "TURN_OVER",
-    "Player 1 : Handmaid (1 is protected until their next turn)",
-    "TURN_OVER",
-    "Player 2 : Countess (auto discard with Prince)",
-    "TURN_OVER",
-    "Player 0 : Baron (0 compares cards with 2)",
-    "Killed player: 0,2,Baron,0",
-    "TURN_OVER",
-    "Player 1 : King (1 trades hands with 0)",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 1 holds card Prince)",
-    "TURN_OVER",
-    "Player 1 : Princess (1 loses the game)",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 1 holds card Prince)",
-    "Killed player: 0,1,Guard,0",
-    "Guard guess correct!",
-    "Winner only player left: 0 (Guard)",
-    "ROUND_OVER",
-    "Player 0 : Guard (0 guess 2 holds card Countess)",
-    "TURN_OVER",
-    "Player 1 : Guard (1 guess 0 holds card King)",
-    "TURN_OVER",
-    "Player 2 : Countess (auto discard with Prince)",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 1 holds card Prince)",
-    "Killed player: 0,1,Guard,0",
-    "Guard guess correct!",
-    "TURN_OVER",
-    "Player 2 : Baron (2 compares cards with 0)",
-    "Killed player: 2,2,Baron,2",
-    "Winner only player left: 0 (Baron)",
-    "ROUND_OVER",
-    "Player 0 : Baron (0 compares cards with 1)",
-    "Killed player: 0,0,Baron,0",
-    "TURN_OVER",
-    "Player 1 : King (1 trades hands with 2)",
-    "TURN_OVER",
-    "Player 2 : Priest (2 sees card of 1)",
-    "Priest sees Prince",
-    "TURN_OVER",
-    "Player 1 : Guard (1 guess 2 holds card King)",
-    "TURN_OVER",
-    "Player 2 : Guard (2 guess 1 holds card Prince)",
-    "Killed player: 2,1,Guard,2",
-    "Guard guess correct!",
-    "Winner only player left: 2 (Guard)",
-    "ROUND_OVER",
-    "Player 2 : Handmaid (2 is protected until their next turn)",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 1 holds card Prince)",
-    "TURN_OVER",
-    "Player 1 : Prince (1 discards card and draws a new card)",
-    "Player 1 discards Guard",
-    "TURN_OVER",
-    "Player 2 : Guard (2 guess 0 holds card Priest)",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 2 holds card King)",
-    "TURN_OVER",
-    "Player 1 : Priest (1 sees card of 2)",
-    "Priest sees Countess",
-    "TURN_OVER",
-    "Player 2 : Priest (2 sees card of 0)",
-    "Priest sees Princess",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 1 holds card Prince)",
-    "TURN_OVER",
-    "Player 1 : King (1 trades hands with 2)",
-    "TURN_OVER",
-    "Player 2 : Prince (0 discards card and draws a new card)",
-    "Killed player: 2,0,Prince,2",
-    "Player 0 discards Princess and loses!",
-    "TURN_OVER",
-    "Player 1 : Countess (no effect)",
-    "No more cards remaining. Winners: [1]",
-    "ROUND_OVER",
-    "Player 1 : Priest (1 sees card of 0)",
-    "Priest sees Handmaid",
-    "TURN_OVER",
-    "Player 2 : Guard (2 guess 1 holds card Princess)",
-    "TURN_OVER",
-    "Player 0 : Handmaid (0 is protected until their next turn)",
-    "TURN_OVER",
-    "Player 1 : Handmaid (1 is protected until their next turn)",
-    "TURN_OVER",
-    "Player 2 : Guard - no effect",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 2 holds card Princess)",
-    "TURN_OVER",
-    "Player 1 : King (1 trades hands with 0)",
-    "TURN_OVER",
-    "Player 2 : Guard (2 guess 1 holds card Countess)",
-    "TURN_OVER",
-    "Player 0 : Baron (0 compares cards with 2)",
-    "Killed player: 0,2,Baron,0",
-    "TURN_OVER",
-    "Player 1 : Prince (0 discards card and draws a new card)",
-    "Player 0 discards Baron",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 1 holds card Princess)",
-    "Killed player: 0,1,Guard,0",
-    "Guard guess correct!",
-    "Winner only player left: 0 (Guard)",
-    "ROUND_OVER",
-    "Player 0 : Prince (2 discards card and draws a new card)",
-    "Player 2 discards Guard",
-    "TURN_OVER",
-    "Player 1 : Guard (1 guess 0 holds card Baron)",
-    "TURN_OVER",
-    "Player 2 : Baron (2 compares cards with 0)",
-    "Killed player: 2,0,Baron,2",
-    "TURN_OVER",
-    "Player 1 : Guard (1 guess 2 holds card Prince)",
-    "TURN_OVER",
-    "Player 2 : Guard (2 guess 1 holds card King)",
-    "TURN_OVER",
-    "Player 1 : Guard (1 guess 2 holds card Handmaid)",
-    "TURN_OVER",
-    "Player 2 : Princess (2 loses the game)",
-    "TURN_OVER",
-    "Player 1 : Handmaid (1 is protected until their next turn)",
-    "TURN_OVER",
-    "Player 2 : Handmaid (2 is protected until their next turn)",
-    "TURN_OVER",
-    "Player 1 : Baron - no effect",
-    "TURN_OVER",
-    "Player 2 : King (2 trades hands with 1)",
-    "No more cards remaining. Winners: [2]",
-    "ROUND_OVER",
-    "Player 2 : Guard (2 guess 0 holds card King)",
-    "TURN_OVER",
-    "Player 0 : Guard (0 guess 2 holds card Princess)",
-    "TURN_OVER",
-    "Player 1 : Priest (1 sees card of 0)",
-    "Priest sees Countess",
-    "TURN_OVER",
-    "Player 2 : Guard (2 guess 1 holds card Handmaid)",
-    "TURN_OVER",
-    "Player 0 : Priest (0 sees card of 2)",
+    "Player 0 : Priest: see p2",
     "Priest sees Baron",
     "TURN_OVER",
-    "Player 1 : Handmaid (1 is protected until their next turn)",
+    "Player 1 : Guard: guess p2 has Baron",
+    "Killed player: 1,2,Guard,1",
+    "Guard guess correct!",
     "TURN_OVER",
-    "Player 2 : Baron (2 compares cards with 0)",
-    "Killed player: 2,2,Baron,2",
-    "TURN_OVER",
-    "Player 0 : Countess (no effect)",
-    "TURN_OVER",
-    "Player 1 : Baron (1 compares cards with 0)",
-    "Killed player: 1,0,Baron,1",
+    "Player 0 : Baron: compare with p1",
+    "Killed player: 0,0,Baron,0",
     "Winner only player left: 1 (Baron)",
     "ROUND_OVER",
-    "Player 1 : Prince (2 discards card and draws a new card)",
-    "Player 2 discards Guard",
+    "Player 1 : Countess (auto discard with King)",
     "TURN_OVER",
-    "Player 2 : Guard (2 guess 1 holds card Prince)",
+    "Player 2 : Guard: guess p1 has Handmaid",
     "TURN_OVER",
-    "Player 0 : Guard (0 guess 2 holds card Baron)",
+    "Player 0 : Guard: guess p2 has Prince",
     "TURN_OVER",
-    "Player 1 : Priest (1 sees card of 2)",
-    "Priest sees Prince",
+    "Player 1 : Guard: guess p2 has King",
     "TURN_OVER",
-    "Player 2 : Guard (2 guess 0 holds card Baron)",
+    "Player 2 : Guard: guess p1 has Handmaid",
     "TURN_OVER",
-    "Player 0 : Guard (0 guess 2 holds card Countess)",
+    "Player 0 : Guard: guess p2 has Prince",
+    "TURN_OVER",
+    "Player 1 : Priest: see p2",
+    "Priest sees Handmaid",
+    "TURN_OVER",
+    "Player 2 : Priest: see p1",
+    "Priest sees King",
+    "TURN_OVER",
+    "Player 0 : Prince: p0",
+    "Player 0 discards Handmaid",
+    "TURN_OVER",
+    "Player 1 : Baron: compare with p2",
+    "Killed player: 1,2,Baron,1",
+    "TURN_OVER",
+    "Player 0 : Prince: p1",
+    "Player 1 discards King",
+    "No more cards remaining. Winners: [0]",
+    "ROUND_OVER",
+    "Player 0 : Guard: guess p2 has Princess",
+    "TURN_OVER",
+    "Player 1 : King: swap with p0",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p0 has Priest",
+    "Killed player: 2,0,Guard,2",
+    "Guard guess correct!",
     "TURN_OVER",
     "Player 1 : Handmaid (1 is protected until their next turn)",
     "TURN_OVER",
-    "Player 2 : Prince (2 discards card and draws a new card)",
-    "Player 2 discards Baron",
+    "Player 2 : Priest: see p2",
     "TURN_OVER",
-    "Player 0 : Countess (no effect)",
+    "Player 1 : Prince: p2",
+    "Player 2 discards Countess",
     "TURN_OVER",
-    "Player 1 : Baron (1 compares cards with 0)",
-    "Killed player: 1,1,Baron,1",
-    "No more cards remaining. Winners: [0]",
+    "Player 2 : Guard: guess p1 has Princess",
+    "TURN_OVER",
+    "Player 1 : Baron: compare with p2",
+    "Killed player: 1,2,Baron,1",
+    "Winner only player left: 1 (Baron)",
+    "ROUND_OVER",
+    "Player 1 : Princess (1 loses the game)",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p0 has Handmaid",
+    "TURN_OVER",
+    "Player 0 : Guard: guess p1 has Prince",
+    "TURN_OVER",
+    "Player 1 : Handmaid (1 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p0 has Priest",
+    "Killed player: 2,0,Guard,2",
+    "Guard guess correct!",
+    "TURN_OVER",
+    "Player 1 : Guard: guess p2 has Baron",
+    "Killed player: 1,2,Guard,1",
+    "Guard guess correct!",
+    "Winner only player left: 1 (Guard)",
+    "ROUND_OVER",
+    "Player 1 : Guard: guess p2 has Baron",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p1 has Countess",
+    "TURN_OVER",
+    "Player 0 : Priest: see p1",
+    "Priest sees Handmaid",
+    "TURN_OVER",
+    "Player 1 : Guard: guess p2 has Countess",
+    "TURN_OVER",
+    "Player 2 : Guard: guess p0 has King",
+    "TURN_OVER",
+    "Player 0 : Priest: see p1",
+    "Priest sees Handmaid",
+    "TURN_OVER",
+    "Player 1 : Handmaid (1 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 2 : Handmaid (2 is protected until their next turn)",
+    "TURN_OVER",
+    "Player 0 : Baron: compare with p0",
+    "TURN_OVER",
+    "Player 1 : Prince: p0",
+    "Player 0 discards Guard",
+    "TURN_OVER",
+    "Player 2 : Countess (auto discard with Prince)",
+    "No more cards remaining. Winners: [1]",
     "ROUND_OVER",
     "GAME_OVER",
-    "Player 0 finishes at position 1 with score: 5",
-    "Player 1 finishes at position 3 with score: 2",
-    "Player 2 finishes at position 2 with score: 4"
+    "Player 0 finishes at position 3 with score: 2",
+    "Player 1 finishes at position 1 with score: 5",
+    "Player 2 finishes at position 2 with score: 3"
   ]
 }

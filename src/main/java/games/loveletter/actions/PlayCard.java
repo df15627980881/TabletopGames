@@ -176,7 +176,7 @@ public class PlayCard extends AbstractAction {
         if (this.cardType == LoveLetterCard.CardType.Princess) {
             return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                     "<html><h2>Princess Action</h2><p>The other card cannot be played, " +
-                            "so only the princess can be played. The player is eliminated.</p></html>"));
+                            "so only the princess can be played. The player" + this.playerID + " is eliminated.</p></html>"));
         }
         if (this.cardType == LoveLetterCard.CardType.Countess) {
             if (this.forcedCountessCardType != null) {
