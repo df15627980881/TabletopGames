@@ -600,14 +600,18 @@ public class InterfaceTech extends GUI {
         }
 
 
-        PreGameState<FrenchCard> preGameState = GuideContext.deckForResult.get(GuideContext.deckForResultIndex);
-        Set<Long> playerIds = new LinkedHashSet<>(preGameState.getPlayerIdAndActions().stream().map(x -> x.a).collect(Collectors.toSet()));
-        List<AbstractAction> actions = new ArrayList<>(preGameState.getPlayerIdAndActions().stream().map(x -> x.b).toList());
+        PreGameState preGameState = GuideContext.deckForResult.get(GuideContext.deckForResultIndex);
+//        Set<Long> playerIds = new LinkedHashSet<>(preGameState.getPlayerIdAndActions().stream().map(x -> x.a).collect(Collectors.toSet()));
+        List<AbstractAction> actions = new ArrayList<>(preGameState.getPlayerIdAndActions().stream().map(x -> {
+            Pair<Long, AbstractAction> y = (Pair<Long, AbstractAction>) x;
+            return y.b;
+        }).toList());
         List<AbstractPlayer> players = new ArrayList<>();
-        for (int i=0; i<playerIds.size(); ++i) {
+        for (int i=0; i<preGameState.getPlayerCount(); ++i) {
             players.add(new RandomPlayer());
         }
         gameResult = Game.runOne(gameType, null, players, System.currentTimeMillis(), false, null, null, 1);
+        preGameState.resetIndexx();
         buildInterface(true);
         updateGUI();
 //        showActionFeedback = false;

@@ -771,14 +771,14 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
 
                 if (isFirst) {
                     PreGameState<LoveLetterCard> deckForMechanism = GuideContext.deckForMechanism;
-                    deckForMechanism.setIndexx(0);
+                    deckForMechanism.resetIndexx();
                     List<AbstractPlayer> players = new ArrayList<>();
                     for (int i = 0; i < deckForMechanism.getPlayerCount(); ++i) players.add(new MCTSPlayer());
                     Game game2 = Game.runOne(GameType.LoveLetter, null, players, deckForMechanism.getSeed(), false, null, null, 1);
                     frame.gameResult = game2;
                     AbstractGameState gameState1 = game2.getGameState().copy();
                     gameState1.reset(deckForMechanism.getSeed());
-                    deckForMechanism.setIndexx(0);
+                    deckForMechanism.resetIndexx();
                     frame.gameRunning = new Game(game2.getGameType(), game2.getPlayers(),
                             GameType.LoveLetter.createForwardModel(null, game2.getPlayers().size()), gameState1);
                     game = frame.gameRunning;

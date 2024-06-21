@@ -26,17 +26,23 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
     public static Map<String, Game> strategyTextAndSimulate = new HashMap<>();
 
+    public static Map<String, Game> strategyTextAndGameResults = new HashMap<>();
+
     public static List<PartialObservableDeck<LoveLetterCard>> tmpCardsForReserve;
     public static List<Long> rnds;
     public static boolean tmpCardsForReserveSwitch = false;
 
     // When you want to add a new strategy, please modify this count
-    private final int mechanismStrategyCount = 3;
+//    private final int mechanismStrategyCount = 3;
     private final int simulateStrategyCount = 4;
+    private final int gameResultStrategyCount = 2;
 
     private LoveLetterStrategyEnum loveLetterStrategyEnum;
 
     private static Pair<Long, Game> gameForMechanism;
+
+    private final String gameResultStrategyText01 = "Round ends when only a single player is left.";
+    private final String gameResultStrategyText02 = "there are no cards left in the draw pile";
 
     @Override
     public boolean isValid(String strategy, Game game, Long seed) {
@@ -50,6 +56,12 @@ public class LoveLetterGameStrategy implements IGameStrategy {
             return true;
         }
 
+        if (LoveLetterStrategyEnum.GAME_RESULT.getName().equals(strategy)) {
+            this.loveLetterStrategyEnum = LoveLetterStrategyEnum.GAME_RESULT;
+            isGameResult(game, seed);
+            return true;
+        }
+
         if (LoveLetterStrategyEnum.SIMULATE.getName().equals(strategy)) {
             this.loveLetterStrategyEnum = LoveLetterStrategyEnum.SIMULATE;
             isSimulate(game, seed);
@@ -57,6 +69,18 @@ public class LoveLetterGameStrategy implements IGameStrategy {
         }
 
         return false;
+    }
+
+    private void isGameResult(Game game, Long seed) {
+        // case1: Round ends when only a single player is left
+        LoveLetterGameState gs = (LoveLetterGameState) game.getGameState();
+        if (gs.getRemainingCards() != 0) {
+            strategyTextAndGameResults.put(gameResultStrategyText01, game);
+            return;
+        }
+
+        // case2: there are no cards left in the draw pile
+        strategyTextAndGameResults.put(gameResultStrategyText02, game);
     }
 
     private void isSimulate(Game game, Long seed) {
@@ -106,7 +130,6 @@ public class LoveLetterGameStrategy implements IGameStrategy {
                 actions.add(action);
             }
             List<GameResultForJSON.Deck> decks = new ArrayList<>();
-//            tmpCardsForReserve = tmpCardsForReserve.subList(1, tmpCardsForReserve.size());
             for (PartialObservableDeck<LoveLetterCard> a : gameForMechanism.b.getGameState().getNowDecks()) {
                 List<LoveLetterCard> components = new ArrayList<>(a.copy().getComponents());
 
@@ -132,6 +155,51 @@ public class LoveLetterGameStrategy implements IGameStrategy {
 
             JSONUtils.writeToJsonFile(gameResultForJSON, path + "/" + allFileSize);
 
+        } else if (this.loveLetterStrategyEnum == LoveLetterStrategyEnum.GAME_RESULT) {
+            path += "/GameResult";
+            File[] allFiles = JSONUtils.getAllFile(path);
+            int allFileSize = allFiles == null ? 0 : allFiles.length;
+            assert strategyTextAndGameResults.size() != 0;
+            for (Map.Entry<String, Game> entry : strategyTextAndGameResults.entrySet()) {
+                Game game = entry.getValue();
+
+                GameResultForJSON gameResultForJSON = new GameResultForJSON();
+                gameResultForJSON.setPlayerCount(game.getPlayers().size());
+
+                List<Pair<Integer, AbstractAction>> history = game.getGameState().getHistory();
+                List<GameResultForJSON.Action> actions = new ArrayList<>();
+                for (Pair<Integer, AbstractAction> pair : history) {
+                    GameResultForJSON.Action action = new GameResultForJSON.Action();
+                    action.setPlayer(pair.a);
+                    action.setAction((PlayCard) pair.b);
+                    actions.add(action);
+                }
+                List<GameResultForJSON.Deck> decks = new ArrayList<>();
+                for (PartialObservableDeck<LoveLetterCard> a : game.getGameState().getNowDecks()) {
+                    List<LoveLetterCard> components = new ArrayList<>(a.copy().getComponents());
+
+                    GameResultForJSON.Deck deck = new GameResultForJSON.Deck();
+                    List<GameResultForJSON.Deck.Card> cards = new ArrayList<>();
+                    for (LoveLetterCard component : components) {
+                        GameResultForJSON.Deck.Card card = new GameResultForJSON.Deck.Card();
+                        card.setCardType(component.cardType.name());
+                        cards.add(card);
+                    }
+                    deck.setCards(cards);
+                    deck.setName(String.valueOf(allFiles == null ? 0 : allFiles.length));
+                    deck.setVisibilityMode("VISIBLE_TO_ALL");
+                    decks.add(deck);
+                }
+
+                gameResultForJSON.setHistoryText(game.getGameState().getHistoryAsText());
+                gameResultForJSON.setActions(actions);
+                gameResultForJSON.setGameResultDesc(entry.getKey());
+                gameResultForJSON.setSeed(game.getGameState().getCoreGameParameters().getRandomSeed());
+                gameResultForJSON.setStrategy(null);
+                gameResultForJSON.setDecks(decks);
+
+                JSONUtils.writeToJsonFile(gameResultForJSON, path + "/" + allFileSize++);
+            }
         }
 
     }
@@ -171,11 +239,15 @@ public class LoveLetterGameStrategy implements IGameStrategy {
         if (this.loveLetterStrategyEnum == LoveLetterStrategyEnum.MECHANISM) {
             return Objects.nonNull(gameForMechanism);
         }
+        if (this.loveLetterStrategyEnum == LoveLetterStrategyEnum.GAME_RESULT) {
+            return strategyTextAndGameResults.size() == gameResultStrategyCount;
+        }
         return false;
     }
 
     public enum LoveLetterStrategyEnum {
         MECHANISM("mechanism"),
+        GAME_RESULT("gameResult"),
         SIMULATE("simulate");
 
         private final String name;

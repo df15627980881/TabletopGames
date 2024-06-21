@@ -96,4 +96,8 @@ public class PreGameState<T extends Card> {
         this.indexx += 1;
         this.indexx %= drawDecks.size();
     }
+
+    public void resetIndexx() {
+        this.setIndexx(0);
+    }
 }

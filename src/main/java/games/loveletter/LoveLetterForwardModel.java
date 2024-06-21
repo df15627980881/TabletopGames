@@ -72,6 +72,14 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
             for (LoveLetterCard component : reverse) {
                 llgs.drawPile.add(component.copy());
             }
+        } else if (GuideContext.guideStage == GuideContext.GuideState.SHOW_GAME_RESULT) {
+            List<PreGameState> deckForResults = GuideContext.deckForResult;
+            PreGameState<LoveLetterCard> deckForResult = deckForResults.get(GuideContext.deckForResultIndex);
+            List<LoveLetterCard> reverse = Lists.reverse(deckForResult.getDrawDecks().get(deckForResult.getIndexx()).getComponents());
+            deckForResult.addIndexx();
+            for (LoveLetterCard component : reverse) {
+                llgs.drawPile.add(component.copy());
+            }
         } else {
             for (HashMap.Entry<LoveLetterCard.CardType, Integer> entry : llp.cardCounts.entrySet()) {
                 for (int i = 0; i < entry.getValue(); i++) {
@@ -98,7 +106,6 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
                 boolean[] visible = new boolean[llgs.getNPlayers()];
                 if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
                     // In guide, we make the player0 as new user play.
-                    System.out.println("GKSKS");
                     Arrays.fill(visible, i == 0);
                 } else if (llgs.getCoreGameParameters().partialObservable) {
                     visible[i] = true;
