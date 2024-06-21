@@ -3,8 +3,11 @@ package players.simple;
 import core.AbstractGameState;
 import core.AbstractPlayer;
 import core.actions.AbstractAction;
+import utilities.Pair;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class RandomPlayer extends AbstractPlayer {
