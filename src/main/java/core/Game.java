@@ -15,7 +15,8 @@ import games.blackjack.BlackjackGameState;
 import gui.AbstractGUIManager;
 import gui.GUI;
 import gui.GamePanel;
-import guide.GuideContext;
+import guide.*;
+import org.apache.commons.collections4.CollectionUtils;
 import players.basicMCTS.BasicMCTSPlayer;
 import players.human.ActionController;
 import players.human.HumanConsolePlayer;
@@ -365,6 +366,7 @@ public class Game {
      * @param newRandomSeed - random seed is updated in the game parameters object and used throughout the game.
      */
     public final void reset(List<AbstractPlayer> players, long newRandomSeed) {
+        List<PreGameState> ss = GuideContext.deckForSimulate;
         gameState.reset(newRandomSeed);
         forwardModel.abstractSetup(gameState);
         if (players.size() == gameState.getNPlayers()) {
@@ -491,6 +493,19 @@ public class Game {
                 }
 
                 if (debug) System.out.println("Exiting synchronized block in Game");
+            }
+            if (CollectionUtils.isNotEmpty(GuideContext.deckForSimulate) && GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
+                PreGameState preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
+                SimulateConditionCaller caller = GuideContext.caller;
+                PreGameState.SimulateInfo simulateInfo = preGameState.getSimulateInfo();
+                if (Objects.nonNull(simulateInfo)) {
+                    Pair<Boolean, Boolean> result = caller.callMethod(simulateInfo.getIsSuccess(), this);
+                    if (result.a) {
+                        DialogUtils.show(DialogUtils.create(GuideContext.frame, "Game Guide", Boolean.TRUE,
+                                300, 200, result.b ? simulateInfo.getSuccessText() : simulateInfo.getFailText()));
+                        break;
+                    }
+                }
             }
         }
         if (firstEnd) {

@@ -80,6 +80,14 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
             for (LoveLetterCard component : reverse) {
                 llgs.drawPile.add(component.copy());
             }
+        } else if (GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
+            List<PreGameState> deckForSimulates = GuideContext.deckForSimulate;
+            PreGameState<LoveLetterCard> deckForSimulate = deckForSimulates.get(GuideContext.deckForSimulateIndex);
+            List<LoveLetterCard> reverse = Lists.reverse(deckForSimulate.getDrawDecks().get(deckForSimulate.getIndexx()).getComponents());
+            deckForSimulate.addIndexx();
+            for (LoveLetterCard component : reverse) {
+                llgs.drawPile.add(component.copy());
+            }
         } else {
             for (HashMap.Entry<LoveLetterCard.CardType, Integer> entry : llp.cardCounts.entrySet()) {
                 for (int i = 0; i < entry.getValue(); i++) {

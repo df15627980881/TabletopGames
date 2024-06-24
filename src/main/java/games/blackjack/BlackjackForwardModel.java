@@ -67,7 +67,7 @@ public class BlackjackForwardModel extends StandardForwardModel {
             visibility = new boolean[firstState.getNPlayers()];
             Arrays.fill(visibility, true);
             visibility[0] = false;
-            ArrayList<boolean[]> elementVisibility = (ArrayList<boolean[]>) playerDeck.getElementVisibility();
+            List<boolean[]> elementVisibility = (LinkedList<boolean[]>) playerDeck.getElementVisibility();
             // Because PartialObservableDeck#add method add the element at the first place......
             elementVisibility.set(0, visibility);
             playerDeck.setVisibility(elementVisibility);
@@ -144,7 +144,7 @@ public class BlackjackForwardModel extends StandardForwardModel {
             boolean[] visibility = new boolean[bjgs.getNPlayers()];
             Arrays.fill(visibility, true);
             PartialObservableDeck<FrenchCard> playerDeck = playerDecks.get(bjgs.getNPlayers()-1);
-            ArrayList<boolean[]> elementVisibility = (ArrayList<boolean[]>) playerDeck.getElementVisibility();
+            List<boolean[]> elementVisibility = (LinkedList<boolean[]>) playerDeck.getElementVisibility();
             for (int i=0; i<elementVisibility.size(); ++i) {
                 elementVisibility.set(i, visibility);
             }

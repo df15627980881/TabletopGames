@@ -10,9 +10,11 @@ import core.components.PartialObservableDeck;
 import games.blackjack.BlackjackGameState;
 import games.blackjack.actions.Hit;
 import games.blackjack.actions.Stand;
+import guide.PreGameState;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.curator.shaded.com.google.common.collect.Lists;
 import utilities.JSONUtils;
 import utilities.Pair;
 
@@ -25,7 +27,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
 
     public static Map<String, Game> strategyTextAndGameResults = new HashMap<>();
 
-    public static Map<String, Game> strategyTextAndSimulate = new HashMap<>();
+    public static Map<String, Pair<PreGameState.SimulateInfo, Game>> strategyTextAndSimulate = new HashMap<>();
 
     // When you want to add a new strategy, please modify this count
     private final int gameResultStrategyCount = 3;
@@ -67,6 +69,20 @@ public class BlackjackGameStrategy implements IGameStrategy {
     }
 
     private void isSimulate(Game game, Long seed) {
+
+        PreGameState.SimulateInfo simulateInfo = new PreGameState.SimulateInfo();
+        simulateInfo.setBeginActionIndex(0);
+        simulateInfo.setIsSuccess("method1");
+        simulateInfo.setStartText("Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!");
+        simulateInfo.setSuccessText("Congratulations! It seems you have mastered this strategy.");
+        simulateInfo.setFailText("Oops! You can try it again.");
+        List<String> players = new ArrayList<>();
+        for (int i=0; i<game.getGameState().getNPlayers()-1; ++i) {
+            players.add("HumanGUIPlayer");
+        }
+        players.add("MCTS");
+        simulateInfo.setPlayers(players);
+        
         BlackjackGameState gs = (BlackjackGameState) game.getGameState();
         Deck<FrenchCard> allDeck = FrenchCard.generateDeck("DrawDeck", CoreConstants.VisibilityMode.HIDDEN_TO_ALL);
         //shuffle the cards
@@ -113,7 +129,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                     System.out.println("1: " + pair.a + pair.b);
                 }
                 assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
-                strategyTextAndSimulate.put(simulateStrategyText01, game);
+                strategyTextAndSimulate.put(simulateStrategyText01, new Pair<>(simulateInfo,game));
                 return;
             } else {
                 // reset initGame again
@@ -159,7 +175,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                     System.out.println("2: " + pair.a + pair.b);
                 }
                 assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
-                strategyTextAndSimulate.put(simulateStrategyText02, game);
+                strategyTextAndSimulate.put(simulateStrategyText02, new Pair<>(simulateInfo,game));
                 return;
             } else {
                 // reset initGame again
@@ -205,7 +221,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                     System.out.println("3: " + pair.a + pair.b);
                 }
                 assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
-                strategyTextAndSimulate.put(simulateStrategyText03, game);
+                strategyTextAndSimulate.put(simulateStrategyText03, new Pair<>(simulateInfo,game));
                 return;
             } else {
                 // reset initGame again
@@ -260,7 +276,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                     System.out.println(playerResult);
                 }
                 assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
-                strategyTextAndSimulate.put(simulateStrategyText04, game);
+                strategyTextAndSimulate.put(simulateStrategyText04, new Pair<>(simulateInfo,game));
                 return;
             } else {
                 // reset initGame again
@@ -339,8 +355,8 @@ public class BlackjackGameStrategy implements IGameStrategy {
             File[] allFiles = JSONUtils.getAllFile(path);
             int allFileSize = allFiles == null ? 0 : allFiles.length;
             assert strategyTextAndSimulate.size() == simulateStrategyCount;
-            for (Map.Entry<String, Game> entry : strategyTextAndSimulate.entrySet()) {
-                Game game = entry.getValue();
+            for (Map.Entry<String, Pair<PreGameState.SimulateInfo, Game>> entry : strategyTextAndSimulate.entrySet()) {
+                Game game = entry.getValue().b;
                 BlackjackGameState gs = (BlackjackGameState) game.getGameState();
                 GameResultForJSON gameResultForJSON = new GameResultForJSON();
                 gameResultForJSON.setPlayerCount(gs.getNPlayers());
@@ -366,6 +382,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                 assert cards.size() == 52;
                 deck.setCards(cards);
                 gameResultForJSON.setDeck(deck);
+                gameResultForJSON.setSimulateInfo(entry.getValue().a);
 
                 JSONUtils.writeToJsonFile(gameResultForJSON, path + "/" + allFileSize++);
             }
@@ -385,7 +402,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
 
     @Override
     public void recordDeck(AbstractGameState gameState) {
-        // Do nothing Because it has one round.
+        // Do nothing Because it has just one round.
     }
 
     private int calDeckSum(List<FrenchCard> cards) {
@@ -473,6 +490,16 @@ public class BlackjackGameStrategy implements IGameStrategy {
         private Deck deck;
 
         private String strategy;
+
+        private PreGameState.SimulateInfo simulateInfo;
+
+        public PreGameState.SimulateInfo getSimulateInfo() {
+            return simulateInfo;
+        }
+
+        public void setSimulateInfo(PreGameState.SimulateInfo simulateInfo) {
+            this.simulateInfo = simulateInfo;
+        }
 
         public String getStrategy() {
             return strategy;

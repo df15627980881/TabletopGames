@@ -7,12 +7,14 @@ import core.Game;
 import core.actions.AbstractAction;
 import core.components.FrenchCard;
 import games.GameType;
+import games.loveletter.LoveLetterGameState;
 import gui.AbstractGUIManager;
 import gui.GUI;
 import gui.GamePanel;
 import gui.views.ComponentView;
 import guide.param.Question;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.testng.Assert;
 import players.PlayerType;
 import players.human.ActionController;
@@ -96,6 +98,8 @@ public class InterfaceTech extends GUI {
 
     private boolean isFirstEnterStrategy;
 
+    private PreGameState preGameState;
+
 
     public InterfaceTech() {
     }
@@ -134,6 +138,7 @@ public class InterfaceTech extends GUI {
         GuideContext.deckForMechanism = PreGameStateUtils.get(gameType, "data/preGameState/" + gameType.name() + "/Mechanism/" + 0 + ".json");
         GuideContext.deckForResult = new ArrayList<>();
         GuideContext.deckForSimulate = new ArrayList<>();
+        GuideContext.caller = new SimulateConditionCaller();
         GuideContext.deckForResultIndex = 0;
         GuideContext.deckForSimulateIndex = 0;
 
@@ -157,10 +162,13 @@ public class InterfaceTech extends GUI {
 
         startTrigger = e -> {
             Runnable runnable = () -> {
+                this.preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
                 next.setEnabled(false);
                 end = false;
                 buttonPanel.remove(replay);
+                GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex).resetIndexx();
                 gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
+                GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex).resetIndexx();
                 gameRunning.reset(playersForSimulate);
                 gameRunning.setTurnPause(200);
                 gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
@@ -169,11 +177,25 @@ public class InterfaceTech extends GUI {
                 guiUpdater.start();
                 buildInterface(false);
                 gameRunning.setPaused(paused);
+                System.out.println("GuideContext.deckForSimulateIndex: " + GuideContext.deckForSimulateIndex);
+                DialogUtils.show(DialogUtils.create(GuideContext.frame, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getSimulateInfo().getStartText()));
+                if (Objects.nonNull(preGameState) && Objects.nonNull(preGameState.getSimulateInfo())) {;
+                    List<Pair<Long, AbstractAction>> playerIdAndActions = preGameState.getPlayerIdAndActions();
+                    for (int i = 0; i < preGameState.getSimulateInfo().getBeginActionIndex(); i++) {
+//                        LoveLetterGameState gs = (LoveLetterGameState) gameRunning.getGameState();
+//                        gs.getPlayerHandCards().get(1).getComponents().forEach(System.out::println);
+//                        System.out.println("---");
+                        gameRunning.processOneAction(playerIdAndActions.get(i).b);
+                    }
+                }
+                System.out.println(gameRunning.getGameState().getGameStatus());
                 gameRunning.run();
                 end = true;
                 buttonPanel.add(replay);
                 next.setEnabled(true);
                 guiUpdater.stop();
+                buttonPanel.revalidate();
+                buttonPanel.repaint();
                 updateGUI();
                 GuideContext.deckForSimulateIndex += 1;
             };
@@ -619,21 +641,21 @@ public class InterfaceTech extends GUI {
             gameRunning.processOneAction(x);
             updateGUI();
         });
-        DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getGameResultDesc()));
+        if (StringUtils.isNotBlank(preGameState.getGameResultDesc())) {
+            DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getGameResultDesc()));
+        }
         if (GuideContext.deckForResultIndex == GuideContext.deckForResult.size() - 1) {
-//            getPreviousRecommendAction();
             GuideContext.guideStage = GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS;
-//            getContentPane().removeAll();
             for (ActionListener actionListener : next.getActionListeners()) {
                 next.removeActionListener(actionListener);
             }
-            PreGameState preGameState2 = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
-            for (int i=0; i<preGameState2.getPlayerCount() - 1; ++i) {
-                playersForSimulate.add(PlayerType.valueOf("HumanGUIPlayer").createPlayerInstance(seed, humanInputQueue, null));
-            }
-            playersForSimulate.add(new MCTSPlayer());
-//            System.out.println("GJDSJJ");
-//            updateGUI();
+            this.preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
+//            for (int i=0; i<preGameState2.getPlayerCount() - 1; ++i) {
+//                playersForSimulate.add(PlayerType.valueOf("HumanGUIPlayer").createPlayerInstance(seed, humanInputQueue, null));
+//            }
+//            playersForSimulate.add(new MCTSPlayer());
+            playersForSimulate = new ArrayList<>(this.preGameState.getSimulateInfo().getPlayers().stream()
+                    .map(x -> PlayerType.valueOf(x).createPlayerInstance(seed, humanInputQueue, null)).toList());
             replay.addActionListener(e -> {
                 GuideContext.deckForSimulateIndex -= 1;
                 Assert.assertTrue(GuideContext.deckForSimulateIndex >= 0);
@@ -645,63 +667,27 @@ public class InterfaceTech extends GUI {
                 gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
                 setFrameProperties();
                 buildInterface(false);
-//                started = true;
                 startTrigger.actionPerformed(e);
                 next.setEnabled(false);
-//                GuideContext.deckForSimulateIndex += 1;
-//                simulate();
             });
             next.addActionListener(e -> {
-//                Runnable runnable = () -> {
-//                    System.out.println("GGF" + playersForSimulate.size());
-//                    humanInputQueue = new ActionController();
-//                    gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
-//                    gameRunning.reset(playersForSimulate);
-//                    gameRunning.setTurnPause(200);
-//                    gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
-//                    setFrameProperties();
-//                    guiUpdater = new Timer(100, event -> updateGUI());
-//                    guiUpdater.start();
-//                    buildInterface(false);
-//                    gameRunning.setPaused(paused);
-//                    gameRunning.run();
-//                    guiUpdater.stop();
-//                    System.out.println("DNNDSNJSN");
-//                    updateGUI();
-//                    simulate();
-//                };
-//                gameThread = new Thread(runnable);
-//                gameThread.start();
-//                if (GuideContext.deckForSimulateIndex == 0) simulate();
                 gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
                 gameRunning.reset(playersForSimulate);
                 gameRunning.setTurnPause(200);
                 gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
                 setFrameProperties();
                 buildInterface(false);
-//                started = true;
                 end = false;
                 getContentPane().remove(replay);
                 if (isFirstEnterStrategy) {
-                    DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!"));
+//                    DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!"));
+                    DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, this.preGameState.getSimulateInfo().getStartText()));
                     isFirstEnterStrategy = false;
                 }
                 startTrigger.actionPerformed(e);
                 simulate();
-//                GuideContext.deckForSimulateIndex += 1;
             });
-//            simulate();
-//            runQuestions(questionService.getQuestions(), questionService.getQuestions().keySet().stream().toList(), 0);
         }
-// Just show last 7 actions
-//        SwingWorker<Void, AbstractAction> worker = processSpecificActions(actions);
-//        worker.addPropertyChangeListener(evt -> {
-//            if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
-//                GuideContext.deckForResultIndex += 1;
-//                runGameResult();
-//            }
-//        });
-//        worker.execute();
     }
 
     public void prepareSimulate() {
@@ -748,8 +734,6 @@ public class InterfaceTech extends GUI {
 
     @Deprecated
     public void runTertiaryPart(GuideGenerator.SimulateForMechanismParam param, int indexx) {
-//        System.out.println(seedsForWinWithBannedAction.size());
-//        gameResult = Objects.requireNonNull(seedsForWinWithBannedAction.entrySet().stream().findFirst().orElse(null)).getValue().b;
         if (indexx == 0) {
             GuideContext.guideStage = GuideContext.GuideState.SHOW_GAME_RESULT;
             DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, Let's learn some game results"));
@@ -757,9 +741,6 @@ public class InterfaceTech extends GUI {
         if (param == null) {
             return;
         }
-//        if (param.getGameResult() == CoreConstants.GameResult.GAME_ONGOING) {
-//            continue;
-//        }
         gameResult = param.getFinalGame();
         for (CoreConstants.GameResult playerResult : gameResult.getGameState().getPlayerResults()) {
             System.out.println(indexx + " " + playerResult);
@@ -784,7 +765,6 @@ public class InterfaceTech extends GUI {
     }
 
     public void simulate() {
-//        System.out.println("DDD" + GuideContext.deckForSimulateIndex);
         if (GuideContext.deckForSimulateIndex == GuideContext.deckForSimulate.size() - 1) {
             for (ActionListener actionListener : next.getActionListeners()) {
                 next.removeActionListener(actionListener);
@@ -801,105 +781,23 @@ public class InterfaceTech extends GUI {
             runQuestions(questionService.getQuestions(), questionService.getQuestions().keySet().stream().toList(), 0);
             return;
         }
-//        if (GuideContext.deckForSimulateIndex == 0) {
         getContentPane().removeAll();
-//        }
-//        if (GuideContext.deckForSimulateIndex >= GuideContext.deckForSimulate.size()) {
-//            for (ActionListener actionListener : next.getActionListeners()) {
-//                next.removeActionListener(actionListener);
-//            }
-//            return;
-//        }
-//        this.humanInputQueue = new ActionController();
         PreGameState preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
-        List<AbstractPlayer> players = new ArrayList<>();
-        for (int i=0; i<preGameState.getPlayerCount() - 1; ++i) {
-            players.add(PlayerType.valueOf("HumanGUIPlayer").createPlayerInstance(seed, humanInputQueue, null));
-        }
-        players.add(new MCTSPlayer());
-        playersForSimulate = players;
-//        if (GuideContext.deckForSimulateIndex == 0) {
-//            GuideContext.guideStage = GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS;
-//            getContentPane().removeAll();
-//            for (ActionListener actionListener : next.getActionListeners()) {
-//                next.removeActionListener(actionListener);
-//            }
-//            next.addActionListener(e -> {
-//                Runnable runnable = () -> {
-//                    gameRunning = gameType.createGameInstance(players.size(), null);
-//                    gameRunning.reset(players);
-//                    gameRunning.setTurnPause(200);
-//                    gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
-//                    setFrameProperties();
-//                    guiUpdater = new Timer(100, event -> updateGUI());
-//                    guiUpdater.start();
-//                    buildInterface(false);
-//                    gameRunning.setPaused(paused);
-//                    gameRunning.run();
-//                    guiUpdater.stop();
-//                    updateGUI();
-//                };
-//                gameThread = new Thread(runnable);
-//                gameThread.start();
-//                simulate();
-//            });
-//        } else
-//        else {
-//            for (ActionListener actionListener : next.getActionListeners()) {
-//                next.removeActionListener(actionListener);
-//            }
-//            next.addActionListener(e -> {
-//                this.humanInputQueue = new ActionController();
-//                getContentPane().removeAll();
-//                GuideContext.deckForSimulateIndex += 1;
-//                startGame.setText(started ? "Play!" : "Stop!");
-//                simulate();
-//            });
+//        List<AbstractPlayer> players = new ArrayList<>();
+//        for (int i=0; i<preGameState.getPlayerCount() - 1; ++i) {
+//            players.add(PlayerType.valueOf("HumanGUIPlayer").createPlayerInstance(seed, humanInputQueue, null));
 //        }
-
-
-//        ActionListener startTrigger = e -> {
-//            Runnable runnable = () -> {
-//                gameRunning = gameType.createGameInstance(players.size(), null);
-//                gameRunning.reset(players);
-//                gameRunning.setTurnPause(200);
-//                gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
-//                setFrameProperties();
-//                guiUpdater = new Timer(100, event -> updateGUI());
-//                guiUpdater.start();
-//                buildInterface(false);
-//                gameRunning.setPaused(paused);
-//                gameRunning.run();
-//                guiUpdater.stop();
-//                updateGUI();
-//            };
-//            gameThread = new Thread(runnable);
-//            gameThread.start();
-//        };
-//        buttonPanel.remove(startGame);
-//        JButton finalStartGame = startGame;
-//        startGame.addActionListener(e -> {
-//            if (started) {
-//                startTrigger.actionPerformed(e);
-//            }
-//            finalStartGame.setText(started ? "Stop!" : "Play!");
-//        });
-//        if (Objects.isNull(buttonPanel)) {
-//        buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
-//        }
-//        buttonPanel.add(startGame);
+//        players.add(new MCTSPlayer());
+        playersForSimulate = new ArrayList<>(preGameState.getSimulateInfo().getPlayers().stream()
+                .map(x -> PlayerType.valueOf(x).createPlayerInstance(seed, humanInputQueue, null)).toList());
         if (end) {
             buttonPanel.add(replay);
         }
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-        DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getStrategy()));
+        if (StringUtils.isNotBlank(preGameState.getStrategy())) {
+            DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getStrategy()));
+        }
         updateGUI();
-//        gameResult = Game.runOne(gameType, null, players, System.currentTimeMillis(), false, null, null, 1);
-//        buildInterface(true);
-//        updateGUI();
-//        System.out.println("simulateEnd");
-//        GuideContext.deckForSimulateIndex += 1;
-//        DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getStrategy()));
     }
 
     /**

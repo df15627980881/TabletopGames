@@ -6,114 +6,17 @@
     "visibilityMode": "VISIBLE_TO_ALL",
     "cards": [
       {
-        "type": "King",
-        "suite": "Hearts"
-      },
-      {
-        "type": "Queen",
-        "suite": "Hearts"
-      },
-      {
-        "type": "Number",
-        "suite": "Diamonds",
-        "number": "2"
-      },
-      {
-        "type": "Number",
-        "suite": "Hearts",
-        "number": "2"
-      },
-      {
-        "type": "Ace",
-        "suite": "Clubs"
-      },
-      {
-        "type": "King",
-        "suite": "Diamonds"
-      },
-      {
-        "type": "Number",
-        "suite": "Diamonds",
-        "number": "7"
-      },
-      {
-        "type": "Number",
-        "suite": "Hearts",
-        "number": "10"
-      },
-      {
-        "type": "Number",
-        "suite": "Spades",
-        "number": "5"
-      },
-      {
-        "type": "Number",
-        "suite": "Spades",
-        "number": "8"
-      },
-      {
-        "type": "Number",
-        "suite": "Spades",
-        "number": "4"
-      },
-      {
-        "type": "Number",
-        "suite": "Hearts",
-        "number": "4"
-      },
-      {
-        "type": "Number",
-        "suite": "Diamonds",
-        "number": "3"
-      },
-      {
-        "type": "Number",
-        "suite": "Clubs",
-        "number": "2"
-      },
-      {
-        "type": "Jack",
-        "suite": "Hearts"
-      },
-      {
-        "type": "King",
-        "suite": "Spades"
-      },
-      {
         "type": "Number",
         "suite": "Clubs",
         "number": "6"
       },
       {
-        "type": "Ace",
-        "suite": "Diamonds"
-      },
-      {
         "type": "Number",
         "suite": "Hearts",
-        "number": "9"
+        "number": "7"
       },
       {
-        "type": "Number",
-        "suite": "Diamonds",
-        "number": "9"
-      },
-      {
-        "type": "Number",
-        "suite": "Clubs",
-        "number": "10"
-      },
-      {
-        "type": "Number",
-        "suite": "Diamonds",
-        "number": "8"
-      },
-      {
-        "type": "Jack",
-        "suite": "Diamonds"
-      },
-      {
-        "type": "Jack",
+        "type": "Queen",
         "suite": "Spades"
       },
       {
@@ -123,51 +26,42 @@
       },
       {
         "type": "Number",
-        "suite": "Spades",
-        "number": "6"
-      },
-      {
-        "type": "Queen",
-        "suite": "Diamonds"
-      },
-      {
-        "type": "Number",
-        "suite": "Clubs",
+        "suite": "Diamonds",
         "number": "9"
       },
       {
         "type": "Number",
-        "suite": "Diamonds",
-        "number": "6"
-      },
-      {
-        "type": "Number",
         "suite": "Spades",
-        "number": "7"
-      },
-      {
-        "type": "Number",
-        "suite": "Diamonds",
         "number": "4"
       },
       {
         "type": "Number",
-        "suite": "Spades",
-        "number": "2"
+        "suite": "Diamonds",
+        "number": "3"
       },
       {
-        "type": "King",
-        "suite": "Clubs"
+        "type": "Number",
+        "suite": "Spades",
+        "number": "5"
       },
       {
         "type": "Number",
         "suite": "Hearts",
-        "number": "5"
+        "number": "2"
       },
       {
         "type": "Number",
-        "suite": "Diamonds",
-        "number": "5"
+        "suite": "Clubs",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "6"
+      },
+      {
+        "type": "King",
+        "suite": "Spades"
       },
       {
         "type": "Number",
@@ -175,14 +69,26 @@
         "number": "10"
       },
       {
+        "type": "King",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Ace",
+        "suite": "Hearts"
+      },
+      {
         "type": "Number",
-        "suite": "Hearts",
-        "number": "6"
+        "suite": "Clubs",
+        "number": "3"
+      },
+      {
+        "type": "Queen",
+        "suite": "Hearts"
       },
       {
         "type": "Number",
         "suite": "Hearts",
-        "number": "7"
+        "number": "3"
       },
       {
         "type": "Number",
@@ -190,22 +96,62 @@
         "number": "9"
       },
       {
-        "type": "Ace",
-        "suite": "Hearts"
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "5"
       },
       {
-        "type": "Queen",
-        "suite": "Spades"
+        "type": "Ace",
+        "suite": "Diamonds"
       },
       {
         "type": "Number",
-        "suite": "Clubs",
+        "suite": "Diamonds",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
         "number": "7"
       },
       {
         "type": "Number",
         "suite": "Clubs",
-        "number": "3"
+        "number": "10"
+      },
+      {
+        "type": "King",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "7"
       },
       {
         "type": "Number",
@@ -214,31 +160,8 @@
       },
       {
         "type": "Number",
-        "suite": "Hearts",
-        "number": "8"
-      },
-      {
-        "type": "Number",
-        "suite": "Hearts",
-        "number": "3"
-      },
-      {
-        "type": "Number",
-        "suite": "Clubs",
-        "number": "4"
-      },
-      {
-        "type": "Queen",
-        "suite": "Clubs"
-      },
-      {
-        "type": "Ace",
-        "suite": "Spades"
-      },
-      {
-        "type": "Number",
-        "suite": "Clubs",
-        "number": "8"
+        "suite": "Diamonds",
+        "number": "2"
       },
       {
         "type": "Jack",
@@ -248,8 +171,97 @@
         "type": "Number",
         "suite": "Diamonds",
         "number": "10"
+      },
+      {
+        "type": "Jack",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "10"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "6"
+      },
+      {
+        "type": "Ace",
+        "suite": "Spades"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "9"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "8"
+      },
+      {
+        "type": "Jack",
+        "suite": "Spades"
+      },
+      {
+        "type": "King",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Jack",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Queen",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "9"
+      },
+      {
+        "type": "Ace",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Queen",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "8"
       }
     ]
   },
-  "strategy": "When the dealer\u0027s up card is a fair one, 2 or 3, the player should stop with a total of 13 or higher."
+  "strategy": "When the dealer\u0027s upcard is a good one, a 7, 8, 9, 10-card, or ace for example, the player should not stop drawing until a total of 17 or more is reached.",
+  "simulateInfo": {
+    "beginActionIndex": 0,
+    "isSuccess": "method1",
+    "startText": "Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!",
+    "successText": "Congratulations! It seems you have mastered this strategy.",
+    "failText": "Oops! You can try it again.",
+    "players": [
+      "HumanGUIPlayer",
+      "HumanGUIPlayer",
+      "MCTS"
+    ]
+  }
 }

@@ -399,7 +399,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                         boolean[] visibility = new boolean[game.getPlayers().size()];
                         Arrays.fill(visibility, true);
                         visibility[0] = false;
-                        ArrayList<boolean[]> elementVisibility = (ArrayList<boolean[]>) playerDeck.getElementVisibility();
+                        List<boolean[]> elementVisibility = (LinkedList<boolean[]>) playerDeck.getElementVisibility();
                         // Because PartialObservableDeck#add method add the element at the first place......
                         elementVisibility.set(0, visibility);
                         playerDeck.setVisibility(elementVisibility);

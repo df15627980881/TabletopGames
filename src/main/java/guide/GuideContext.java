@@ -33,6 +33,8 @@ public class GuideContext {
      */
     public static GuideState guideStage;
 
+    public static SimulateConditionCaller caller;
+
     public enum GuideState {
         GUIDE_CLOSE("Guide Close"),
         SHOW_GAME_RULE("Show Game Rule"),

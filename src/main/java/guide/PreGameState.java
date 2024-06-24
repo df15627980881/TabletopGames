@@ -14,6 +14,8 @@ public class PreGameState<T extends Card> {
 
     private List<Pair<Long, AbstractAction>> playerIdAndActions;
 
+    private SimulateInfo simulateInfo;
+
     private Deck<T> drawDeck;
 
     /**
@@ -27,6 +29,67 @@ public class PreGameState<T extends Card> {
     private String strategy;
 
     private Long seed;
+
+    public static class SimulateInfo {
+
+        /**
+         * Indicate which action we want new user to simulate
+         */
+        private int beginActionIndex;
+        private String isSuccess;
+        private String startText;
+        private String successText;
+        private String failText;
+        private List<String> players;
+
+        public int getBeginActionIndex() {
+            return beginActionIndex;
+        }
+
+        public void setBeginActionIndex(int beginActionIndex) {
+            this.beginActionIndex = beginActionIndex;
+        }
+
+        public String getIsSuccess() {
+            return isSuccess;
+        }
+
+        public void setIsSuccess(String isSuccess) {
+            this.isSuccess = isSuccess;
+        }
+
+        public String getStartText() {
+            return startText;
+        }
+
+        public void setStartText(String startText) {
+            this.startText = startText;
+        }
+
+        public String getSuccessText() {
+            return successText;
+        }
+
+        public void setSuccessText(String successText) {
+            this.successText = successText;
+        }
+
+        public String getFailText() {
+            return failText;
+        }
+
+        public void setFailText(String failText) {
+            this.failText = failText;
+        }
+
+        public List<String> getPlayers() {
+            return players;
+        }
+
+        public void setPlayers(List<String> players) {
+            this.players = players;
+        }
+    }
 
     public List<Pair<Long, AbstractAction>> getPlayerIdAndActions() {
         return playerIdAndActions;
@@ -99,5 +162,13 @@ public class PreGameState<T extends Card> {
 
     public void resetIndexx() {
         this.setIndexx(0);
+    }
+
+    public SimulateInfo getSimulateInfo() {
+        return simulateInfo;
+    }
+
+    public void setSimulateInfo(SimulateInfo simulateInfo) {
+        this.simulateInfo = simulateInfo;
     }
 }

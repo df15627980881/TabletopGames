@@ -44,7 +44,7 @@ public class LLGUIListener implements IGameListener {
             parent.repaint();
 
             // Message for pause and clarity
-            if (GuideContext.guideStage != GuideContext.GuideState.SHOW_GAME_RESULT) {
+            if (!(GuideContext.guideStage == GuideContext.GuideState.SHOW_GAME_RESULT || GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS)) {
                 JOptionPane.showMessageDialog(parent, "Round over! Winners: " + winners.toString() + ". Next round begins!");
             }
         }

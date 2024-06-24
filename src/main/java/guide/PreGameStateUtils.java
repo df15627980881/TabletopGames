@@ -16,10 +16,7 @@ import org.json.simple.JSONObject;
 import utilities.JSONUtils;
 import utilities.Pair;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PreGameStateUtils {
 
@@ -73,6 +70,24 @@ public class PreGameStateUtils {
         }
 
         deck.reverse();
+
+        JSONObject simulateInfoObj = (JSONObject) jsonObject.get("simulateInfo");
+        if (Objects.nonNull(simulateInfoObj)) {
+            PreGameState.SimulateInfo simulateInfo = new PreGameState.SimulateInfo();
+            simulateInfo.setBeginActionIndex(((Long) simulateInfoObj.get("beginActionIndex")).intValue());
+            simulateInfo.setIsSuccess((String) simulateInfoObj.get("isSuccess"));
+            simulateInfo.setStartText((String) simulateInfoObj.get("startText"));
+            simulateInfo.setSuccessText((String) simulateInfoObj.get("successText"));
+            simulateInfo.setFailText((String) simulateInfoObj.get("failText"));
+            JSONArray playerJA = (JSONArray) simulateInfoObj.get("players");
+            List<String> players = new ArrayList<>();
+            for (Object o : playerJA) {
+                String player = (String) o;
+                players.add(player);
+            }
+            simulateInfo.setPlayers(players);
+            result.setSimulateInfo(simulateInfo);
+        }
 
         result.setPlayerCount(playerCount);
         result.setPlayerIdAndActions(actions);
@@ -170,6 +185,24 @@ public class PreGameStateUtils {
 //
             deck.reverse();
             drawDecks.add(deck);
+        }
+
+        JSONObject simulateInfoObj = (JSONObject) jsonObject.get("simulateInfo");
+        if (Objects.nonNull(simulateInfoObj)) {
+            PreGameState.SimulateInfo simulateInfo = new PreGameState.SimulateInfo();
+            simulateInfo.setBeginActionIndex(((Long) simulateInfoObj.get("beginActionIndex")).intValue());
+            simulateInfo.setIsSuccess((String) simulateInfoObj.get("isSuccess"));
+            simulateInfo.setStartText((String) simulateInfoObj.get("startText"));
+            simulateInfo.setSuccessText((String) simulateInfoObj.get("successText"));
+            simulateInfo.setFailText((String) simulateInfoObj.get("failText"));
+            JSONArray playerJA = (JSONArray) simulateInfoObj.get("players");
+            List<String> players = new ArrayList<>();
+            for (Object o : playerJA) {
+                String player = (String) o;
+                players.add(player);
+            }
+            simulateInfo.setPlayers(players);
+            result.setSimulateInfo(simulateInfo);
         }
 
         result.setPlayerCount(playerCount);
