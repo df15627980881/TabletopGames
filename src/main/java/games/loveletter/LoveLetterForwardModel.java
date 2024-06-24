@@ -112,7 +112,8 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
             // new game set up
             for (int i = 0; i < llgs.getNPlayers(); i++) {
                 boolean[] visible = new boolean[llgs.getNPlayers()];
-                if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
+                if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN
+                        || GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
                     // In guide, we make the player0 as new user play.
                     Arrays.fill(visible, i == 0);
                 } else if (llgs.getCoreGameParameters().partialObservable) {

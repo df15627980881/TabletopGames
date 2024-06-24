@@ -366,7 +366,6 @@ public class Game {
      * @param newRandomSeed - random seed is updated in the game parameters object and used throughout the game.
      */
     public final void reset(List<AbstractPlayer> players, long newRandomSeed) {
-        List<PreGameState> ss = GuideContext.deckForSimulate;
         gameState.reset(newRandomSeed);
         forwardModel.abstractSetup(gameState);
         if (players.size() == gameState.getNPlayers()) {
