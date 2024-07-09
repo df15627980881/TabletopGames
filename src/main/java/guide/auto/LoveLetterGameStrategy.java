@@ -27,6 +27,8 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static games.loveletter.cards.LoveLetterCard.CardType.Princess;
+
 public class LoveLetterGameStrategy implements IGameStrategy {
 
     public static Map<String, Game> strategyTextAndMechanism = new HashMap<>();
@@ -145,7 +147,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
          **/
 
         /**
-        // case2: 当你手中握着 Baron 时，你应该舍弃手中较小的牌
+        // case2: When you hold a Baron, you should discard the small card in your hand, please try not to lose the game.
         initGame = resetActionForGame(game, seed);
         for (int i=0; i<history.size(); ++i) {
             AbstractAction action = history.get(i).b;
@@ -165,7 +167,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
                     PreGameState.SimulateInfo simulateInfo = new PreGameState.SimulateInfo();
                     simulateInfo.setBeginActionIndex(i);
                     simulateInfo.setIsSuccess("method3");
-                    simulateInfo.setStartText("When you hold a Baron, you should discard the smaller card in your hand, please try not to lose the game.");
+                    simulateInfo.setStartText("When you hold a Baron, you should discard the small card in your hand, please try not to lose the game.");
                     simulateInfo.setSuccessText("Congratulations! It seems you have mastered this strategy.");
                     simulateInfo.setFailText("Oops! You can try it again.");
                     List<String> players = new ArrayList<>();
@@ -180,7 +182,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
         }
          **/
 /**
-        // case3: 在游戏初期，使用Guard可以猜中对手。为了成功增加胜算，玩家通常会在游戏开始时猜出较低的牌（每张 2-5 张牌出现两次），以提高成功率
+        // case3: In the early stages of the game, using a Guard can guess an opponent's card. To increase the chances of success, players often guess lower cards (each valued 2-5, appearing twice) at the start of the game to improve their success rate.
         initGame = resetActionForGame(game, seed);
         for (int i=0; i<history.size(); ++i) {
             AbstractAction action = history.get(i).b;
@@ -213,7 +215,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
         }
  **/
 
-        // case4: 当对手对你使用King时，他手上的牌对于你来说也是已知的，试着击败他吧
+        // case4: When your opponent uses a King on you, the card in their hand becomes known to you as well, so try to defeat them.
         initGame = resetActionForGame(game, seed);
         for (int i=0; i<history.size(); ++i) {
             AbstractAction action = history.get(i).b;
@@ -272,7 +274,10 @@ public class LoveLetterGameStrategy implements IGameStrategy {
             cardTypesAppear.add(playCard.getCardType());
         }
         System.out.println(vis.size() + " " + history.size() + " " + cardTypesAppear.size());
-        if (vis.size() == 8 && cardTypesAppear.size() == 8) {
+//        if (vis.size() == 8 && cardTypesAppear.size() == 8) {
+//            gameForMechanism = new Pair<>(seed, game);
+//        }
+        if (vis.size() == 7 && cardTypesAppear.size() == 7 && !vis.containsKey(Princess.name())) {
             gameForMechanism = new Pair<>(seed, game);
         }
     }

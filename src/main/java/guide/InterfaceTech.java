@@ -177,8 +177,10 @@ public class InterfaceTech extends GUI {
                 guiUpdater.start();
                 buildInterface(false);
                 gameRunning.setPaused(paused);
-                System.out.println("GuideContext.deckForSimulateIndex: " + GuideContext.deckForSimulateIndex);
-                DialogUtils.show(DialogUtils.create(GuideContext.frame, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getSimulateInfo().getStartText()));
+//                System.out.println("GuideContext.deckForSimulateIndex: " + GuideContext.deckForSimulateIndex);
+//                if (preGameState.getIndexx() == 0) {
+//                    DialogUtils.show(DialogUtils.create(GuideContext.frame, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getSimulateInfo().getStartText()));
+//                }
                 if (Objects.nonNull(preGameState) && Objects.nonNull(preGameState.getSimulateInfo())) {;
                     List<Pair<Long, AbstractAction>> playerIdAndActions = preGameState.getPlayerIdAndActions();
                     for (int i = 0; i < preGameState.getSimulateInfo().getBeginActionIndex(); i++) {
@@ -297,6 +299,14 @@ public class InterfaceTech extends GUI {
         SwingWorker<Void, AbstractAction> worker = new SwingWorker<>() {
             @Override
             protected Void doInBackground() throws Exception {
+                for (ActionListener actionListener : next.getActionListeners()) {
+                    next.removeActionListener(actionListener);
+                }
+                next.addActionListener(e -> {
+                    synchronized (lock) {
+                        lock.notifyAll();
+                    }
+                });
                 for (AbstractAction action: actions) {
                     synchronized (gameRunning) {
                         currentPlayer = gameRunning.getGameState().getCurrentPlayer();
@@ -319,7 +329,7 @@ public class InterfaceTech extends GUI {
             @Override
             protected void process(List<AbstractAction> chunks) {
                 for (AbstractAction action : chunks) {
-                    System.out.println(action.getString(gameRunning.getGameState()));
+//                    System.out.println(action.getString(gameRunning.getGameState()));
                     ArrayList<JDialog> dialogs = action.createDialogWithFeedbackForNewbie(
                             InterfaceTech.this, gameRunning.getGameState(), currentPlayer);
                     if (CollectionUtils.isNotEmpty(dialogs)) {
@@ -351,9 +361,9 @@ public class InterfaceTech extends GUI {
                     });
                     updateGUI();
                     gameRunning.getGameState().setDialogs(new ArrayList<>());
-                    synchronized (lock) {
-                        lock.notifyAll();
-                    }
+//                    synchronized (lock) {
+//                        lock.notifyAll();
+//                    }
                     break;
                 }
             }
@@ -723,10 +733,10 @@ public class InterfaceTech extends GUI {
             buildInterface(false);
             end = false;
             getContentPane().remove(replay);
-            if (isFirstEnterStrategy) {
-                DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!"));
-                isFirstEnterStrategy = false;
-            }
+//            if (isFirstEnterStrategy) {
+//                DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!"));
+//                isFirstEnterStrategy = false;
+//            }
             startTrigger.actionPerformed(e);
             simulate();
         });
