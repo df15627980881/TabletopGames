@@ -464,7 +464,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                     playerViewBorders[cur] = title;
                     playerHand.setBorder(title);
                     playerHands[cur] = playerHand;
-//                    frame.updateGUI();
+                    frame.updateGUI();
                     DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                             "Now the dealer shows the cards in his hand."));
                     try {
