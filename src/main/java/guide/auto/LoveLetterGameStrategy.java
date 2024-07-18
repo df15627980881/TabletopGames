@@ -114,7 +114,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
         // case1: When another player plays a card, you can infer the cards in their hand from the outcome and use some cards to defeat them.
         // Player 1 played a Baron, and Player 2, who had a Countess in hand, lost the game. It can be inferred that Player 1's card was the Princess, and he can be defeated using the Prince.
         Game initGame = resetActionForGame(game, seed);
-        /**
+
         for (int i=0; i<history.size(); ++i) {
             AbstractAction action = history.get(i).b;
             LoveLetterGameState currentGS = (LoveLetterGameState) initGame.getGameState();
@@ -144,9 +144,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
             }
             initGame.processOneAction(action);
         }
-         **/
 
-        /**
         // case2: When you hold a Baron, you should discard the small card in your hand, please try not to lose the game.
         initGame = resetActionForGame(game, seed);
         for (int i=0; i<history.size(); ++i) {
@@ -180,8 +178,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
             }
             initGame.processOneAction(action);
         }
-         **/
-/**
+
         // case3: In the early stages of the game, using a Guard can guess an opponent's card. To increase the chances of success, players often guess lower cards (each valued 2-5, appearing twice) at the start of the game to improve their success rate.
         initGame = resetActionForGame(game, seed);
         for (int i=0; i<history.size(); ++i) {
@@ -213,7 +210,7 @@ public class LoveLetterGameStrategy implements IGameStrategy {
             }
             initGame.processOneAction(action);
         }
- **/
+
 
         // case4: When your opponent uses a King on you, the card in their hand becomes known to you as well, so try to defeat them.
         initGame = resetActionForGame(game, seed);

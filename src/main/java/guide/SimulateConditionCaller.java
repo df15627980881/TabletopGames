@@ -74,7 +74,7 @@ public class SimulateConditionCaller {
         if (action instanceof GuardAction) {
             GuardAction playCard = (GuardAction) action;
             Assert.assertEquals(player, playCard.getPlayerID());
-            if (playCard.getPlayerID() == 0) {
+            if (playCard.getPlayerID() == 0 && playCard.getTargetCardType().getValue() >= 2 && playCard.getTargetCardType().getValue() <= 5) {
                 return new Pair<>(true, true);
             } else {
                 return new Pair<>(true, false);

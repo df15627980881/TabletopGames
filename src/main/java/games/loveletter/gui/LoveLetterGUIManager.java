@@ -397,6 +397,10 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
                     actionButtons[i].setButtonAction(null, "");
                 }
             }
+        } else if (gameState.getGameStatus() == CoreConstants.GameResult.GAME_END) {
+            for (ActionButton actionButton : actionButtons) {
+                actionButton.setVisible(false);
+            }
         }
     }
 

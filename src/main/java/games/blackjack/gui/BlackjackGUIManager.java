@@ -297,7 +297,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
                 if (MapUtils.isEmpty(playerIdAndDeck)) {
                     DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
-                            "A game can consist of 2-7 players, with player " + bjgs.getDealerPlayer() + " being the dealer"));
+                            "A game can consist of 2 to 7 players. In this example, we assume there are four players and one dealer, with Player " + bjgs.getDealerPlayer() + " acting as the dealer."));
                 }
 
                 parent.setBackground(ImageIO.GetInstance().getImage("data/FrenchCards/table-background.jpg"));

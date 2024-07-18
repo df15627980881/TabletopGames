@@ -105,8 +105,8 @@ public class GuideGenerator {
         RandomPlayer player1 = new RandomPlayer();
         RandomPlayer player2 = new RandomPlayer();
         RandomPlayer player3 = new RandomPlayer();
-        RandomPlayer player4 = new RandomPlayer();
-        RandomPlayer player5 = new RandomPlayer();
+//        RandomPlayer player4 = new RandomPlayer();
+//        RandomPlayer player5 = new RandomPlayer();
 
         ArrayList<AbstractPlayer> players = new ArrayList<>(Lists.newArrayList(player1, player2, player3
         ));

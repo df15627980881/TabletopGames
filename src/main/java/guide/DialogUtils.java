@@ -10,9 +10,9 @@ public class DialogUtils {
         tutorialDialog.setSize(width, height);
         tutorialDialog.setLayout(new BorderLayout());
         tutorialDialog.setModal(true);
-        Font font = new Font("Arial", Font.BOLD, 20);
+//        Font font = new Font("Arial", Font.BOLD, 10);
         JLabel label = new JLabel(labelText);
-        label.setFont(font);
+//        label.setFont(font);
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         tutorialDialog.add(label, BorderLayout.CENTER);
 
@@ -57,15 +57,15 @@ public class DialogUtils {
 
         Container contentPane = tutorialDialog.getContentPane();
 
-        Font font = new Font("Arial", Font.BOLD, 20);
-        label.setFont(font);
+//        Font font = new Font("Arial", Font.BOLD, 10);
+//        label.setFont(font);
 
         JLabel label1 = new JLabel("Now Let's start. Here'are the rules for game " + gameName);
         JLabel label2 = new JLabel(ruleText);
         label1.setAlignmentX(Component.CENTER_ALIGNMENT);
         label2.setAlignmentX(Component.CENTER_ALIGNMENT);
-        label1.setFont(font);
-        label2.setFont(font);
+//        label1.setFont(font);
+//        label2.setFont(font);
 
         contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
         contentPane.add(label1);

@@ -162,6 +162,7 @@ public class InterfaceTech extends GUI {
 
         startTrigger = e -> {
             Runnable runnable = () -> {
+                System.out.println("GuideContext.deckForSimulateIndex: " + GuideContext.deckForSimulateIndex);
                 this.preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
                 next.setEnabled(false);
                 end = false;
@@ -170,7 +171,7 @@ public class InterfaceTech extends GUI {
                 gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
                 GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex).resetIndexx();
                 gameRunning.reset(playersForSimulate);
-                gameRunning.setTurnPause(200);
+                gameRunning.setTurnPause(500);
                 gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
                 setFrameProperties();
                 guiUpdater = new Timer(100, event -> updateGUI());
@@ -181,15 +182,19 @@ public class InterfaceTech extends GUI {
 //                if (preGameState.getIndexx() == 0) {
 //                    DialogUtils.show(DialogUtils.create(GuideContext.frame, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getSimulateInfo().getStartText()));
 //                }
+                DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, this.preGameState.getSimulateInfo().getStartText()));
                 if (Objects.nonNull(preGameState) && Objects.nonNull(preGameState.getSimulateInfo())) {;
                     List<Pair<Long, AbstractAction>> playerIdAndActions = preGameState.getPlayerIdAndActions();
                     for (int i = 0; i < preGameState.getSimulateInfo().getBeginActionIndex(); i++) {
+//                    for (int i = 0; i < 0; i++) {
 //                        LoveLetterGameState gs = (LoveLetterGameState) gameRunning.getGameState();
 //                        gs.getPlayerHandCards().get(1).getComponents().forEach(System.out::println);
 //                        System.out.println("---");
                         gameRunning.processOneAction(playerIdAndActions.get(i).b);
+                        updateGUI();
                     }
                 }
+                updateGUI();
                 System.out.println(gameRunning.getGameState().getGameStatus());
                 gameRunning.run();
                 end = true;
@@ -376,6 +381,7 @@ public class InterfaceTech extends GUI {
         return worker;
     }
 
+    @Deprecated
     public SwingWorker<Void, AbstractAction> processActionsAndIntroduce() {
 //        listenForDecisions();
         SwingWorker<Void, AbstractAction> worker = new SwingWorker<>() {
@@ -421,13 +427,13 @@ public class InterfaceTech extends GUI {
                                 InterfaceTech.this, gameRunning.getGameState(), currentPlayer);
                         if (CollectionUtils.isNotEmpty(dialogs)) {
                             dialogs.forEach(dialog -> {
-                                dialog.setLocationRelativeTo(InterfaceTech.this); // 相对主窗口居中
+                                dialog.setLocationRelativeTo(InterfaceTech.this);
                                 dialog.setVisible(true);
                             });
                         }
 //                    updateGUI();
                         gameRunning.getGameState().getDialogs().forEach(x -> {
-                            x.setLocationRelativeTo(InterfaceTech.this); // 相对主窗口居中
+                            x.setLocationRelativeTo(InterfaceTech.this);
                             x.setVisible(true);
 //                        updateGUI();
                         });
@@ -667,6 +673,10 @@ public class InterfaceTech extends GUI {
             playersForSimulate = new ArrayList<>(this.preGameState.getSimulateInfo().getPlayers().stream()
                     .map(x -> PlayerType.valueOf(x).createPlayerInstance(seed, humanInputQueue, null)).toList());
             replay.addActionListener(e -> {
+//                if (isFirstEnterStrategy) {
+//                    DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, this.preGameState.getSimulateInfo().getStartText()));
+//                    isFirstEnterStrategy = false;
+//                }
                 GuideContext.deckForSimulateIndex -= 1;
                 Assert.assertTrue(GuideContext.deckForSimulateIndex >= 0);
                 end = false;
@@ -677,10 +687,13 @@ public class InterfaceTech extends GUI {
                 gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
                 setFrameProperties();
                 buildInterface(false);
+                updateGUI();
                 startTrigger.actionPerformed(e);
+                updateGUI();
                 next.setEnabled(false);
             });
             next.addActionListener(e -> {
+//                isFirstEnterStrategy = true;
                 gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
                 gameRunning.reset(playersForSimulate);
                 gameRunning.setTurnPause(200);
@@ -689,11 +702,11 @@ public class InterfaceTech extends GUI {
                 buildInterface(false);
                 end = false;
                 getContentPane().remove(replay);
-                if (isFirstEnterStrategy) {
+//                if (isFirstEnterStrategy) {
 //                    DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, "Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!"));
-                    DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, this.preGameState.getSimulateInfo().getStartText()));
-                    isFirstEnterStrategy = false;
-                }
+//                    DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, this.preGameState.getSimulateInfo().getStartText()));
+//                    isFirstEnterStrategy = false;
+//                }
                 startTrigger.actionPerformed(e);
                 simulate();
             });
@@ -711,6 +724,7 @@ public class InterfaceTech extends GUI {
         }
         playersForSimulate.add(new MCTSPlayer());
         replay.addActionListener(e -> {
+            isFirstEnterStrategy = true;
             GuideContext.deckForSimulateIndex -= 1;
             Assert.assertTrue(GuideContext.deckForSimulateIndex >= 0);
             end = false;
@@ -802,6 +816,7 @@ public class InterfaceTech extends GUI {
                 .map(x -> PlayerType.valueOf(x).createPlayerInstance(seed, humanInputQueue, null)).toList());
         if (end) {
             buttonPanel.add(replay);
+            isFirstEnterStrategy = true;
         }
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
         if (StringUtils.isNotBlank(preGameState.getStrategy())) {
