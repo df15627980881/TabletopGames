@@ -61,7 +61,8 @@ public class BlackjackForwardModel extends StandardForwardModel {
             }
         }
 
-        if (GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
+        if (GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS
+                || GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
             PartialObservableDeck<FrenchCard> playerDeck = bjgs.playerDecks.get(bjgs.getNPlayers()-1);
             // need allocate new address because it will modify bjgs directly by shallow copy
             visibility = new boolean[firstState.getNPlayers()];

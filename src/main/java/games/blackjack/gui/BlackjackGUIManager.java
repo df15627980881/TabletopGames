@@ -430,10 +430,27 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 //            frame.updateGUI();
             worker.addPropertyChangeListener(evt -> {
                 if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
-                    parent.removeAll();
                     BlackjackGameState gs = (BlackjackGameState) game.getGameState();
+                    boolean[] visibility = new boolean[game.getPlayers().size()];
+                    Arrays.fill(visibility, true);
+                    List<boolean[]> elementVisibility = gs.getPlayerDecks().get(gs.getDealerPlayer()).getElementVisibility();
+                    elementVisibility.set(0, visibility);
+                    gs.getPlayerDecks().get(gs.getDealerPlayer()).setVisibility(elementVisibility);
+
+                    parent.removeAll();
                     int cur = game.getPlayers().size() - 1;
                     BlackjackParameters gameParameters = (BlackjackParameters) gs.getGameParameters();
+//                    visibility = new boolean[gs.getNPlayers()];
+//                    Arrays.fill(visibility, true);
+//                    PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + gs.getDealerPlayer() + " deck", gs.getDealerPlayer(), visibility);
+//                    playerDeck.add(gs.getPlayerDecks().get(gs.getDealerPlayer()));
+//                    elementVisibility = (LinkedList<boolean[]>) playerDeck.getElementVisibility();
+//                    elementVisibility.set(0, visibility);
+//                    playerDeck.setVisibility(elementVisibility);
+//                    if (deck.get(i).type == FrenchCard.FrenchCardType.Ace) {
+//                        playerHands[i] = new BlackjackPlayerView(playerDeck, i, "data/FrenchCards/", "It can be seen as Point 11");
+//                    ddd
+//                    BlackjackPlayerView playerHand = new BlackjackPlayerView(playerDeck, cur, gameParameters.getDataPath());
                     BlackjackPlayerView playerHand = new BlackjackPlayerView(gs.getPlayerDecks().get(cur), cur, gameParameters.getDataPath());
                     playerHand.setOpaque(false);
                     // Get agent name
@@ -447,7 +464,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                     playerViewBorders[cur] = title;
                     playerHand.setBorder(title);
                     playerHands[cur] = playerHand;
-                    frame.updateGUI();
+//                    frame.updateGUI();
                     DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                             "Now the dealer shows the cards in his hand."));
                     try {
@@ -501,7 +518,6 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                     parent.revalidate();
                     parent.setVisible(true);
                     parent.repaint();
-
                     processDealerAction(frame, dealerActions);
 //                    generateSoftHand(frame);
                 }
