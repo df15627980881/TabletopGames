@@ -93,7 +93,7 @@ public class PreGameStateUtils {
         result.setPlayerIdAndActions(actions);
         result.setDrawDeck(deck);
         result.setGameResultDesc(gameResultDesc);
-        result.setStrategy(strategy);
+//        result.setStrategy(strategy);
         return result;
     }
 
@@ -209,7 +209,7 @@ public class PreGameStateUtils {
         result.setPlayerIdAndActions(actions);
         result.setDrawDecks(drawDecks);
         result.setGameResultDesc(gameResultDesc);
-        result.setStrategy(strategy);
+//        result.setStrategy(strategy);
         result.setSeed(seed);
         result.setIndexx(0);
 

@@ -819,9 +819,9 @@ public class InterfaceTech extends GUI {
             isFirstEnterStrategy = true;
         }
         getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-        if (StringUtils.isNotBlank(preGameState.getStrategy())) {
-            DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getStrategy()));
-        }
+//        if (StringUtils.isNotBlank(preGameState.getStrategy())) {
+//            DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, preGameState.getStrategy()));
+//        }
         updateGUI();
     }
 

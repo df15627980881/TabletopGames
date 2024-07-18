@@ -255,7 +255,7 @@
   "simulateInfo": {
     "beginActionIndex": 0,
     "isSuccess": "method1",
-    "startText": "Now, here are some common playing strategies recommended to you, please try to have two players win the dealer at the same time!",
+    "startText": "When the dealer\u0027s upcard is a poor one, 4, 5, or 6, the player should stop drawing as soon as he gets a total of 12 or higher. The strategy here is never to take a card if there is any chance of going bust. The desire with this poor holding is to let the dealer hit and hopefully go over 21.",
     "successText": "Congratulations! It seems you have mastered this strategy.",
     "failText": "Oops! You can try it again.",
     "players": [

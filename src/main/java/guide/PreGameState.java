@@ -26,7 +26,7 @@ public class PreGameState<T extends Card> {
 
     private String gameResultDesc;
 
-    private String strategy;
+//    private String strategy;
 
     private Long seed;
 
@@ -123,13 +123,13 @@ public class PreGameState<T extends Card> {
         this.playerCount = playerCount;
     }
 
-    public String getStrategy() {
-        return strategy;
-    }
-
-    public void setStrategy(String strategy) {
-        this.strategy = strategy;
-    }
+//    public String getStrategy() {
+//        return strategy;
+//    }
+//
+//    public void setStrategy(String strategy) {
+//        this.strategy = strategy;
+//    }
 
     public Long getSeed() {
         return seed;

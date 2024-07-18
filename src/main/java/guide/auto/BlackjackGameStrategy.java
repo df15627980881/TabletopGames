@@ -129,6 +129,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                     System.out.println("1: " + pair.a + pair.b);
                 }
                 assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+                simulateInfo.setStartText(gameResultStrategyText01);
                 strategyTextAndSimulate.put(simulateStrategyText01, new Pair<>(simulateInfo,game));
                 return;
             } else {
@@ -175,6 +176,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                     System.out.println("2: " + pair.a + pair.b);
                 }
                 assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+                simulateInfo.setStartText(simulateStrategyText02);
                 strategyTextAndSimulate.put(simulateStrategyText02, new Pair<>(simulateInfo,game));
                 return;
             } else {
@@ -221,6 +223,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                     System.out.println("3: " + pair.a + pair.b);
                 }
                 assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+                simulateInfo.setStartText(simulateStrategyText03);
                 strategyTextAndSimulate.put(simulateStrategyText03, new Pair<>(simulateInfo,game));
                 return;
             } else {
@@ -276,6 +279,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                     System.out.println(playerResult);
                 }
                 assert getWinGameCount(gs.getPlayerResults()) == gs.getNPlayers() - 1 && gs.getPlayerResults()[gs.getDealerPlayer()] == CoreConstants.GameResult.LOSE_GAME;
+                simulateInfo.setStartText(simulateStrategyText04);
                 strategyTextAndSimulate.put(simulateStrategyText04, new Pair<>(simulateInfo,game));
                 return;
             } else {
@@ -361,7 +365,7 @@ public class BlackjackGameStrategy implements IGameStrategy {
                 GameResultForJSON gameResultForJSON = new GameResultForJSON();
                 gameResultForJSON.setPlayerCount(gs.getNPlayers());
                 gameResultForJSON.setGameResultDesc("");
-                gameResultForJSON.setStrategy(entry.getKey());
+//                gameResultForJSON.setStrategy(entry.getKey());
 
                 GameResultForJSON.Deck deck = new GameResultForJSON.Deck();
                 deck.setName(String.valueOf(allFiles == null ? 0 : allFiles.length));
@@ -489,8 +493,6 @@ public class BlackjackGameStrategy implements IGameStrategy {
 
         private Deck deck;
 
-        private String strategy;
-
         private PreGameState.SimulateInfo simulateInfo;
 
         public PreGameState.SimulateInfo getSimulateInfo() {
@@ -499,14 +501,6 @@ public class BlackjackGameStrategy implements IGameStrategy {
 
         public void setSimulateInfo(PreGameState.SimulateInfo simulateInfo) {
             this.simulateInfo = simulateInfo;
-        }
-
-        public String getStrategy() {
-            return strategy;
-        }
-
-        public void setStrategy(String strategy) {
-            this.strategy = strategy;
         }
 
         public int getPlayerCount() {
