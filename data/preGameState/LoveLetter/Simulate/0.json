@@ -1278,8 +1278,8 @@
     "beginActionIndex": 47,
     "isSuccess": "method2",
     "startText": "When another player plays a card, you can infer the cards in their hand from the outcome and use some cards to defeat them. please try to defeat player1.",
-    "successText": "Congratulations! It seems you have mastered this strategy.",
-    "failText": "Oops! You can try it again.",
+    "successText": "Well done, we can deduce Player 1's hand based on Player 2's discarded card. Since Player 1 played the Baron to compare hands with Player 2, who held a Countess, and since only one card has a higher value than the Countess, we can conclude that Player 1's hand was the Princess. You played the Prince, which forced Player 2 to discard the Princess. According to the game rules, anyone who discards the Princess is eliminated. Now click the next button to next challenge.",
+    "failText": "You did not succeed in the challenge. Try to deduce the other players' hands based on the cards played (look at the history frame to see who played which card and who was eliminated, etc.). In this level, you should focus particularly on the card Baron.",
     "players": [
       "HumanGUIPlayer",
       "MCTS",

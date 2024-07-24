@@ -1674,8 +1674,8 @@
     "beginActionIndex": 6,
     "isSuccess": "method4",
     "startText": "In the early stages of the game, using a Guard can guess an opponent\u0027s card. To increase the chances of success, players often guess lower cards (each valued 2-5, appearing twice) at the start of the game to improve their success rate.",
-    "successText": "Congratulations! It seems you have mastered this strategy.",
-    "failText": "Oops! You can try it again.",
+    "successText": "Congratulations! It seems you have mastered this strategy. Now click the next button to next challenge.",
+    "failText": "You did not succeed in the challenge. We are now only considering cards other than the Guard. Among them, the Prince, Handmaid, Baron, and Priest each have two cards, which increases the likelihood of guessing correctly.",
     "players": [
       "HumanGUIPlayer",
       "MCTS",

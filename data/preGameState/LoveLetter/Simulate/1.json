@@ -1936,8 +1936,8 @@
     "beginActionIndex": 6,
     "isSuccess": "method3",
     "startText": "When you hold a Baron, you should discard the smaller card in your hand, please try not to lose the game.",
-    "successText": "Congratulations! It seems you have mastered this strategy.",
-    "failText": "Oops! You can try it again.",
+    "successText": "Congratulations! It seems you have mastered this strategy. Now click the next button to next challenge.",
+    "failText": "You did not succeed in the challenge. It seems that you did not understand the value of each card. In Love Letter, the cards rank from highest to lowest as follows: Princess > Countess > King > Prince > Handmaid > Baron > Priest > Guard.",
     "players": [
       "HumanGUIPlayer",
       "MCTS",

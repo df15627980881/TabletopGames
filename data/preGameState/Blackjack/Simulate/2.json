@@ -257,7 +257,7 @@
     "isSuccess": "method1",
     "startText": "When the dealer\u0027s upcard is a good one, a 7, 8, 9, 10-card, or ace for example, the player should not stop drawing until a total of 17 or more is reached.",
     "successText": "Congratulations! It seems you have mastered this strategy.",
-    "failText": "Oops! You can try it again.",
+    "failText": "You did not succeed in the challenge.",
     "players": [
       "HumanGUIPlayer",
       "HumanGUIPlayer",

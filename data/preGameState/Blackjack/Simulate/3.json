@@ -257,7 +257,7 @@
     "isSuccess": "method1",
     "startText": "With a soft hand, the general strategy is to keep hitting until a total of at least 18 is reached. Thus, with an ace and a six (7 or 17), the player would not stop at 17, but would hit.",
     "successText": "Congratulations! It seems you have mastered this strategy.",
-    "failText": "Oops! You can try it again.",
+    "failText": "You did not succeed in the challenge.",
     "players": [
       "HumanGUIPlayer",
       "HumanGUIPlayer",

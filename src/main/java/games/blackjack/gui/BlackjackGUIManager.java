@@ -63,11 +63,11 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         if (MechanismEnum.DIRECTION.getDescription().equals(purpose)) {
             generateDirectionGuide(frame, new HashMap<>(), false);
         } else if (MechanismEnum.POINT.getDescription().equals(purpose)) {
-            generatePointGuide(frame);
+            generatePointGuide(frame, game);
         } else if (MechanismEnum.SOFT_HAND.getDescription().equals(purpose)) {
 //            generateSoftHand(frame);
         } else if (MechanismEnum.ALL.getDescription().equals(purpose)) {
-            generatePointGuide(frame);
+            generatePointGuide(frame, game);
 //            generateDirectionGuide(frame, new HashMap<>(), true);
 //            generatePointGuide();
 //            generateSoftHand();
@@ -93,7 +93,8 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                 pane.add("Rules", rules);
                 JLabel ruleText = new JLabel(getRuleText());
                 rules.add(ruleText);
-                rules.setBackground(new Color(43, 108, 25, 111));
+//                rules.setBackground(new Color(43, 108, 25, 111));
+                rules.setBackground(new Color(167, 196, 179));
 
                 activePlayer = gameState.getCurrentPlayer();
 
@@ -102,7 +103,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                 double nVertAreas = 3.5;
                 this.width = playerWidth * nHorizAreas;
                 this.height = (int) (playerHeight* nVertAreas);
-                ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
+                ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+200));
 
                 BlackjackGameState bjgs = (BlackjackGameState) gameState;
                 BlackjackParameters bjgp = (BlackjackParameters) gameState.getGameParameters();
@@ -237,6 +238,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         historyInfo.setOpaque(false);
         historyContainer.setOpaque(false);
         historyContainer.getViewport().setBackground(new Color(43, 108, 25, 111));
+//        historyContainer.getViewport().setBackground(new Color(167, 196, 179));
 //        historyContainer.getViewport().setOpaque(false);
         historyInfo.setEditable(false);
         wrapper.add(historyContainer);
@@ -281,8 +283,8 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                 pane.add("Rules", rules);
                 JLabel ruleText = new JLabel(getRuleText());
                 rules.add(ruleText);
-                rules.setBackground(new Color(43, 108, 25, 111));
-
+//                rules.setBackground(new Color(43, 108, 25, 111));
+                rules.setBackground(new Color(167, 196, 179));
                 activePlayer = gameState.getCurrentPlayer();
 
                 int nPlayers = gameState.getNPlayers();
@@ -481,7 +483,8 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                     pane.add("Rules", rules);
                     JLabel ruleText = new JLabel(getRuleText());
                     rules.add(ruleText);
-                    rules.setBackground(new Color(43, 108, 25, 111));
+//                    rules.setBackground(new Color(43, 108, 25, 111));
+                    rules.setBackground(new Color(167, 196, 179));
                     JPanel mainGameArea = new JPanel();
                     mainGameArea.setOpaque(false);
                     mainGameArea.setLayout(new BorderLayout());
@@ -543,10 +546,11 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
     }
 
-    public void generatePointGuide(InterfaceTech frame) {
+    public void generatePointGuide(InterfaceTech frame, Game game) {
         for (ActionListener actionListener : frame.getNext().getActionListeners()) {
             frame.getNext().removeActionListener(actionListener);
         }
+        parent.removeAll();
         GuideContext.guideStage = GuideContext.GuideState.SHOW_MECHANISM_POINT;
         DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
                 "Let's learn the points of each card."));
@@ -558,13 +562,20 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         pane.add("Main", main);
         pane.add("Rules", rules);
         JLabel ruleText = new JLabel(getRuleText());
+
+//        rules.setBackground(new Color(43, 108, 25, 111));
         rules.add(ruleText);
-        rules.setBackground(new Color(43, 108, 25, 111));
+        rules.setBackground(new Color(167, 196, 179));
 
         activePlayer = 0;
 
-        this.width = 200;
-        this.height = 200;
+//        this.width = 200;
+//        this.height = 200;
+        int nPlayers = game.getGameState().getNPlayers();
+        int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
+        double nVertAreas = 3.5;
+        this.width = playerWidth * nHorizAreas;
+        this.height = (int) (playerHeight* nVertAreas);
         ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
 
         parent.setBackground(ImageIO.GetInstance().getImage("data/FrenchCards/table-background.jpg"));

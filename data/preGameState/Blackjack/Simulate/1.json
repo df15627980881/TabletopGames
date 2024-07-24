@@ -257,7 +257,7 @@
     "isSuccess": "method1",
     "startText": "When the dealer\u0027s up card is a fair one, 2 or 3, the player should stop with a total of 13 or higher.",
     "successText": "Congratulations! It seems you have mastered this strategy.",
-    "failText": "Oops! You can try it again.",
+    "failText": "You did not succeed in the challenge.",
     "players": [
       "HumanGUIPlayer",
       "HumanGUIPlayer",

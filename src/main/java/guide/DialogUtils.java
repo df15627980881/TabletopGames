@@ -11,7 +11,8 @@ public class DialogUtils {
         tutorialDialog.setLayout(new BorderLayout());
         tutorialDialog.setModal(true);
 //        Font font = new Font("Arial", Font.BOLD, 10);
-        JLabel label = new JLabel(labelText);
+//        JLabel label = new JLabel(labelText);
+        JLabel label = new JLabel("<html><body style='width: " + (width - 20) + "px'>" + labelText + "</body></html>");
 //        label.setFont(font);
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         tutorialDialog.add(label, BorderLayout.CENTER);
@@ -32,7 +33,9 @@ public class DialogUtils {
         tutorialDialog.setLayout(new BorderLayout());
         tutorialDialog.setModal(true);
 
-        JLabel label = new JLabel(labelText);
+//        JLabel label = new JLabel(labelText);
+        JLabel label = new JLabel("<html><body style='width: " + (width - 20) + "px'>" + labelText + "</body></html>");
+
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         tutorialDialog.add(label, BorderLayout.CENTER);
 
@@ -52,6 +55,8 @@ public class DialogUtils {
         tutorialDialog.setModal(true);
 
         JLabel label = new JLabel(labelText);
+//        JLabel label = new JLabel("<html><body style='width: " + (width - 20) + "px'>" + labelText + "</body></html>");
+
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         tutorialDialog.add(label, BorderLayout.CENTER);
 

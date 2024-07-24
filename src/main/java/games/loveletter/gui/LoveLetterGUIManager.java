@@ -95,8 +95,13 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
 
         // Find required size of window
         int count = 8;
-        this.width = 200;
-        this.height = 300;
+//        this.width = 200;
+//        this.height = 300;
+        int nPlayers = llgs.getNPlayers();
+        int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
+        double nVertAreas = 4;
+        this.width = playerAreaWidth * nHorizAreas;
+        this.height = (int) (playerAreaHeight * nVertAreas);
         ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
 
         parent.setBackground(ImageIO.GetInstance().getImage("data/loveletter/bg.png"));
