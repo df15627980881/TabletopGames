@@ -23,7 +23,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 17.0.10+11-LTS-240, mixed mode, sharing
    ```sh
    git clone https://github.com/df15627980881/TabletopGames.git
    ```
-   The next steps can be step 2-4 or step 5
+   <b>The next steps can be step 2-4 or step 5-8</b>
 2. Navigate to the folder directory in the terminal.
    ```sh
    cd TabletopGames
