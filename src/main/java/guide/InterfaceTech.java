@@ -728,7 +728,7 @@ public class InterfaceTech extends GUI {
                         updateGUI();
                         next.setEnabled(false);
                     });
-                    buttonPanel.add(this.repaint);
+//                    buttonPanel.add(this.repaint);
                 }
                 startTrigger.actionPerformed(e);
                 simulate();

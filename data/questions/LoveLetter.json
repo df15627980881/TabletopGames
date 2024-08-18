@@ -13,7 +13,7 @@
       },
       {
         "option": "C",
-        "optionText": "To capture other players’ tokens of affection."
+        "optionText": "To capture other players' tokens of affection."
       },
       {
         "option": "D",
@@ -93,7 +93,7 @@
   },
   "5": {
     "type": "optional",
-    "questionText": "Which card protects you from other players’ actions until your next turn?",
+    "questionText": "Which card protects you from other players' actions until your next turn?",
     "options": [
       {
         "option": "A",
