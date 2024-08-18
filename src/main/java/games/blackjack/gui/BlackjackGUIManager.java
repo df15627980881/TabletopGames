@@ -237,8 +237,8 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         historyContainer.setPreferredSize(new Dimension(width/2 - 25, height));
         historyInfo.setOpaque(false);
         historyContainer.setOpaque(false);
-        historyContainer.getViewport().setBackground(new Color(43, 108, 25, 111));
-//        historyContainer.getViewport().setBackground(new Color(167, 196, 179));
+//        historyContainer.getViewport().setBackground(new Color(43, 108, 25, 111));
+        historyContainer.getViewport().setBackground(new Color(167, 196, 179));
 //        historyContainer.getViewport().setOpaque(false);
         historyInfo.setEditable(false);
         wrapper.add(historyContainer);

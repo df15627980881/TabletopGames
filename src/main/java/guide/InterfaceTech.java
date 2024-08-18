@@ -87,6 +87,7 @@ public class InterfaceTech extends GUI {
     private Thread gameThread;
 
     private JButton replay;
+    private JButton repaint;
 
     private List<Game> gamesForPreviousActionShow;
 
@@ -162,7 +163,7 @@ public class InterfaceTech extends GUI {
 
         startTrigger = e -> {
             Runnable runnable = () -> {
-                System.out.println("GuideContext.deckForSimulateIndex: " + GuideContext.deckForSimulateIndex);
+//                System.out.println("GuideContext.deckForSimulateIndex: " + GuideContext.deckForSimulateIndex);
                 this.preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
                 next.setEnabled(false);
                 end = false;
@@ -171,10 +172,11 @@ public class InterfaceTech extends GUI {
                 gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
                 GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex).resetIndexx();
                 gameRunning.reset(playersForSimulate);
-                gameRunning.setTurnPause(500);
+//                gameRunning.setTurnPause(500);
                 gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
                 setFrameProperties();
-                guiUpdater = new Timer(100, event -> updateGUI());
+                int c = new Random(System.currentTimeMillis()).nextInt(50, 150);
+                guiUpdater = new Timer(c, event -> updateGUI());
                 guiUpdater.start();
                 buildInterface(false);
                 gameRunning.setPaused(paused);
@@ -194,15 +196,18 @@ public class InterfaceTech extends GUI {
                         updateGUI();
                     }
                 }
+                buildInterface(false);
                 updateGUI();
-                System.out.println(gameRunning.getGameState().getGameStatus());
+//                System.out.println(gameRunning.getGameState().getGameStatus());
                 gameRunning.run();
                 end = true;
                 buttonPanel.add(replay);
+//                buttonPanel.add(repaint);
                 next.setEnabled(true);
                 guiUpdater.stop();
                 buttonPanel.revalidate();
                 buttonPanel.repaint();
+                buildInterface(false);
                 updateGUI();
                 GuideContext.deckForSimulateIndex += 1;
             };
@@ -707,6 +712,24 @@ public class InterfaceTech extends GUI {
 //                    DialogUtils.show(DialogUtils.create(InterfaceTech.this, "Game Guide", Boolean.TRUE, 300, 200, this.preGameState.getSimulateInfo().getStartText()));
 //                    isFirstEnterStrategy = false;
 //                }
+
+                if (Objects.isNull(this.repaint)) {
+                    this.repaint = new JButton("Repaint");
+                    this.repaint.addActionListener(e2 -> {
+                        getContentPane().remove(replay);
+                        gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
+                        gameRunning.reset(playersForSimulate);
+                        gameRunning.setTurnPause(200);
+                        gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
+                        setFrameProperties();
+                        buildInterface(false);
+                        updateGUI();
+                        startTrigger.actionPerformed(e2);
+                        updateGUI();
+                        next.setEnabled(false);
+                    });
+                    buttonPanel.add(this.repaint);
+                }
                 startTrigger.actionPerformed(e);
                 simulate();
             });
@@ -724,6 +747,21 @@ public class InterfaceTech extends GUI {
         }
         playersForSimulate.add(new MCTSPlayer());
         replay.addActionListener(e -> {
+            isFirstEnterStrategy = true;
+            GuideContext.deckForSimulateIndex -= 1;
+            Assert.assertTrue(GuideContext.deckForSimulateIndex >= 0);
+            end = false;
+            getContentPane().remove(replay);
+            gameRunning = gameType.createGameInstance(playersForSimulate.size(), null);
+            gameRunning.reset(playersForSimulate);
+            gameRunning.setTurnPause(200);
+            gui = (humanInputQueue != null) ? gameType.createGUIManager(gamePanel, gameRunning, humanInputQueue) : null;
+            setFrameProperties();
+            buildInterface(false);
+            startTrigger.actionPerformed(e);
+            next.setEnabled(false);
+        });
+        repaint.addActionListener(e -> {
             isFirstEnterStrategy = true;
             GuideContext.deckForSimulateIndex -= 1;
             Assert.assertTrue(GuideContext.deckForSimulateIndex >= 0);
