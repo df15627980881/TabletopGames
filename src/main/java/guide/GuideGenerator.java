@@ -38,6 +38,7 @@ public class GuideGenerator {
 
     private final Map<CoreConstants.GameResult, SimulateForMechanismParam> resultAndActionSequencesMap;
 
+
     private static final String gameType = "LoveLetter";
 
     private final Map<String, List<AbstractPlayer>> gameTypeAndPlayers = new HashMap<>() {{
