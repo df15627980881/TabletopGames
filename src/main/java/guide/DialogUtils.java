@@ -3,6 +3,9 @@ package guide;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Common methods for creating dialog
+ */
 public class DialogUtils {
 
     public static JDialog create(Frame frame, String title, boolean modal, Integer width, Integer height, String labelText) {

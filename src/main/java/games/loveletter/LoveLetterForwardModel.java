@@ -65,6 +65,8 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
 
         // Add all cards to the draw pile
         llgs.drawPile.clear();
+
+        //
         if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
             PreGameState<LoveLetterCard> deckForMechanism = GuideContext.deckForMechanism;
             List<LoveLetterCard> reverse = Lists.reverse(deckForMechanism.getDrawDecks().get(deckForMechanism.getIndexx()).getComponents());

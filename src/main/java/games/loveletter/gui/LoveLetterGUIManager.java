@@ -71,6 +71,11 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
 
     List<LoveLetterCard> cards;
 
+    /**
+     * Initial tutorial mechanism GUI
+     * @param purpose show which mechanism
+     * @param frame current JFrame
+     */
     public LoveLetterGUIManager(GamePanel parent, Game game, String purpose, InterfaceTech frame) {
         super(parent, game, purpose);
 
@@ -95,8 +100,6 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
 
         // Find required size of window
         int count = 8;
-//        this.width = 200;
-//        this.height = 300;
         int nPlayers = llgs.getNPlayers();
         int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
         double nVertAreas = 4;
@@ -442,7 +445,17 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
         }
     }
 
-    private void generateDirectionGuide(InterfaceTech frame, GamePanel parent, Game game, Map<Integer, PartialObservableDeck<LoveLetterCard>> playerIdAndDeck, Map<Integer, PartialObservableDeck<LoveLetterCard>> discardDeck, int indexx) {
+    /**
+     * Display the order of play
+     * @param frame Current JFrame
+     * @param game Current Game
+     * @param playerIdAndDeck The deck of cards each player possesses.
+     * @param discardDeck The collection of cards discarded by the player
+     * @param indexx A counter that records how many cards have been dealt.
+     */
+    private void generateDirectionGuide(InterfaceTech frame, GamePanel parent, Game game,
+                                        Map<Integer, PartialObservableDeck<LoveLetterCard>> playerIdAndDeck,
+                                        Map<Integer, PartialObservableDeck<LoveLetterCard>> discardDeck, int indexx) {
         UIManager.put("TabbedPane.contentOpaque", false);
         UIManager.put("TabbedPane.opaque", false);
         UIManager.put("TabbedPane.tabsOpaque", false);
@@ -637,6 +650,11 @@ public class LoveLetterGUIManager extends AbstractGUIManager {
         }
     }
 
+    /**
+     * After dealing is completed, players begin drawing cards
+     * @param frame Current JFrame
+     * @param playerIdAndDeck The deck of cards each player possesses
+     */
     private void simulateActions(GamePanel parent, InterfaceTech frame, Map<Integer, PartialObservableDeck<LoveLetterCard>> playerIdAndDeck) {
         UIManager.put("TabbedPane.contentOpaque", false);
         UIManager.put("TabbedPane.opaque", false);

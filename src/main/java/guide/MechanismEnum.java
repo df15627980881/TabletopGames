@@ -17,6 +17,7 @@ public enum MechanismEnum {
 
     private final String description;
 
+    @Deprecated
     private final int order;
 
     MechanismEnum(GameType gameType, String description, int order) {

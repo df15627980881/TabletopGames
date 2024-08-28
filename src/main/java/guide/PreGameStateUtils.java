@@ -20,6 +20,10 @@ import java.util.*;
 
 public class PreGameStateUtils {
 
+    /**
+     * Read JSON data
+     * @param path JSON file
+     */
     public static PreGameState<? extends Card> get(GameType gameType, String path) {
         if (gameType == GameType.Blackjack) return getBlackjack(path);
         if (gameType == GameType.LoveLetter) return getLoveLetter(path);
@@ -141,13 +145,6 @@ public class PreGameStateUtils {
                 }
                 assert action != null;
                 actions.add(new Pair<>(playerId, action));
-//                System.out.println(action == null);
-//                actions.add(new Pair<>((long) action.getPlayerID(), (AbstractAction) optionObj.get("action")));
-//                if ("Hit".equals(actionText)) {
-//                    actions.add(new Pair<>(playerId, new Hit(playerId.intValue(), true, false)));
-//                } else if ("Stand".equals(actionText)) {
-//                    actions.add(new Pair<>(playerId, new Stand()));
-//                }
             }
         }
         JSONArray decksArray = (JSONArray) jsonObject.get("decks");
@@ -216,6 +213,7 @@ public class PreGameStateUtils {
         return result;
     }
 
+    @Deprecated
     public static void generateDeckJson() {
 //        Deck<FrenchCard> deck = new Deck<>("aa", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
         Set<FrenchCard> deck = new LinkedHashSet<>();
@@ -233,15 +231,6 @@ public class PreGameStateUtils {
 
         deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 6));
         deck.add(new FrenchCard(FrenchCard.FrenchCardType.Queen, FrenchCard.Suite.Clubs));
-//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.King, FrenchCard.Suite.Clubs));
-//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Queen, FrenchCard.Suite.Spades));
-//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 9));
-//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Spades, 10));
-//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 2));
-//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 6));
-//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Ace, FrenchCard.Suite.Clubs));
-//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Jack, FrenchCard.Suite.Diamonds));
-//        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, 6));
 
 
         for (int j=2; j<=10; ++j) {
@@ -287,6 +276,7 @@ public class PreGameStateUtils {
         }
     }
 
+    @Deprecated
     public static void main(String[] args) {
         generateDeckJson();
 //        getBlackjack();

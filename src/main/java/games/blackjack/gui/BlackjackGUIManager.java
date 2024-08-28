@@ -47,13 +47,13 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
     JTabbedPane pane;
 
+    /**
+     * Initial tutorial mechanism GUI
+     * @param purpose show which mechanism
+     * @param frame current JFrame
+     */
     public BlackjackGUIManager(GamePanel parent, Game game, String purpose, InterfaceTech frame) {
         super(parent, game, purpose);
-//        Deck<FrenchCard> deck = PreGameStateUtils.getBlackjack().getDrawDeck();
-//        preGameState = PreGameStateUtils.getBlackjack();
-
-//        deck.shuffle(new Random(preGameState.getSeed()));
-//        frenchCards = deck.getComponents();
         indexx = 0;
         playerId = 0;
         UIManager.put("TabbedPane.contentOpaque", false);
@@ -68,9 +68,6 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 //            generateSoftHand(frame);
         } else if (MechanismEnum.ALL.getDescription().equals(purpose)) {
             generatePointGuide(frame, game);
-//            generateDirectionGuide(frame, new HashMap<>(), true);
-//            generatePointGuide();
-//            generateSoftHand();
         }
     }
 
@@ -269,6 +266,12 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         }
     }
 
+    /**
+     * Display the order of dealing and the order of play
+     * @param frame the current JFrame
+     * @param playerIdAndDeck The deck of cards each player possesses.
+     * @param isAll whether show all mechanisms
+     */
     public void generateDirectionGuide(InterfaceTech frame, Map<Integer, PartialObservableDeck<FrenchCard>> playerIdAndDeck, boolean isAll) {
         List<FrenchCard> frenchCards = new ArrayList<>(GuideContext.deckForMechanism.getDrawDeck().getComponents());
         if (game != null){
@@ -345,15 +348,10 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                     mainGameArea.add(sides[i], locations[i]);
                 }
 
-                // Top area will show state information
                 JPanel infoPanel = createGameStateInfoPanel("Blackjack", gameState, width, defaultInfoPanelHeight);
-                // Bottom area will show actions available
-//                JComponent actionPanel = createActionPanel(new IScreenHighlight[0], width, defaultActionPanelHeight, false);
 
-                // Add all views to frame
                 main.add(mainGameArea, BorderLayout.CENTER);
                 main.add(infoPanel, BorderLayout.NORTH);
-//                main.add(actionPanel, BorderLayout.SOUTH);
 
                 pane.add("Main", main);
                 pane.add("Rules", rules);
@@ -415,6 +413,11 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         }
     }
 
+    /**
+     * After dealing is completed, players begin drawing cards
+     * @param frame Current JFrame
+     * @param playerIdAndDeck The deck of cards each player possesses
+     */
     private void simulateActions(InterfaceTech frame, Map<Integer, PartialObservableDeck<FrenchCard>> playerIdAndDeck) {
         for (ActionListener actionListener : frame.getNext().getActionListeners()) {
             frame.getNext().removeActionListener(actionListener);
@@ -427,9 +430,6 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
         SwingWorker<Void, AbstractAction> worker = frame.processSpecificActions(playerActions);
         frame.getNext().addActionListener(e -> {
-//            frame.gameRunning.processOneAction(preGameState.getActions().get(i.get()));
-//            i.addAndGet(1);
-//            frame.updateGUI();
             worker.addPropertyChangeListener(evt -> {
                 if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
                     BlackjackGameState gs = (BlackjackGameState) game.getGameState();
@@ -442,17 +442,6 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                     parent.removeAll();
                     int cur = game.getPlayers().size() - 1;
                     BlackjackParameters gameParameters = (BlackjackParameters) gs.getGameParameters();
-//                    visibility = new boolean[gs.getNPlayers()];
-//                    Arrays.fill(visibility, true);
-//                    PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + gs.getDealerPlayer() + " deck", gs.getDealerPlayer(), visibility);
-//                    playerDeck.add(gs.getPlayerDecks().get(gs.getDealerPlayer()));
-//                    elementVisibility = (LinkedList<boolean[]>) playerDeck.getElementVisibility();
-//                    elementVisibility.set(0, visibility);
-//                    playerDeck.setVisibility(elementVisibility);
-//                    if (deck.get(i).type == FrenchCard.FrenchCardType.Ace) {
-//                        playerHands[i] = new BlackjackPlayerView(playerDeck, i, "data/FrenchCards/", "It can be seen as Point 11");
-//                    ddd
-//                    BlackjackPlayerView playerHand = new BlackjackPlayerView(playerDeck, cur, gameParameters.getDataPath());
                     BlackjackPlayerView playerHand = new BlackjackPlayerView(gs.getPlayerDecks().get(cur), cur, gameParameters.getDataPath());
                     playerHand.setOpaque(false);
                     // Get agent name
@@ -502,15 +491,11 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                         mainGameArea.add(sides[i], locations[i]);
                     }
 
-                    // Top area will show state information
                     JPanel infoPanel = createGameStateInfoPanel("Blackjack", gs, width, defaultInfoPanelHeight);
-                    // Bottom area will show actions available
-//                JComponent actionPanel = createActionPanel(new IScreenHighlight[0], width, defaultActionPanelHeight, false);
 
                     // Add all views to frame
                     main.add(mainGameArea, BorderLayout.CENTER);
                     main.add(infoPanel, BorderLayout.NORTH);
-//                main.add(actionPanel, BorderLayout.SOUTH);
 
                     pane.add("Main", main);
                     pane.add("Rules", rules);
@@ -529,6 +514,11 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         });
     }
 
+    /**
+     * After the players finish drawing cards, the dealer begins to draw cards
+     * @param frame Current JFrame
+     * @param dealerActions dealer's actions, for displaying step by step
+     */
     private void processDealerAction(InterfaceTech frame, List<AbstractAction> dealerActions) {
         for (ActionListener actionListener : frame.getNext().getActionListeners()) {
             frame.getNext().removeActionListener(actionListener);
@@ -546,6 +536,11 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
     }
 
+    /**
+     * Show each card point
+     * @param frame
+     * @param game
+     */
     public void generatePointGuide(InterfaceTech frame, Game game) {
         for (ActionListener actionListener : frame.getNext().getActionListeners()) {
             frame.getNext().removeActionListener(actionListener);
@@ -579,6 +574,8 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
 
         parent.setBackground(ImageIO.GetInstance().getImage("data/FrenchCards/table-background.jpg"));
+
+        // Generate card manually
         int count = 13;
         boolean[] visibility = new boolean[count];
         Arrays.fill(visibility, true);
@@ -598,11 +595,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         playerViewBorders = new Border[count];
         JPanel mainGameArea = new JPanel();
         mainGameArea.setOpaque(false);
-//        mainGameArea.setLayout(new BorderLayout());
         mainGameArea.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-//        String[] locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
-//        JPanel[] sides = new JPanel[]{new JPanel(), new JPanel(), new JPanel(), new JPanel()};
-//        JPanel[] playerPanels = new JPanel[count];
         for (int i = 0; i < count; i++) {
             PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + i + " deck", i, visibility);
             playerDeck.add(deck.get(i));
@@ -636,10 +629,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
             mainGameArea.add(playerHands[i]);
         }
 
-        // Add all views to frame
         main.add(mainGameArea, BorderLayout.CENTER);
-//        main.add(infoPanel, BorderLayout.NORTH);
-//                main.add(actionPanel, BorderLayout.SOUTH);
 
         pane.add("Main", main);
         pane.add("Rules", rules);

@@ -18,6 +18,9 @@ public class GameContext {
         GuideContext.gameStrategy = this.gameStrategy;
     }
 
+    /**
+     * Begin to search
+     */
     public void execute(String strategy, Game game, Long seed) {
         gameStrategy.isValid(strategy, game, seed);
     }
@@ -26,6 +29,9 @@ public class GameContext {
         gameStrategy.exportJson();
     }
 
+    /**
+     * Whether all the expected matches have been searched and completed
+     */
     public boolean isEnd() {
         return gameStrategy.isEnd();
     }

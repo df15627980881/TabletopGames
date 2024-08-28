@@ -493,6 +493,8 @@ public class Game {
 
                 if (debug) System.out.println("Exiting synchronized block in Game");
             }
+
+            // Check if novices success or fail in challenge
             if (CollectionUtils.isNotEmpty(GuideContext.deckForSimulate) && GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
                 PreGameState preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
                 SimulateConditionCaller caller = GuideContext.caller;

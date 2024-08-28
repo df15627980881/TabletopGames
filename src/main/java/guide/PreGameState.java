@@ -8,37 +8,65 @@ import utilities.Pair;
 
 import java.util.List;
 
+/**
+ * This class is a mapping class for JSON files, storing all the information of JSON games.
+ * @param <T>
+ */
 public class PreGameState<T extends Card> {
 
     private Integer playerCount;
 
+    // <0, Stand>, <1, Hit> ...
     private List<Pair<Long, AbstractAction>> playerIdAndActions;
 
     private SimulateInfo simulateInfo;
 
+    /**
+     * store the order of each card
+     */
     private Deck<T> drawDeck;
 
     /**
      * If the game has more than 1 rounds, use this
      */
     private List<Deck<T>> drawDecks;
+    /**
+     * If the game has more than 1 rounds, this variable represents the game is in which round
+     */
     private int indexx = 0;
 
+    /**
+     * used in Game Result module for introducing.
+     * e.g. When the dealer busts, all players who have not busted win.
+     */
     private String gameResultDesc;
-
-//    private String strategy;
 
     private Long seed;
 
+    /**
+     * This class stores information relevant for game simulation, allowing the code to execute to a specified state for user practice.
+     */
     public static class SimulateInfo {
 
         /**
-         * Indicate which action we want new user to simulate
+         * The code displays to the user after executing up to which Action
          */
         private int beginActionIndex;
+        /**
+         * The name of the callback method, called for validation when the novice is in the simulation module.
+         */
         private String isSuccess;
+        /**
+         * Before simulating, what strategy text displays
+         */
         private String startText;
+        /**
+         * When novices success in challenge, what text displays
+         */
         private String successText;
+        /**
+         * When novices fail in challenge, what text displays
+         */
         private String failText;
         private List<String> players;
 
@@ -122,14 +150,6 @@ public class PreGameState<T extends Card> {
     public void setPlayerCount(Integer playerCount) {
         this.playerCount = playerCount;
     }
-
-//    public String getStrategy() {
-//        return strategy;
-//    }
-//
-//    public void setStrategy(String strategy) {
-//        this.strategy = strategy;
-//    }
 
     public Long getSeed() {
         return seed;

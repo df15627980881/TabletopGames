@@ -1,10 +1,12 @@
 package guide;
 
-import core.components.Card;
 import guide.auto.IGameStrategy;
 
 import java.util.List;
 
+/**
+ * In this class, we maintain variables related to the tutorial.
+ */
 public class GuideContext {
 
     public static PreGameState deckForMechanism;

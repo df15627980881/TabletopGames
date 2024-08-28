@@ -10,7 +10,7 @@ import java.util.*;
 
 public class QuestionService {
 
-    private Map<String, Question> questions;
+    private final Map<String, Question> questions;
 
     public QuestionService(GameType gameType) {
         this.questions = convert(JSONUtils.loadJSONFile("data/questions/" + gameType.name() + ".json"));

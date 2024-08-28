@@ -19,6 +19,9 @@ import java.util.Set;
 
 public class SimulateConditionCaller {
 
+    /**
+     * Common check in Blackjack. Whether all players except the dealer have won.
+     */
     public Pair<Boolean, Boolean> method1(Game game) {
 //        System.out.println("Executing method1");
         BlackjackGameState gs = (BlackjackGameState) game.getGameState();
@@ -31,8 +34,11 @@ public class SimulateConditionCaller {
         return new Pair<>(!gs.isNotTerminal(), ok);
     }
 
+    /**
+     * Check if the novice played the Prince against player1
+     */
     public Pair<Boolean, Boolean> method2(Game game) {
-        System.out.println("Executing method2");
+//        System.out.println("Executing method2");
         LoveLetterGameState gs = (LoveLetterGameState) game.getGameState();
         List<Pair<Integer, AbstractAction>> history = gs.getHistory();
         int player = history.get(history.size()-1).a;
@@ -47,8 +53,11 @@ public class SimulateConditionCaller {
         return new Pair<>(true, false);
     }
 
+    /**
+     * Check if the novice played the Baron.
+     */
     public Pair<Boolean, Boolean> method3(Game game) {
-        System.out.println("Executing method3");
+//        System.out.println("Executing method3");
         LoveLetterGameState gs = (LoveLetterGameState) game.getGameState();
         List<Pair<Integer, AbstractAction>> history = gs.getHistory();
         int player = history.get(history.size()-1).a;
@@ -65,8 +74,11 @@ public class SimulateConditionCaller {
         return new Pair<>(true, false);
     }
 
+    /**
+     * Check whether the novice played the Guard and guessed it to be the Priest, Baron, Handmaid, or Prince
+     */
     public Pair<Boolean, Boolean> method4(Game game) {
-        System.out.println("Executing method4");
+//        System.out.println("Executing method4");
         LoveLetterGameState gs = (LoveLetterGameState) game.getGameState();
         List<Pair<Integer, AbstractAction>> history = gs.getHistory();
         int player = history.get(history.size()-1).a;
@@ -83,8 +95,11 @@ public class SimulateConditionCaller {
         return new Pair<>(true, false);
     }
 
+    /**
+     * Check if the novice played the Guard against player2
+     */
     public Pair<Boolean, Boolean> method5(Game game) {
-        System.out.println("Executing method5");
+//        System.out.println("Executing method5");
         LoveLetterGameState gs = (LoveLetterGameState) game.getGameState();
         List<Pair<Integer, AbstractAction>> history = gs.getHistory();
         int player = history.get(history.size()-1).a;
