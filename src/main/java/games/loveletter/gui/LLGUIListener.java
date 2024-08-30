@@ -7,9 +7,12 @@ import evaluation.metrics.Event;
 import games.loveletter.LoveLetterForwardModel;
 import games.loveletter.LoveLetterGameState;
 import gui.GamePanel;
+import guide.GuideContext;
+import guide.auto.GameContext;
 
 import javax.swing.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class LLGUIListener implements IGameListener {
@@ -41,7 +44,9 @@ public class LLGUIListener implements IGameListener {
             parent.repaint();
 
             // Message for pause and clarity
-            JOptionPane.showMessageDialog(parent, "Round over! Winners: " + winners.toString() + ". Next round begins!");
+            if (!(GuideContext.guideStage == GuideContext.GuideState.SHOW_GAME_RESULT || GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS)) {
+                JOptionPane.showMessageDialog(parent, "Round over! Winners: " + winners.toString() + ". Next round begins!");
+            }
         }
     }
 

@@ -1,0 +1,117 @@
+{
+  "1": {
+    "type": "optional",
+    "questionText": "What is the main objective of \"Love Letter\"?",
+    "options": [
+      {
+        "option": "A",
+        "optionText": "To collect as many cards as possible."
+      },
+      {
+        "option": "B",
+        "optionText": "To be the last player remaining in the round, or to have the highest card when the deck runs out."
+      },
+      {
+        "option": "C",
+        "optionText": "To capture other players' tokens of affection."
+      },
+      {
+        "option": "D",
+        "optionText": "To discard all your cards."
+      }
+    ],
+    "answer": "B"
+  },
+  "2": {
+    "type": "optional",
+    "questionText": "Which card allows you to look at another player's hand?",
+    "options": [
+      {
+        "option": "A",
+        "optionText": "King"
+      },
+      {
+        "option": "B",
+        "optionText": "Priest"
+      },
+      {
+        "option": "C",
+        "optionText": "Princess"
+      },
+      {
+        "option": "D",
+        "optionText": "Countess"
+      }
+    ],
+    "answer": "B"
+  },
+  "3": {
+    "type": "optional",
+    "questionText": "If you play the Baron card (3), what must you do next?",
+    "options": [
+      {
+        "option": "A",
+        "optionText": "Draw a new card."
+      },
+      {
+        "option": "B",
+        "optionText": "Choose another player to compare hands with; the player with the lower value card is out of the round."
+      },
+      {
+        "option": "C",
+        "optionText": "Protect yourself from other players' actions until your next turn."
+      },
+      {
+        "option": "D",
+        "optionText": "Trade hands with another player."
+      }
+    ],
+    "answer": "B"
+  },
+  "4": {
+    "type": "optional",
+    "questionText": "What happens if you discard the Princess (8)?",
+    "options": [
+      {
+        "option": "A",
+        "optionText": "You win the round."
+      },
+      {
+        "option": "B",
+        "optionText": "You lose the round."
+      },
+      {
+        "option": "C",
+        "optionText": "You can choose another player to be out of the round."
+      },
+      {
+        "option": "D",
+        "optionText": "Nothing special happens."
+      }
+    ],
+    "answer": "B"
+  },
+  "5": {
+    "type": "optional",
+    "questionText": "Which card protects you from other players' actions until your next turn?",
+    "options": [
+      {
+        "option": "A",
+        "optionText": "Guard"
+      },
+      {
+        "option": "B",
+        "optionText": "Priest"
+      },
+      {
+        "option": "C",
+        "optionText": "Handmaid"
+      },
+      {
+        "option": "D",
+        "optionText": "Prince"
+      }
+    ],
+    "answer": "C"
+  }
+}

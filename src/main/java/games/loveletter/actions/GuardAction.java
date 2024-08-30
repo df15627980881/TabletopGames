@@ -1,10 +1,20 @@
 package games.loveletter.actions;
 
 import core.AbstractGameState;
+import core.CoreConstants;
+import core.AbstractGameState;
 import core.components.Deck;
 import core.interfaces.IPrintable;
 import games.loveletter.LoveLetterGameState;
 import games.loveletter.cards.LoveLetterCard;
+import guide.DialogUtils;
+import org.apache.curator.shaded.com.google.common.collect.Lists;
+import org.testng.Assert;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * The guard allows to attempt guessing another player's card. If the guess is correct, the targeted opponent
@@ -45,5 +55,35 @@ public class GuardAction extends PlayCard implements IPrintable {
     @Override
     public String getString(AbstractGameState gameState) {
         return "Guard: guess p" + targetPlayer + " has " + targetCardType.name();
+    }
+
+    @Override
+    public ArrayList<JDialog> createDialogWithFeedbackForNewbie(Frame frame, AbstractGameState gameState, int currentPlayer) {
+        ArrayList<JDialog> results = new ArrayList<>();
+        Assert.assertEquals(currentPlayer, playerID);
+        LoveLetterGameState llgs = (LoveLetterGameState) gameState;
+        if (targetPlayer == -1) {
+            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>Guard Action</h2><p>No one can be guessed. Nothing happen.</p></html>"));
+        }
+        Deck<LoveLetterCard> opponentDeck = llgs.getPlayerHandCards().get(targetPlayer);
+        LoveLetterCard card = opponentDeck.peek();
+//        if (Objects.isNull(card)) {
+//            return Lists.newArrayList(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+//                    "<html><h2>Guard Action</h2><p>No one can be guessed. Nothing happen.</p></html>"));
+//        }
+        if (llgs.getPlayerResults()[targetPlayer] == CoreConstants.GameResult.LOSE_ROUND) {
+            results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>Guard Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer
+                            + "'s hand(guessing " + targetCardType + ", the actual card is " + targetCardType +
+                            "), the result is that Player " + playerID + "'s guess is correct, leading to Player "
+                            + targetPlayer + " being eliminated.</p></html>"));
+        } else {
+            results.add(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                    "<html><h2>Guard Action</h2><p>The player" + playerID + " guess the card in player" + targetPlayer
+                            + "'s hand(guessing " + targetCardType + ", the actual card is " + card.cardType +
+                            "), the result is that Player " + playerID + "'s guess is wrong, leading nothing.</p></html>"));
+        }
+        return results;
     }
 }

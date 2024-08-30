@@ -1,0 +1,267 @@
+{
+  "playerCount": 3,
+  "gameResultDesc": "",
+  "deck": {
+    "name": "0",
+    "visibilityMode": "VISIBLE_TO_ALL",
+    "cards": [
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "4"
+      },
+      {
+        "type": "Jack",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Queen",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "King",
+        "suite": "Spades"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "10"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "10"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "6"
+      },
+      {
+        "type": "Ace",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "King",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Ace",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "10"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "10"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "9"
+      },
+      {
+        "type": "Jack",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "6"
+      },
+      {
+        "type": "Queen",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Ace",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "9"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "9"
+      },
+      {
+        "type": "Jack",
+        "suite": "Clubs"
+      },
+      {
+        "type": "King",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Queen",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Ace",
+        "suite": "Spades"
+      },
+      {
+        "type": "King",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "8"
+      },
+      {
+        "type": "Queen",
+        "suite": "Spades"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "9"
+      },
+      {
+        "type": "Jack",
+        "suite": "Spades"
+      }
+    ]
+  },
+  "strategy": "With a soft hand, the general strategy is to keep hitting until a total of at least 18 is reached. Thus, with an ace and a six (7 or 17), the player would not stop at 17, but would hit.",
+  "simulateInfo": {
+    "beginActionIndex": 0,
+    "isSuccess": "method1",
+    "startText": "With a soft hand, the general strategy is to keep hitting until a total of at least 18 is reached. Thus, with an ace and a six (7 or 17), the player would not stop at 17, but would hit.",
+    "successText": "Congratulations! It seems you have mastered this strategy.",
+    "failText": "You did not succeed in the challenge.",
+    "players": [
+      "HumanGUIPlayer",
+      "HumanGUIPlayer",
+      "MCTS"
+    ]
+  }
+}

@@ -30,6 +30,36 @@ public class LoveLetterPlayerView extends JPanel {
     LoveLetterDeckView handCards;
     LoveLetterDeckView discardCards;
 
+    boolean isGuide;
+    String extra;
+
+    public LoveLetterPlayerView(Deck<LoveLetterCard> hand, int playerId, String dataPath, String extra) {
+        JLabel label1 = new JLabel(hand.get(0).cardType.name());
+        JLabel label2 = new JLabel("<html><body style='width: " + 150 + "px;'>" + extra + "</body></html>");
+        handCards = new LoveLetterDeckView(playerId, hand, false, dataPath,
+                new Rectangle(0, 0, playerAreaWidth / 2 - border * 2, llCardHeight));
+        JPanel wrap = new JPanel();
+        wrap.setLayout(new BoxLayout(wrap, BoxLayout.Y_AXIS));
+        wrap.setOpaque(false);
+        wrap.add(label1);
+        wrap.add(handCards);
+
+        JPanel wrap2 = new JPanel();
+        wrap2.setLayout(new BoxLayout(wrap2, BoxLayout.Y_AXIS));
+        wrap2.setOpaque(false);
+        wrap2.add(label2);
+
+        this.setLayout(new BorderLayout());
+        this.add(wrap, BorderLayout.CENTER);
+        this.add(wrap2, BorderLayout.EAST);
+        this.isGuide = true;
+
+        this.width = playerAreaWidth + border * 2;
+        this.height = playerAreaHeight + border + borderBottom*2;
+        this.playerId = playerId;
+        this.extra = extra;
+    }
+
     public LoveLetterPlayerView(Deck<LoveLetterCard> hand, Deck<LoveLetterCard> discard, int playerId, Set<Integer> humanId, String dataPath) {
         JLabel label1 = new JLabel("Player hand:");
         JLabel label2 = new JLabel("Discards:");
@@ -56,6 +86,7 @@ public class LoveLetterPlayerView extends JPanel {
         this.height = playerAreaHeight + border + borderBottom*2;
         this.humanId = humanId;
         this.playerId = playerId;
+        this.isGuide = false;
     }
 
     /**
@@ -66,8 +97,13 @@ public class LoveLetterPlayerView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         // Draw affection tokens
-        g.setColor(Color.black);
-        g.drawString(nPoints + "/" + nPointsWin + " affection tokens", border + buffer, llCardHeight + borderBottom*2);
+        if (!isGuide) {
+            g.setColor(Color.black);
+            g.drawString(nPoints + "/" + nPointsWin + " affection tokens", border + buffer, llCardHeight + borderBottom * 2);
+        } else {
+//            g.setColor(Color.black);
+//            g.drawString(extra, border + buffer, llCardHeight + borderBottom * 2);
+        }
     }
 
     @Override

@@ -1,6 +1,9 @@
 package utilities;
 
 import evaluation.optimisation.TunableParameters;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -11,6 +14,9 @@ import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -426,4 +432,67 @@ public class JSONUtils {
         }
         return json;
     }
+
+    public static File[] getAllFile(String directoryPath) {
+        if (StringUtils.isBlank(directoryPath)) {
+            return null;
+        }
+
+        File folder = new File(directoryPath);
+        return folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".json"));
+    }
+
+    public static void jsonToFile(JSONObject jsonObject, String path) {
+        if (!path.endsWith(".json")) path += ".json";
+        try (FileWriter file = new FileWriter(path)) {
+            file.write(jsonObject.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static JSONObject convertToJsonObject(Map<String, Object> data) {
+        JSONObject jsonObject = new JSONObject();
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            Object value = entry.getValue();
+            if (value instanceof Map<?, ?>) {
+                jsonObject.put(entry.getKey(), convertToJsonObject((Map<String, Object>) value));
+            } else if (value instanceof List<?>) {
+                jsonObject.put(entry.getKey(), convertToJsonArray((List<Object>) value));
+            } else {
+                jsonObject.put(entry.getKey(), value);
+            }
+        }
+        return jsonObject;
+    }
+
+    public static JSONArray convertToJsonArray(List<Object> data) {
+        JSONArray jsonArray = new JSONArray();
+        for (Object item : data) {
+            if (item instanceof Map<?, ?>) {
+                jsonArray.add(convertToJsonObject((Map<String, Object>) item));
+            } else if (item instanceof List<?>) {
+                jsonArray.add(convertToJsonArray((List<Object>) item));
+            } else {
+                jsonArray.add(item);
+            }
+        }
+        return jsonArray;
+    }
+
+    public static void writeToJsonFile(Object obj, String path) {
+        if (!path.endsWith(".json")) path += ".json";
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        String jsonContent = gson.toJson(obj);
+        Path path2 = Paths.get(path);
+
+        try {
+            Files.createDirectories(path2.getParent());
+            Files.write(path2, jsonContent.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

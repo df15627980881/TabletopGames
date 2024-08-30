@@ -2,6 +2,8 @@ package core;
 
 import core.actions.AbstractAction;
 import core.actions.DoNothing;
+import core.components.FrenchCard;
+import core.components.PartialObservableDeck;
 import core.interfaces.IExtendedSequence;
 import core.interfaces.IPrintable;
 import core.turnorders.ReactiveTurnOrder;
@@ -9,9 +11,12 @@ import evaluation.listeners.IGameListener;
 import evaluation.metrics.Event;
 import evaluation.summarisers.TAGNumericStatSummary;
 import games.GameType;
+import games.blackjack.BlackjackGameState;
 import gui.AbstractGUIManager;
 import gui.GUI;
 import gui.GamePanel;
+import guide.*;
+import org.apache.commons.collections4.CollectionUtils;
 import players.basicMCTS.BasicMCTSPlayer;
 import players.human.ActionController;
 import players.human.HumanConsolePlayer;
@@ -34,7 +39,9 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+import static core.CoreConstants.GameResult.GAME_ONGOING;
 import static games.GameType.*;
+import static guide.auto.LoveLetterGameStrategy.tmpCardsForReserve;
 
 
 public class Game {
@@ -111,7 +118,8 @@ public class Game {
      * @return - game instance created for the run
      */
     public static Game runOne(GameType gameToPlay, String parameterConfigFile, List<AbstractPlayer> players, long seed,
-                              boolean randomizeParameters, List<IGameListener> listeners, ActionController ac, int turnPause) {
+                              boolean randomizeParameters, List<IGameListener> listeners, ActionController ac,
+                              int turnPause) {
         // Creating game instance (null if not implemented)
         Game game;
         if (parameterConfigFile != null) {
@@ -120,7 +128,6 @@ public class Game {
         } else game = gameToPlay.createGameInstance(players.size(), seed);
         if (game == null)
             System.out.println("Error game: " + gameToPlay);
-
         if (listeners != null) {
             Set<String> agentNames = players.stream()
                     //           .peek(a -> System.out.println(a.toString()))
@@ -486,6 +493,21 @@ public class Game {
 
                 if (debug) System.out.println("Exiting synchronized block in Game");
             }
+
+            // Check if novices success or fail in challenge
+            if (CollectionUtils.isNotEmpty(GuideContext.deckForSimulate) && GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
+                PreGameState preGameState = GuideContext.deckForSimulate.get(GuideContext.deckForSimulateIndex);
+                SimulateConditionCaller caller = GuideContext.caller;
+                PreGameState.SimulateInfo simulateInfo = preGameState.getSimulateInfo();
+                if (Objects.nonNull(simulateInfo)) {
+                    Pair<Boolean, Boolean> result = caller.callMethod(simulateInfo.getIsSuccess(), this);
+                    if (result.a) {
+                        DialogUtils.show(DialogUtils.create(GuideContext.frame, "Game Guide", Boolean.TRUE,
+                                300, 200, result.b ? simulateInfo.getSuccessText() : simulateInfo.getFailText()));
+                        break;
+                    }
+                }
+            }
         }
         if (firstEnd) {
             if (gameState.coreGameParameters.verbose) {
@@ -501,7 +523,6 @@ public class Game {
     }
 
     public final AbstractAction oneAction() {
-
         // we pause before each action is taken if running with a delay (e.g. for video recording with random players)
         if (turnPause > 0)
             synchronized (this) {
@@ -511,11 +532,11 @@ public class Game {
                     e.printStackTrace();
                 }
             }
-
         // This is the next player to be asked for a decision
         int activePlayer = gameState.getCurrentPlayer();
-        if (!gameState.isNotTerminalForPlayer(activePlayer))
+        if (!gameState.isNotTerminalForPlayer(activePlayer)) {
             throw new AssertionError("Player " + activePlayer + " is not allowed to move");
+        }
         AbstractPlayer currentPlayer = players.get(activePlayer);
         if (debug) System.out.printf("Starting oneAction for player %s%n", activePlayer);
 
@@ -625,6 +646,18 @@ public class Game {
 
         if (debug) System.out.printf("Finishing oneAction for player %s%n", activePlayer);
         return action;
+    }
+
+    public void processOneAction(AbstractAction nextAction) {
+        int activePlayer = gameState.getCurrentPlayer();
+        AbstractPlayer currentPlayer = players.get(activePlayer);
+        actionSpaceSize.add(new Pair<>(activePlayer, 1));
+        nDecisions += 1;
+        AbstractGameState observation = gameState.copy(activePlayer);
+        currentPlayer.registerUpdatedObservation(observation);
+        forwardModel.next(gameState, nextAction.copy());
+        lastPlayer = activePlayer;
+        listeners.forEach(l -> l.onEvent(Event.createEvent(Event.GameEvent.ACTION_CHOSEN, gameState, nextAction, activePlayer)));
     }
 
     /**

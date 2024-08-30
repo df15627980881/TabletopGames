@@ -325,6 +325,7 @@ public class Frontend extends GUI {
                     listenForDecisions();
                     gameRunning.run();
                     System.out.println("Game over: " + Arrays.toString(gameRunning.getGameState().getPlayerResults()));
+                    System.out.println(gameRunning.getGameState().getHistory());
                     guiUpdater.stop();
                     // and update GUI to final game state
                     updateGUI(gui, frame);

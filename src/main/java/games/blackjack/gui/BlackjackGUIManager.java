@@ -1,20 +1,33 @@
 package games.blackjack.gui;
 
-import gui.*;
-import core.AbstractGameState;
-import core.AbstractPlayer;
-import core.Game;
+import core.*;
+import core.actions.AbstractAction;
+import core.components.Deck;
+import core.components.FrenchCard;
+import core.components.PartialObservableDeck;
 import games.blackjack.BlackjackGameState;
 import games.blackjack.BlackjackParameters;
+import gui.AbstractGUIManager;
+import gui.GamePanel;
+import gui.IScreenHighlight;
+import guide.*;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.testng.collections.Lists;
 import players.human.ActionController;
 import utilities.ImageIO;
+import utilities.Pair;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.util.Set;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class BlackjackGUIManager extends AbstractGUIManager {
     final static int playerWidth = 300;
@@ -29,6 +42,34 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
     Border highlightActive = BorderFactory.createLineBorder(new Color(47,132,220), 3);
     Border[] playerViewBorders;
+
+    int indexx, playerId;
+
+    JTabbedPane pane;
+
+    /**
+     * Initial tutorial mechanism GUI
+     * @param purpose show which mechanism
+     * @param frame current JFrame
+     */
+    public BlackjackGUIManager(GamePanel parent, Game game, String purpose, InterfaceTech frame) {
+        super(parent, game, purpose);
+        indexx = 0;
+        playerId = 0;
+        UIManager.put("TabbedPane.contentOpaque", false);
+        UIManager.put("TabbedPane.opaque", false);
+        UIManager.put("TabbedPane.tabsOpaque", false);
+
+        if (MechanismEnum.DIRECTION.getDescription().equals(purpose)) {
+            generateDirectionGuide(frame, new HashMap<>(), false);
+        } else if (MechanismEnum.POINT.getDescription().equals(purpose)) {
+            generatePointGuide(frame, game);
+        } else if (MechanismEnum.SOFT_HAND.getDescription().equals(purpose)) {
+//            generateSoftHand(frame);
+        } else if (MechanismEnum.ALL.getDescription().equals(purpose)) {
+            generatePointGuide(frame, game);
+        }
+    }
 
     public BlackjackGUIManager(GamePanel parent, Game game, ActionController ac, Set<Integer> humanID) {
         super(parent, game, ac, humanID);
@@ -49,7 +90,8 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                 pane.add("Rules", rules);
                 JLabel ruleText = new JLabel(getRuleText());
                 rules.add(ruleText);
-                rules.setBackground(new Color(43, 108, 25, 111));
+//                rules.setBackground(new Color(43, 108, 25, 111));
+                rules.setBackground(new Color(167, 196, 179));
 
                 activePlayer = gameState.getCurrentPlayer();
 
@@ -58,7 +100,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
                 double nVertAreas = 3.5;
                 this.width = playerWidth * nHorizAreas;
                 this.height = (int) (playerHeight* nVertAreas);
-                ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
+                ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+200));
 
                 BlackjackGameState bjgs = (BlackjackGameState) gameState;
                 BlackjackParameters bjgp = (BlackjackParameters) gameState.getGameParameters();
@@ -190,12 +232,13 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         historyInfo.setPreferredSize(new Dimension(width/2 - 10, height));
         historyContainer = new JScrollPane(historyInfo);
         historyContainer.setPreferredSize(new Dimension(width/2 - 25, height));
-        wrapper.add(historyContainer);
         historyInfo.setOpaque(false);
         historyContainer.setOpaque(false);
-        historyContainer.getViewport().setBackground(new Color(43, 108, 25, 111));
+//        historyContainer.getViewport().setBackground(new Color(43, 108, 25, 111));
+        historyContainer.getViewport().setBackground(new Color(167, 196, 179));
 //        historyContainer.getViewport().setOpaque(false);
         historyInfo.setEditable(false);
+        wrapper.add(historyContainer);
         return wrapper;
     }
 
@@ -214,8 +257,7 @@ public class BlackjackGUIManager extends AbstractGUIManager {
 
                 // Highlight active player
                 if (i == gameState.getCurrentPlayer()) {
-                    Border compound = BorderFactory.createCompoundBorder(
-                            highlightActive, playerViewBorders[i]);
+                    Border compound = BorderFactory.createCompoundBorder(highlightActive, playerViewBorders[i]);
                     playerHands[i].setBorder(compound);
                 } else {
                     playerHands[i].setBorder(playerViewBorders[i]);
@@ -224,7 +266,389 @@ public class BlackjackGUIManager extends AbstractGUIManager {
         }
     }
 
-    private String getRuleText() {
+    /**
+     * Display the order of dealing and the order of play
+     * @param frame the current JFrame
+     * @param playerIdAndDeck The deck of cards each player possesses.
+     * @param isAll whether show all mechanisms
+     */
+    public void generateDirectionGuide(InterfaceTech frame, Map<Integer, PartialObservableDeck<FrenchCard>> playerIdAndDeck, boolean isAll) {
+        List<FrenchCard> frenchCards = new ArrayList<>(GuideContext.deckForMechanism.getDrawDeck().getComponents());
+        if (game != null){
+            AbstractGameState gameState = game.getGameState();
+            if (gameState != null){
+                pane = new JTabbedPane();
+                JPanel main = new JPanel();
+                main.setOpaque(false);
+                main.setLayout(new BorderLayout());
+                JPanel rules = new JPanel();
+                pane.add("Main", main);
+                pane.add("Rules", rules);
+                JLabel ruleText = new JLabel(getRuleText());
+                rules.add(ruleText);
+//                rules.setBackground(new Color(43, 108, 25, 111));
+                rules.setBackground(new Color(167, 196, 179));
+                activePlayer = gameState.getCurrentPlayer();
+
+                int nPlayers = gameState.getNPlayers();
+                int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
+                double nVertAreas = 3.5;
+                this.width = playerWidth * nHorizAreas;
+                this.height = (int) (playerHeight* nVertAreas);
+                ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
+
+                BlackjackGameState bjgs = (BlackjackGameState) gameState;
+                BlackjackParameters bjgp = (BlackjackParameters) gameState.getGameParameters();
+
+                if (MapUtils.isEmpty(playerIdAndDeck)) {
+                    DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                            "A game can consist of 2 to 7 players. In this example, we assume there are four players and one dealer, with Player " + bjgs.getDealerPlayer() + " acting as the dealer."));
+                }
+
+                parent.setBackground(ImageIO.GetInstance().getImage("data/FrenchCards/table-background.jpg"));
+
+                playerHands = new BlackjackPlayerView[nPlayers];
+                playerViewBorders = new Border[nPlayers];
+                JPanel mainGameArea = new JPanel();
+                mainGameArea.setOpaque(false);
+                mainGameArea.setLayout(new BorderLayout());
+
+                String[] locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+                JPanel[] sides = new JPanel[]{new JPanel(), new JPanel(), new JPanel(), new JPanel()};
+                int next = 0;
+                for (int i = 0; i < nPlayers; i++) {
+                    BlackjackPlayerView playerHand = new BlackjackPlayerView(playerIdAndDeck.get(i), i, bjgp.getDataPath());
+                    playerHand.setOpaque(false);
+
+                    // Get agent name
+                    String[] split = game.getPlayers().get(i).getClass().toString().split("\\.");
+                    String agentName = split[split.length - 1];
+
+                    // Create border, layouts and keep track of this view
+                    TitledBorder title;
+                    if (i == bjgs.getDealerPlayer()) {
+                        title = BorderFactory.createTitledBorder(
+                                BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "DEALER [" + agentName + "]",
+                                TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM);
+                    } else {
+                        title = BorderFactory.createTitledBorder(
+                                BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Player " + i + " [" + agentName + "]",
+                                TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM);
+                    }
+                    playerViewBorders[i] = title;
+                    playerHand.setBorder(title);
+
+                    sides[next].add(playerHand);
+                    sides[next].setLayout(new GridBagLayout());
+                    sides[next].setOpaque(false);
+                    next = (next + 1) % (locations.length);
+                    playerHands[i] = playerHand;
+                }
+                for (int i = 0; i < locations.length; i++) {
+                    mainGameArea.add(sides[i], locations[i]);
+                }
+
+                JPanel infoPanel = createGameStateInfoPanel("Blackjack", gameState, width, defaultInfoPanelHeight);
+
+                main.add(mainGameArea, BorderLayout.CENTER);
+                main.add(infoPanel, BorderLayout.NORTH);
+
+                pane.add("Main", main);
+                pane.add("Rules", rules);
+
+                parent.setLayout(new BorderLayout());
+                parent.add(pane, BorderLayout.CENTER);
+                parent.setPreferredSize(new Dimension(width, height + defaultActionPanelHeight + defaultInfoPanelHeight + defaultCardHeight + 20));
+                parent.revalidate();
+                parent.setVisible(true);
+                parent.repaint();
+            }
+        }
+
+        if (MapUtils.isEmpty(playerIdAndDeck)) {
+            for (ActionListener actionListener : frame.getNext().getActionListeners()) {
+                frame.getNext().removeActionListener(actionListener);
+            }
+            frame.getNext().addActionListener(e -> {
+                if (indexx == game.getPlayers().size()) {
+                    DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                            "So far all the cards in the first round have been issued."));
+                }
+                if (indexx >= (game.getPlayers().size()) << 1) {
+                    DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                            "Now that all cards have been issued, the player to the left of the dealer begins to choose which Action to take."));
+//                    parent.removeAll();
+                    if (isAll) {
+                        simulateActions(frame, playerIdAndDeck);
+                    }
+                    return;
+                }
+                if (indexx < game.getPlayers().size()) {
+                    boolean[] visibility = new boolean[game.getPlayers().size()];
+                    Arrays.fill(visibility, true);
+                    PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("HiddenForGuide", indexx % game.getPlayers().size(), visibility);
+                    playerDeck.add(frenchCards.get(indexx));
+                    playerIdAndDeck.put(indexx % game.getPlayers().size(), playerDeck);
+                    indexx += 1;
+                    parent.removeAll();
+                    generateDirectionGuide(frame, playerIdAndDeck, isAll);
+                } else {
+                    PartialObservableDeck<FrenchCard> playerDeck = playerIdAndDeck.get(indexx%game.getPlayers().size());
+                    playerDeck.add(frenchCards.get(indexx));
+                    if (indexx == ((game.getPlayers().size()) << 1) - 1) {
+                        boolean[] visibility = new boolean[game.getPlayers().size()];
+                        Arrays.fill(visibility, true);
+                        visibility[0] = false;
+                        List<boolean[]> elementVisibility = (LinkedList<boolean[]>) playerDeck.getElementVisibility();
+                        // Because PartialObservableDeck#add method add the element at the first place......
+                        elementVisibility.set(0, visibility);
+                        playerDeck.setVisibility(elementVisibility);
+                    }
+                    playerIdAndDeck.put(indexx % game.getPlayers().size(), playerDeck);
+                    indexx += 1;
+                    parent.removeAll();
+                    generateDirectionGuide(frame, playerIdAndDeck, isAll);
+                }
+            });
+        }
+    }
+
+    /**
+     * After dealing is completed, players begin drawing cards
+     * @param frame Current JFrame
+     * @param playerIdAndDeck The deck of cards each player possesses
+     */
+    private void simulateActions(InterfaceTech frame, Map<Integer, PartialObservableDeck<FrenchCard>> playerIdAndDeck) {
+        for (ActionListener actionListener : frame.getNext().getActionListeners()) {
+            frame.getNext().removeActionListener(actionListener);
+        }
+
+        frame.updateGUI();
+        List<Pair<Long, AbstractAction>> playerIdAndActions = GuideContext.deckForMechanism.getPlayerIdAndActions();
+        List<AbstractAction> playerActions = playerIdAndActions.stream().filter(p -> p.a != game.getPlayers().size() - 1).map(pp -> pp.b).toList();
+        List<AbstractAction> dealerActions = playerIdAndActions.stream().filter(p -> p.a == game.getPlayers().size() - 1).map(pp -> pp.b).toList();
+
+        SwingWorker<Void, AbstractAction> worker = frame.processSpecificActions(playerActions);
+        frame.getNext().addActionListener(e -> {
+            worker.addPropertyChangeListener(evt -> {
+                if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
+                    BlackjackGameState gs = (BlackjackGameState) game.getGameState();
+                    boolean[] visibility = new boolean[game.getPlayers().size()];
+                    Arrays.fill(visibility, true);
+                    List<boolean[]> elementVisibility = gs.getPlayerDecks().get(gs.getDealerPlayer()).getElementVisibility();
+                    elementVisibility.set(0, visibility);
+                    gs.getPlayerDecks().get(gs.getDealerPlayer()).setVisibility(elementVisibility);
+
+                    parent.removeAll();
+                    int cur = game.getPlayers().size() - 1;
+                    BlackjackParameters gameParameters = (BlackjackParameters) gs.getGameParameters();
+                    BlackjackPlayerView playerHand = new BlackjackPlayerView(gs.getPlayerDecks().get(cur), cur, gameParameters.getDataPath());
+                    playerHand.setOpaque(false);
+                    // Get agent name
+                    String[] split = game.getPlayers().get(cur).getClass().toString().split("\\.");
+                    String agentName = split[split.length - 1];
+                    parent.setBackground(ImageIO.GetInstance().getImage("data/FrenchCards/table-background.jpg"));
+                    // Create border, layouts and keep track of this view
+                    TitledBorder title = BorderFactory.createTitledBorder(
+                                BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "DEALER [" + agentName + "]",
+                                TitledBorder.CENTER, TitledBorder.BELOW_BOTTOM);
+                    playerViewBorders[cur] = title;
+                    playerHand.setBorder(title);
+                    playerHands[cur] = playerHand;
+                    frame.updateGUI();
+                    DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                            "Now the dealer shows the cards in his hand."));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    pane = new JTabbedPane();
+                    JPanel main = new JPanel();
+                    main.setOpaque(false);
+                    main.setLayout(new BorderLayout());
+                    JPanel rules = new JPanel();
+                    pane.add("Main", main);
+                    pane.add("Rules", rules);
+                    JLabel ruleText = new JLabel(getRuleText());
+                    rules.add(ruleText);
+//                    rules.setBackground(new Color(43, 108, 25, 111));
+                    rules.setBackground(new Color(167, 196, 179));
+                    JPanel mainGameArea = new JPanel();
+                    mainGameArea.setOpaque(false);
+                    mainGameArea.setLayout(new BorderLayout());
+
+                    String[] locations = new String[]{BorderLayout.NORTH, BorderLayout.EAST, BorderLayout.SOUTH, BorderLayout.WEST};
+                    JPanel[] sides = new JPanel[]{new JPanel(), new JPanel(), new JPanel(), new JPanel()};
+                    int next = 0;
+                    for (int i = 0; i < game.getPlayers().size(); i++) {
+                        sides[next].add(playerHands[i]);
+                        sides[next].setLayout(new GridBagLayout());
+                        sides[next].setOpaque(false);
+                        next = (next + 1) % (locations.length);
+                    }
+                    for (int i = 0; i < locations.length; i++) {
+                        mainGameArea.add(sides[i], locations[i]);
+                    }
+
+                    JPanel infoPanel = createGameStateInfoPanel("Blackjack", gs, width, defaultInfoPanelHeight);
+
+                    // Add all views to frame
+                    main.add(mainGameArea, BorderLayout.CENTER);
+                    main.add(infoPanel, BorderLayout.NORTH);
+
+                    pane.add("Main", main);
+                    pane.add("Rules", rules);
+
+                    parent.setLayout(new BorderLayout());
+                    parent.add(pane, BorderLayout.CENTER);
+                    parent.setPreferredSize(new Dimension(width, height + defaultActionPanelHeight + defaultInfoPanelHeight + defaultCardHeight + 20));
+                    parent.revalidate();
+                    parent.setVisible(true);
+                    parent.repaint();
+                    processDealerAction(frame, dealerActions);
+//                    generateSoftHand(frame);
+                }
+            });
+            worker.execute();
+        });
+    }
+
+    /**
+     * After the players finish drawing cards, the dealer begins to draw cards
+     * @param frame Current JFrame
+     * @param dealerActions dealer's actions, for displaying step by step
+     */
+    private void processDealerAction(InterfaceTech frame, List<AbstractAction> dealerActions) {
+        for (ActionListener actionListener : frame.getNext().getActionListeners()) {
+            frame.getNext().removeActionListener(actionListener);
+        }
+        SwingWorker<Void, AbstractAction> worker = frame.processSpecificActions(new ArrayList<>(dealerActions));
+        worker.addPropertyChangeListener(evt -> {
+            if ("state".equals(evt.getPropertyName()) && SwingWorker.StateValue.DONE == evt.getNewValue()) {
+                parent.repaint();
+                frame.showGameResult();
+//                frame.runTertiaryPart(frame.simulateForMechanisms.get(0), 0);
+                frame.runGameResult();
+            }
+        });
+        worker.execute();
+
+    }
+
+    /**
+     * Show each card point
+     * @param frame
+     * @param game
+     */
+    public void generatePointGuide(InterfaceTech frame, Game game) {
+        for (ActionListener actionListener : frame.getNext().getActionListeners()) {
+            frame.getNext().removeActionListener(actionListener);
+        }
+        parent.removeAll();
+        GuideContext.guideStage = GuideContext.GuideState.SHOW_MECHANISM_POINT;
+        DialogUtils.show(DialogUtils.create(frame, "Game Guide", Boolean.TRUE, 300, 200,
+                "Let's learn the points of each card."));
+        JTabbedPane pane = new JTabbedPane();
+        JPanel main = new JPanel();
+        main.setOpaque(false);
+        main.setLayout(new BorderLayout());
+        JPanel rules = new JPanel();
+        pane.add("Main", main);
+        pane.add("Rules", rules);
+        JLabel ruleText = new JLabel(getRuleText());
+
+//        rules.setBackground(new Color(43, 108, 25, 111));
+        rules.add(ruleText);
+        rules.setBackground(new Color(167, 196, 179));
+
+        activePlayer = 0;
+
+//        this.width = 200;
+//        this.height = 200;
+        int nPlayers = game.getGameState().getNPlayers();
+        int nHorizAreas = 1 + (nPlayers <= 3 ? 2 : nPlayers == 4 ? 3 : nPlayers <= 8 ? 4 : 5);
+        double nVertAreas = 3.5;
+        this.width = playerWidth * nHorizAreas;
+        this.height = (int) (playerHeight* nVertAreas);
+        ruleText.setPreferredSize(new Dimension(width*2/3+60, height*2/3+100));
+
+        parent.setBackground(ImageIO.GetInstance().getImage("data/FrenchCards/table-background.jpg"));
+
+        // Generate card manually
+        int count = 13;
+        boolean[] visibility = new boolean[count];
+        Arrays.fill(visibility, true);
+        Deck<FrenchCard> deck = new Deck<>("GuideDeck", CoreConstants.VisibilityMode.VISIBLE_TO_ALL);
+        for (int i=2; i<=10; ++i) {
+            deck.add(new FrenchCard(FrenchCard.FrenchCardType.Number, FrenchCard.Suite.Diamonds, i));
+        }
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Jack, FrenchCard.Suite.Diamonds));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Queen, FrenchCard.Suite.Diamonds));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.King, FrenchCard.Suite.Diamonds));
+        deck.add(new FrenchCard(FrenchCard.FrenchCardType.Ace, FrenchCard.Suite.Diamonds));
+
+//        PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + 0 + " deck", 0, visibility);
+//        deck.stream().forEach(playerDeck::add);
+
+        playerHands = new BlackjackPlayerView[count];
+        playerViewBorders = new Border[count];
+        JPanel mainGameArea = new JPanel();
+        mainGameArea.setOpaque(false);
+        mainGameArea.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+        for (int i = 0; i < count; i++) {
+            PartialObservableDeck<FrenchCard> playerDeck = new PartialObservableDeck<>("Player " + i + " deck", i, visibility);
+            playerDeck.add(deck.get(i));
+            if (deck.get(i).type == FrenchCard.FrenchCardType.Ace) {
+                playerHands[i] = new BlackjackPlayerView(playerDeck, i, "data/FrenchCards/", "It can be seen as Point 11");
+            } else {
+                playerHands[i] = new BlackjackPlayerView(playerDeck, i, "data/FrenchCards/");
+            }
+            BlackjackGameState gameState = (BlackjackGameState) game.getGameState();
+            BlackjackParameters params = (BlackjackParameters) gameState.getGameParameters();
+            int points = 0;
+            switch (deck.get(i).type) {
+                case Number:
+                    points += deck.get(i).number;
+                    break;
+                case Jack:
+                    points += params.jackCard;
+                    break;
+                case Queen:
+                    points += params.queenCard;
+                    break;
+                case King:
+                    points += params.kingCard;
+                    break;
+                case Ace:
+                    points = 1;
+                    break;
+            }
+            playerHands[i].Points = points;
+            playerHands[i].setOpaque(false);
+            mainGameArea.add(playerHands[i]);
+        }
+
+        main.add(mainGameArea, BorderLayout.CENTER);
+
+        pane.add("Main", main);
+        pane.add("Rules", rules);
+
+        parent.setLayout(new BorderLayout());
+        parent.add(pane, BorderLayout.CENTER);
+        parent.setPreferredSize(new Dimension(width, height));
+        parent.revalidate();
+        parent.setVisible(true);
+        parent.repaint();
+
+        frame.getNext().addActionListener(e -> {
+            parent.removeAll();
+            generateDirectionGuide(frame, new HashMap<>(), true);
+        });
+    }
+
+
+    public static String getRuleText() {
         String rules = "<html><center><h1>Blackjack</h1></center><br/><hr><br/>";
         rules += "<p>Players are each dealt 2 cards face up. The dealer is also dealt 2 cards, one up (exposed) and one down (hidden). " +
                 "The value of number cards 2 through 10 is their pip value (2 through 10). " +

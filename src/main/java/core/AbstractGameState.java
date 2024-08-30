@@ -12,15 +12,21 @@ import core.interfaces.IGamePhase;
 import evaluation.listeners.IGameListener;
 import evaluation.metrics.Event;
 import games.GameType;
+import games.loveletter.cards.LoveLetterCard;
 import utilities.ElapsedCpuChessTimer;
 import utilities.Pair;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static core.CoreConstants.GameResult.GAME_ONGOING;
+import static guide.auto.LoveLetterGameStrategy.tmpCardsForReserve;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Contains all game state information.
@@ -72,6 +78,16 @@ public abstract class AbstractGameState {
     // redeterminisationRnd is used for redeterminisation only - this is to ensure that the main game is not affected
     // this is not initialised from any seed, as redeterminisation is used to hide data from players and cannot affect the game itself
     protected Random redeterminisationRnd = new Random();
+    private List<Dialog> dialogs;
+    public List<PartialObservableDeck<LoveLetterCard>> nowDecks = new ArrayList<>();
+
+    public List<PartialObservableDeck<LoveLetterCard>> getNowDecks() {
+        return nowDecks;
+    }
+
+    public void setNowDecks(List<PartialObservableDeck<LoveLetterCard>> nowDecks) {
+        this.nowDecks = nowDecks;
+    }
 
     /**
      * @param gameParameters - game parameters.
@@ -82,6 +98,7 @@ public abstract class AbstractGameState {
         // this is then overridden in the game-specific constructor if needed
         this.gameParameters = gameParameters;
         this.coreGameParameters = new CoreParameters();
+        this.dialogs = new ArrayList<>();
     }
 
     protected abstract GameType _getGameType();
@@ -104,12 +121,15 @@ public abstract class AbstractGameState {
         firstPlayer = 0;
         actionsInProgress.clear();
         rnd = new Random(gameParameters.randomSeed);
+        dialogs = new ArrayList<>();
+        tmpCardsForReserve = new ArrayList<>();
+        nowDecks = new ArrayList<>();
     }
 
     /**
      * Resets variables initialised for this game state.
      */
-    void reset(long seed) {
+    public void reset(long seed) {
         gameParameters.randomSeed = seed;
         reset();
     }
@@ -646,5 +666,13 @@ public abstract class AbstractGameState {
         result = 31 * result + Objects.hash(tick, nPlayers, roundCounter, turnCounter, turnOwner, firstPlayer);
         result = 31 * result + Arrays.hashCode(playerResults);
         return result;
+    }
+
+    public List<Dialog> getDialogs() {
+        return dialogs;
+    }
+
+    public void setDialogs(List<Dialog> dialogs) {
+        this.dialogs = dialogs;
     }
 }

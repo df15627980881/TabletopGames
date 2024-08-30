@@ -1,5 +1,6 @@
 package games.loveletter;
 
+import com.google.common.collect.Lists;
 import core.*;
 import core.actions.AbstractAction;
 import core.actions.ActionSpace;
@@ -9,11 +10,17 @@ import core.interfaces.ITreeActionSpace;
 import games.GameType;
 import games.loveletter.actions.PlayCard;
 import games.loveletter.cards.LoveLetterCard;
+import guide.GuideContext;
+import guide.PreGameState;
+import guide.auto.GameContext;
+import org.apache.commons.collections4.CollectionUtils;
+import org.testng.Assert;
 import utilities.ActionTreeNode;
 
 import java.util.*;
 
 import static core.CoreConstants.*;
+import static guide.auto.LoveLetterGameStrategy.*;
 
 
 public class LoveLetterForwardModel extends StandardForwardModel implements ITreeActionSpace {
@@ -58,15 +65,41 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
 
         // Add all cards to the draw pile
         llgs.drawPile.clear();
-        for (HashMap.Entry<LoveLetterCard.CardType, Integer> entry : llp.cardCounts.entrySet()) {
-            for (int i = 0; i < entry.getValue(); i++) {
-                LoveLetterCard card = new LoveLetterCard(entry.getKey());
-                llgs.drawPile.add(card);
-            }
-        }
 
+        //
+        if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN) {
+            PreGameState<LoveLetterCard> deckForMechanism = GuideContext.deckForMechanism;
+            List<LoveLetterCard> reverse = Lists.reverse(deckForMechanism.getDrawDecks().get(deckForMechanism.getIndexx()).getComponents());
+            GuideContext.deckForMechanism.addIndexx();
+            for (LoveLetterCard component : reverse) {
+                llgs.drawPile.add(component.copy());
+            }
+        } else if (GuideContext.guideStage == GuideContext.GuideState.SHOW_GAME_RESULT) {
+            List<PreGameState> deckForResults = GuideContext.deckForResult;
+            PreGameState<LoveLetterCard> deckForResult = deckForResults.get(GuideContext.deckForResultIndex);
+            List<LoveLetterCard> reverse = Lists.reverse(deckForResult.getDrawDecks().get(deckForResult.getIndexx()).getComponents());
+            deckForResult.addIndexx();
+            for (LoveLetterCard component : reverse) {
+                llgs.drawPile.add(component.copy());
+            }
+        } else if (GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
+            List<PreGameState> deckForSimulates = GuideContext.deckForSimulate;
+            PreGameState<LoveLetterCard> deckForSimulate = deckForSimulates.get(GuideContext.deckForSimulateIndex);
+            List<LoveLetterCard> reverse = Lists.reverse(deckForSimulate.getDrawDecks().get(deckForSimulate.getIndexx()).getComponents());
+            deckForSimulate.addIndexx();
+            for (LoveLetterCard component : reverse) {
+                llgs.drawPile.add(component.copy());
+            }
+        } else {
+            for (HashMap.Entry<LoveLetterCard.CardType, Integer> entry : llp.cardCounts.entrySet()) {
+                for (int i = 0; i < entry.getValue(); i++) {
+                    LoveLetterCard card = new LoveLetterCard(entry.getKey());
+                    llgs.drawPile.add(card);
+                }
+            }
+            llgs.drawPile.shuffle(llgs.getRnd());
+        }
         // Remove one card from the game
-        llgs.drawPile.shuffle(llgs.getRnd());
         llgs.removedCard = llgs.drawPile.draw();
 
         // In min-player game, N more cards are on the side, but visible to all players at all times
@@ -76,13 +109,16 @@ public class LoveLetterForwardModel extends StandardForwardModel implements ITre
                 llgs.reserveCards.add(llgs.drawPile.draw());
             }
         }
-
         // Set up player hands and discards
         if (llgs.getPlayerHandCards().isEmpty()) {
             // new game set up
             for (int i = 0; i < llgs.getNPlayers(); i++) {
                 boolean[] visible = new boolean[llgs.getNPlayers()];
-                if (llgs.getCoreGameParameters().partialObservable) {
+                if (GuideContext.guideStage == GuideContext.GuideState.SHOW_MECHANISM_TURN
+                        || GuideContext.guideStage == GuideContext.GuideState.SIMULATE_ACTIONS_BY_PLAYERS) {
+                    // In guide, we make the player0 as new user play.
+                    Arrays.fill(visible, i == 0);
+                } else if (llgs.getCoreGameParameters().partialObservable) {
                     visible[i] = true;
                 } else {
                     Arrays.fill(visible, true);

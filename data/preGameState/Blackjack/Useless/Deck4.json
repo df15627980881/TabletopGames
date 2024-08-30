@@ -1,0 +1,255 @@
+{
+  "playerCount": 3,
+  "gameResultDesc": "",
+  "strategy": "With a soft hand, the general strategy is to keep hitting until a total of at least 18 is reached. Thus, with an ace and a six (7 or 17), the player would not stop at 17, but would hit.",
+  "deck": {
+    "name": "Deck04",
+    "visibilityMode": "VISIBLE_TO_ALL",
+    "cards": [
+      {
+        "type": "Ace",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Ace",
+        "suite": "Clubs"
+      },
+      {
+        "type": "King",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "2"
+      },
+      {
+        "type": "Ace",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "10"
+      },
+      {
+        "type": "Jack",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "6"
+      },
+      {
+        "type": "Queen",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "9"
+      },
+      {
+        "type": "Number",
+        "suite": "Diamonds",
+        "number": "10"
+      },
+      {
+        "type": "Jack",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Queen",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "King",
+        "suite": "Diamonds"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "9"
+      },
+      {
+        "type": "Number",
+        "suite": "Clubs",
+        "number": "10"
+      },
+      {
+        "type": "Jack",
+        "suite": "Clubs"
+      },
+      {
+        "type": "King",
+        "suite": "Clubs"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "4"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "6"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "9"
+      },
+      {
+        "type": "Number",
+        "suite": "Hearts",
+        "number": "10"
+      },
+      {
+        "type": "Queen",
+        "suite": "Hearts"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "2"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "3"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "5"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "7"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "8"
+      },
+      {
+        "type": "Number",
+        "suite": "Spades",
+        "number": "9"
+      },
+      {
+        "type": "Jack",
+        "suite": "Spades"
+      },
+      {
+        "type": "Queen",
+        "suite": "Spades"
+      },
+      {
+        "type": "King",
+        "suite": "Spades"
+      },
+      {
+        "type": "Ace",
+        "suite": "Spades"
+      }
+    ]
+  }
+}

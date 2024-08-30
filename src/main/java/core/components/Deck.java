@@ -415,6 +415,10 @@ public class Deck<T extends Component> extends Component implements IComponentCo
         return components.get(idx);
     }
 
+    public void reverse() {
+        Collections.reverse(this.components);
+    }
+
     @Override
     public VisibilityMode getVisibilityMode() {
         return visibility;

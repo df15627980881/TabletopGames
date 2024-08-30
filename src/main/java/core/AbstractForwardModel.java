@@ -3,14 +3,21 @@ package core;
 import core.actions.AbstractAction;
 import core.actions.ActionSpace;
 import core.actions.DoNothing;
-import core.interfaces.IPlayerDecorator;
+import core.components.FrenchCard;
+import core.components.PartialObservableDeck;
+import games.blackjack.BlackjackGameState;
+import games.loveletter.LoveLetterGameState;
+import guide.GuideContext;
+import guide.auto.LoveLetterGameStrategy;
+import org.testng.Assert;
 import utilities.ActionTreeNode;
 import utilities.ElapsedCpuChessTimer;
-
+import core.interfaces.IPlayerDecorator;
 import java.util.*;
 import java.util.stream.IntStream;
 
 import static core.CoreConstants.GameResult.*;
+import static guide.auto.LoveLetterGameStrategy.tmpCardsForReserve;
 
 public abstract class AbstractForwardModel {
 
@@ -151,6 +158,9 @@ public abstract class AbstractForwardModel {
     public final void next(AbstractGameState currentState, AbstractAction action) {
         if (action != null) {
             int player = currentState.getCurrentPlayer();
+            if (Objects.nonNull(GuideContext.gameStrategy)) {
+                GuideContext.gameStrategy.recordDeck(currentState);
+            }
             currentState.recordAction(action, player);
             _next(currentState, action);
         } else {

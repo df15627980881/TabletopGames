@@ -3,6 +3,9 @@ package core.actions;
 import core.AbstractGameState;
 import core.interfaces.IPrintable;
 
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Set;
 
 public abstract class AbstractAction implements IPrintable {
@@ -70,5 +73,13 @@ public abstract class AbstractAction implements IPrintable {
 
     public String getTooltip(AbstractGameState gs) {
         return "";
+    }
+
+    /**
+     * Once execute one action, there is a dialog commented with feedback
+     * @return
+     */
+    public ArrayList<JDialog> createDialogWithFeedbackForNewbie(Frame frame, AbstractGameState gameState, int currentPlayer) {
+        return null;
     }
 }
